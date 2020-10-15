@@ -11,6 +11,7 @@ require (
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/karrick/godirwalk v1.16.1 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
+	github.com/pelletier/go-toml v1.8.1 // indirect
 	github.com/rogpeppe/go-internal v1.6.2 // indirect
 	github.com/sirupsen/logrus v1.7.0 // indirect
 	github.com/spf13/cobra v1.0.0 // indirect

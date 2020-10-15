@@ -25,6 +25,7 @@ func loadTemplate(templateName string) string {
 	}
 
 	box := packr.NewBox("./templates")
+	// TODO: Better way to handle file extensions. Perhaps a config file in each template folder.
 	data, err := box.FindString(language + "/" + template + "." + language)
 
 	if err != nil {

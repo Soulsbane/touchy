@@ -1,0 +1,3 @@
+ name = "DLang"
+ description = "The D programming language"
+ extension = "d"
