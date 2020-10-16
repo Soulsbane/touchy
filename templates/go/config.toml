@@ -1,3 +1,3 @@
- name = "GoLang"
- description = "The GoLang rogramming language"
- extension = "go"
+Name = "GoLang"
+Description = "The GoLang rogramming language"
+Extension = "go"

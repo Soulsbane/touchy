@@ -7,11 +7,36 @@ import (
 
 	"github.com/alexflint/go-arg"
 	"github.com/gobuffalo/packr"
+	"github.com/pelletier/go-toml"
 )
+
+type languageConfig struct {
+	Name        string
+	Description string
+	Extension   string
+}
+
+func loadLanguageConfig(languageName string) languageConfig {
+	data, err := ioutil.ReadFile("./templates/" + languageName + "/config.toml")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	config := languageConfig{}
+	err = toml.Unmarshal(data, &config)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return config
+}
 
 func loadTemplate(templateName string) string {
 	language := templateName
 	template := "default"
+	config := languageConfig{}
 
 	if strings.Contains(templateName, ".") {
 		var parts = strings.Split(templateName, ".")
@@ -24,9 +49,10 @@ func loadTemplate(templateName string) string {
 		}
 	}
 
+	config = loadLanguageConfig(language)
+
 	box := packr.NewBox("./templates")
-	// TODO: Better way to handle file extensions. Perhaps a config file in each template folder.
-	data, err := box.FindString(language + "/" + template + "." + language)
+	data, err := box.FindString(language + "/" + template + "." + config.Extension)
 
 	if err != nil {
 		fmt.Println(err)
