@@ -1,8 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"strings"
 
 	"github.com/alexflint/go-arg"
@@ -17,17 +19,18 @@ type languageConfig struct {
 }
 
 func loadLanguageConfig(languageName string) languageConfig {
-	data, err := ioutil.ReadFile("./templates/" + languageName + "/config.toml")
+	configFileName := "./templates/" + languageName + "/config.toml"
+	data, err := ioutil.ReadFile(configFileName)
+	config := languageConfig{}
 
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(errors.New("Failed to load config file"))
 	}
 
-	config := languageConfig{}
 	err = toml.Unmarshal(data, &config)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(errors.New("Failed to read config file: " + configFileName))
 	}
 
 	return config
@@ -36,7 +39,6 @@ func loadLanguageConfig(languageName string) languageConfig {
 func loadTemplate(templateName string) string {
 	language := templateName
 	template := "default"
-	config := languageConfig{}
 
 	if strings.Contains(templateName, ".") {
 		var parts = strings.Split(templateName, ".")
@@ -49,14 +51,12 @@ func loadTemplate(templateName string) string {
 		}
 	}
 
-	config = loadLanguageConfig(language)
-
+	config := loadLanguageConfig(language)
 	box := packr.NewBox("./templates")
 	data, err := box.FindString(language + "/" + template + "." + config.Extension)
 
 	if err != nil {
-		fmt.Println(err)
-		return ""
+		log.Fatal(errors.New("That template does not exist: " + templateName))
 	}
 
 	return data
