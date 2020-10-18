@@ -36,12 +36,13 @@ func loadLanguageConfig(languageName string) languageConfig {
 	return config
 }
 
-func loadTemplate(templateName string) string {
-	language := templateName
+func loadTemplate(name string) string {
+	language := name
 	template := "default"
+	box := packr.NewBox("./templates")
 
-	if strings.Contains(templateName, ".") {
-		var parts = strings.Split(templateName, ".")
+	if strings.Contains(name, ".") {
+		var parts = strings.Split(name, ".")
 
 		language = parts[0]
 		template = parts[1]
@@ -52,11 +53,12 @@ func loadTemplate(templateName string) string {
 	}
 
 	config := loadLanguageConfig(language)
-	box := packr.NewBox("./templates")
-	data, err := box.FindString(language + "/" + template + "." + config.Extension)
+	templateName := language + "/" + template + "." + config.Extension
+	data, err := box.FindString(templateName)
 
 	if err != nil {
-		log.Fatal(errors.New("That template does not exist: " + templateName))
+		//log.Fatal(errors.New("That template does not exist: " + config.Name + " => " + template))
+		log.Fatal(errors.New("That template does not exist: " + name))
 	}
 
 	return data
