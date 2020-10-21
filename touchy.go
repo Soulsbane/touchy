@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/alexflint/go-arg"
@@ -36,7 +38,7 @@ func loadLanguageConfig(languageName string) languageConfig {
 	return config
 }
 
-func loadTemplate(name string) string {
+func loadTemplate(name string) (string, languageConfig) {
 	language := name
 	template := "default"
 	box := packr.NewBox("./templates")
@@ -61,7 +63,7 @@ func loadTemplate(name string) string {
 		log.Fatal(errors.New("That template does not exist: " + name))
 	}
 
-	return data
+	return data, config
 }
 
 func buildTemplateList() {
@@ -75,11 +77,28 @@ func buildTemplateList() {
 	}
 }
 
+func createTemplate(fileName string, templateName string) {
+	template, config := loadTemplate(templateName)
+	currentDir, _ := os.Getwd()
+	file, err := os.Create(filepath.Join(currentDir, "/"+fileName+"."+config.Extension))
+
+	defer file.Close()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	file.WriteString(template)
+	fmt.Println(template)
+}
+
 func main() {
 	var args struct {
+		//FileName     string `arg:"positional, required"`
 		TemplateName string `arg:"positional, required"`
+		FileName     string `arg:"-n, --name" default:"template" help:"Name of the generated file."`
 	}
 
 	arg.MustParse(&args)
-	fmt.Println(loadTemplate(args.TemplateName))
+	createTemplate(args.FileName, args.TemplateName)
 }
