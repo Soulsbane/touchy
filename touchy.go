@@ -21,12 +21,14 @@ type languageConfig struct {
 }
 
 func loadLanguageConfig(languageName string) languageConfig {
-	configFileName := "./templates/" + languageName + "/config.toml"
+	exePath, _ := os.Executable()
+	configFileName := filepath.Join(filepath.Dir(exePath), "/templates/", languageName, "/config.toml")
+
 	data, err := ioutil.ReadFile(configFileName)
 	config := languageConfig{}
 
 	if err != nil {
-		log.Fatal(errors.New("Failed to load config file"))
+		log.Fatal(errors.New("Failed to load config file: " + configFileName))
 	}
 
 	err = toml.Unmarshal(data, &config)
