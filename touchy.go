@@ -13,5 +13,5 @@ func main() {
 	}
 
 	arg.MustParse(&args)
-	generator.CreateTemplate(args.FileName, args.TemplateName)
+	generator.CreateFileFromTemplate(args.FileName, args.TemplateName)
 }

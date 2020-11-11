@@ -78,8 +78,8 @@ func buildTemplateList() {
 	}
 }
 
-// CreateTemplate Creates a template
-func CreateTemplate(fileName string, templateName string) {
+// CreateFileFromTemplate Creates a template
+func CreateFileFromTemplate(fileName string, templateName string) {
 	template, config := loadTemplate(templateName)
 	currentDir, _ := os.Getwd()
 	file, err := os.Create(filepath.Join(currentDir, "/"+fileName+"."+config.Extension))
