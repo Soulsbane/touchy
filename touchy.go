@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/Soulsbane/touchy/generator"
 	"github.com/alexflint/go-arg"
-	"github.com/fatih/color"
+	"github.com/logrusorgru/aurora"
 )
 
 type args struct {
@@ -12,7 +12,7 @@ type args struct {
 }
 
 func (args) Description() string {
-	return color.GreenString("Create a file based upon a template.")
+	return aurora.Blue("Creates a file based upon a template.").Bold().String()
 }
 
 func main() {
