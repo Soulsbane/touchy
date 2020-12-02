@@ -21,7 +21,7 @@ type languageConfig struct {
 
 func loadLanguageConfig(languageName string) languageConfig {
 	exePath, _ := os.Executable()
-	configFileName := filepath.Join(filepath.Dir(exePath), "/templates/", languageName, "/config.toml")
+	configFileName := filepath.Join(filepath.Dir(exePath), "/generator/templates/", languageName, "/config.toml")
 
 	data, err := ioutil.ReadFile(configFileName)
 	config := languageConfig{}
