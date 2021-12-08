@@ -14,9 +14,10 @@ import (
 )
 
 type languageConfig struct {
-	Name        string
-	Description string
-	Extension   string
+	Name            string
+	DefaultFileName string
+	Description     string
+	Extension       string
 }
 
 func loadLanguageConfig(languageName string) languageConfig {
@@ -67,7 +68,7 @@ func loadTemplate(name string) (string, languageConfig) {
 	return data, config
 }
 
-func buildTemplateList() {
+/*func buildTemplateList() {
 	files, err := ioutil.ReadDir("templates")
 
 	if err != nil {
@@ -76,7 +77,7 @@ func buildTemplateList() {
 	for _, file := range files {
 		fmt.Println(file.Name())
 	}
-}
+}*/
 
 // CreateFileFromTemplate Creates a template
 func CreateFileFromTemplate(fileName string, templateName string) {

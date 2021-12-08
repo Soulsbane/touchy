@@ -1,3 +1,4 @@
 Name = "DLang"
+DefaultFileName = "app"
 Description = "The D programming language"
 Extension = "d"

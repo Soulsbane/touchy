@@ -8,7 +8,7 @@ import (
 
 type args struct {
 	TemplateName string `arg:"positional, required"`
-	FileName     string `arg:"-n, --name" default:"template" help:"Name of the generated file."`
+	FileName     string `arg:"-n, --name" help:"Name of the generated file. If not specified, the filename will be the config's DefaultFileName value."`
 }
 
 func (args) Description() string {
