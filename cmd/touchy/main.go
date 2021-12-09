@@ -9,5 +9,12 @@ func main() {
 	var args args
 
 	arg.MustParse(&args)
-	generator.CreateFileFromTemplate(args.FileName, args.TemplateName)
+
+	switch {
+	case args.Create != nil:
+		generator.CreateFileFromTemplate(args.FileName, args.Create.Language)
+	case args.List != nil:
+		generator.ListTemplates()
+	}
+
 }

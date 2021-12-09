@@ -68,16 +68,17 @@ func loadTemplate(name string) (string, languageConfig) {
 	return data, config
 }
 
-/*func buildTemplateList() {
+func ListTemplates() {
 	files, err := ioutil.ReadDir("templates")
 
 	if err != nil {
+		fmt.Print(err)
 	}
 
 	for _, file := range files {
 		fmt.Println(file.Name())
 	}
-}*/
+}
 
 // CreateFileFromTemplate Creates a template
 func CreateFileFromTemplate(fileName string, templateName string) {
@@ -91,6 +92,6 @@ func CreateFileFromTemplate(fileName string, templateName string) {
 		log.Fatal(err)
 	}
 
-	file.WriteString(template)
+	//file.WriteString(template)
 	fmt.Println(template)
 }
