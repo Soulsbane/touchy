@@ -1,0 +1,4 @@
+Name = "GoLang"
+DefaultFileName = "main"
+Description = "The GoLang Pogramming language"
+Extension = "go"
