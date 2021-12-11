@@ -12,7 +12,7 @@ func main() {
 
 	switch {
 	case args.Create != nil:
-		generator.CreateFileFromTemplate(args.FileName, args.Create.Language)
+		generator.CreateFileFromTemplate(args.Create.FileName, args.Create.Language)
 	case args.List != nil:
 		generator.ListTemplates()
 	}

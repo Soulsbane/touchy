@@ -100,6 +100,6 @@ func CreateFileFromTemplate(customFileName string, templateName string) {
 		log.Fatal(err)
 	}
 
-	//file.WriteString(template)
-	fmt.Println(template)
+	file.WriteString(template)
+	//fmt.Println(template)
 }
