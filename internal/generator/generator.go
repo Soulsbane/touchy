@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/BurntSushi/toml"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/packr/v2/file"
 )
 
@@ -44,7 +44,7 @@ func loadLanguageConfig(languageName string) languageConfig {
 func loadTemplate(name string) (string, languageConfig) {
 	language := name
 	template := "default"
-	box := packr.NewBox("./templates")
+	box := packr.New("Templates", "./templates")
 
 	if strings.Contains(name, ".") {
 		var parts = strings.Split(name, ".")
@@ -70,19 +70,9 @@ func loadTemplate(name string) (string, languageConfig) {
 }
 
 func ListTemplates() {
-	files, err := ioutil.ReadDir("templates")
-	box := packr.NewBox("./templates")
+	box := packr.New("Templates", "./templates")
 
-	if err != nil {
-		fmt.Print(err)
-	}
-
-	for _, file := range files {
-		fmt.Println(file.Name())
-	}
-
-	box.WalkPrefix("templates/", func(path string, f file.File) error {
-		//act = append(act, path)
+	box.Walk(func(path string, f file.File) error {
 		fmt.Println(path)
 		return nil
 	})
