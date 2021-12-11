@@ -81,9 +81,17 @@ func ListTemplates() {
 }
 
 // CreateFileFromTemplate Creates a template
-func CreateFileFromTemplate(fileName string, templateName string) {
+func CreateFileFromTemplate(customFileName string, templateName string) {
+	var fileName string
 	template, config := loadTemplate(templateName)
 	currentDir, _ := os.Getwd()
+
+	if customFileName == "DefaultFileName" {
+		fileName = config.DefaultFileName
+	} else {
+		fileName = customFileName
+	}
+
 	file, err := os.Create(filepath.Join(currentDir, "/"+fileName+"."+config.Extension))
 
 	defer file.Close()
