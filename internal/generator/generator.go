@@ -11,6 +11,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2/file"
 )
 
 type languageConfig struct {
@@ -70,6 +71,7 @@ func loadTemplate(name string) (string, languageConfig) {
 
 func ListTemplates() {
 	files, err := ioutil.ReadDir("templates")
+	box := packr.NewBox("./templates")
 
 	if err != nil {
 		fmt.Print(err)
@@ -78,6 +80,12 @@ func ListTemplates() {
 	for _, file := range files {
 		fmt.Println(file.Name())
 	}
+
+	box.WalkPrefix("templates/", func(path string, f file.File) error {
+		//act = append(act, path)
+		fmt.Println(path)
+		return nil
+	})
 }
 
 // CreateFileFromTemplate Creates a template
