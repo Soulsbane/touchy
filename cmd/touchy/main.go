@@ -9,6 +9,7 @@ func main() {
 	var args args
 
 	arg.MustParse(&args)
+	generator := generator.New()
 
 	switch {
 	case args.Create != nil:

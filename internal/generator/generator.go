@@ -21,7 +21,14 @@ type languageConfig struct {
 	Extension       string
 }
 
-func loadLanguageConfig(languageName string) languageConfig {
+type Generator struct {
+}
+
+func New() *Generator {
+	return &Generator{}
+}
+
+func (generator *Generator) loadLanguageConfig(languageName string) languageConfig {
 	exePath, _ := os.Executable()
 	configFileName := filepath.Join(filepath.Dir(exePath), "../../internal/generator/templates/", languageName, "/config.toml")
 
@@ -41,7 +48,7 @@ func loadLanguageConfig(languageName string) languageConfig {
 	return config
 }
 
-func loadTemplate(name string) (string, languageConfig) {
+func (generator *Generator) loadTemplate(name string) (string, languageConfig) {
 	language := name
 	template := "default"
 	box := packr.New("Templates", "./templates")
@@ -57,7 +64,7 @@ func loadTemplate(name string) (string, languageConfig) {
 		}
 	}
 
-	config := loadLanguageConfig(language)
+	config := generator.loadLanguageConfig(language)
 	templateName := language + "/" + template + "." + config.Extension
 	data, err := box.FindString(templateName)
 
@@ -69,7 +76,7 @@ func loadTemplate(name string) (string, languageConfig) {
 	return data, config
 }
 
-func ListTemplates() {
+func (generator Generator) ListTemplates() {
 	box := packr.New("Templates", "./templates")
 
 	box.Walk(func(path string, f file.File) error {
@@ -79,9 +86,9 @@ func ListTemplates() {
 }
 
 // CreateFileFromTemplate Creates a template
-func CreateFileFromTemplate(customFileName string, languageName string) {
+func (generator *Generator) CreateFileFromTemplate(customFileName string, languageName string) {
 	var fileName string
-	template, config := loadTemplate(languageName)
+	template, config := generator.loadTemplate(languageName)
 	currentDir, _ := os.Getwd()
 
 	if customFileName == "DefaultFileName" {
