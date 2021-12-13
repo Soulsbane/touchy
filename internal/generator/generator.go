@@ -3,23 +3,14 @@ package generator
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/BurntSushi/toml"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/packr/v2/file"
 )
-
-type languageConfig struct {
-	Name            string
-	DefaultFileName string
-	Description     string
-	Extension       string
-}
 
 type Generator struct {
 }
@@ -28,27 +19,7 @@ func New() *Generator {
 	return &Generator{}
 }
 
-func (generator *Generator) loadLanguageConfig(languageName string) languageConfig {
-	exePath, _ := os.Executable()
-	configFileName := filepath.Join(filepath.Dir(exePath), "../../internal/generator/templates/", languageName, "/config.toml")
-
-	data, err := ioutil.ReadFile(configFileName)
-	config := languageConfig{}
-
-	if err != nil {
-		log.Fatal(errors.New("Failed to load config file: " + configFileName))
-	}
-
-	err = toml.Unmarshal(data, &config)
-
-	if err != nil {
-		log.Fatal(errors.New("Failed to read config file: " + configFileName))
-	}
-
-	return config
-}
-
-func (generator *Generator) loadTemplate(name string) (string, languageConfig) {
+func (g *Generator) loadTemplate(name string) (string, Language) {
 	language := name
 	template := "default"
 	box := packr.New("Templates", "./templates")
@@ -64,7 +35,7 @@ func (generator *Generator) loadTemplate(name string) (string, languageConfig) {
 		}
 	}
 
-	config := generator.loadLanguageConfig(language)
+	config := LoadLanguage(language)
 	templateName := language + "/" + template + "." + config.Extension
 	data, err := box.FindString(templateName)
 
@@ -76,7 +47,7 @@ func (generator *Generator) loadTemplate(name string) (string, languageConfig) {
 	return data, config
 }
 
-func (generator Generator) ListTemplates() {
+func (g *Generator) ListTemplates() {
 	box := packr.New("Templates", "./templates")
 
 	box.Walk(func(path string, f file.File) error {
@@ -86,9 +57,9 @@ func (generator Generator) ListTemplates() {
 }
 
 // CreateFileFromTemplate Creates a template
-func (generator *Generator) CreateFileFromTemplate(customFileName string, languageName string) {
+func (g *Generator) CreateFileFromTemplate(customFileName string, languageName string) {
 	var fileName string
-	template, config := generator.loadTemplate(languageName)
+	template, config := g.loadTemplate(languageName)
 	currentDir, _ := os.Getwd()
 
 	if customFileName == "DefaultFileName" {
