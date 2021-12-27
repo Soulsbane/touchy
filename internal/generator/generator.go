@@ -35,7 +35,7 @@ func (g *Generator) loadTemplate(name string) (string, Language) {
 		}
 	}
 
-	config := LoadLanguage(language)
+	config := LoadLanguageConfigFile(language)
 	templateName := language + "/" + template + "." + config.Extension
 	data, err := box.FindString(templateName)
 

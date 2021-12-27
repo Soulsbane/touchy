@@ -17,7 +17,7 @@ type Language struct {
 	Extension       string
 }
 
-func LoadLanguage(languageName string) Language {
+func LoadLanguageConfigFile(languageName string) Language {
 	exePath, _ := os.Executable()
 	configFileName := filepath.Join(filepath.Dir(exePath), "../../internal/generator/templates/", languageName, "/config.toml")
 
