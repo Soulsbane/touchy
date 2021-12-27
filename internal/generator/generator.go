@@ -70,11 +70,11 @@ func (g *Generator) CreateFileFromTemplate(customFileName string, languageName s
 
 	file, err := os.Create(filepath.Join(currentDir, "/"+fileName+"."+config.Extension))
 
-	defer file.Close()
-
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	defer file.Close()
 
 	file.WriteString(template)
 	//fmt.Println(template)
