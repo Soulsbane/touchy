@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"embed"
 	"errors"
 	"fmt"
 	"log"
@@ -9,8 +10,10 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/packr/v2"
-	"github.com/gobuffalo/packr/v2/file"
 )
+
+//go:embed templates
+var templateDir embed.FS
 
 type Generator struct {
 }
@@ -47,13 +50,33 @@ func (g *Generator) loadTemplate(name string) (string, Language) {
 	return data, config
 }
 
+// TODO: string argument for list language templates
 func (g *Generator) ListTemplates() {
-	box := packr.New("Templates", "./templates")
+	languageDirs, err := templateDir.ReadDir("templates")
 
-	box.Walk(func(path string, f file.File) error {
-		fmt.Println(path)
-		return nil
-	})
+	if err != nil {
+		panic(err)
+	}
+
+	for _, languageDir := range languageDirs {
+		if languageDir.IsDir() {
+			fmt.Println("languageDir: " + languageDir.Name())
+			templates, err := templateDir.ReadDir(filepath.Join("templates", languageDir.Name()))
+
+			if err != nil {
+				panic(err)
+			}
+
+			for _, template := range templates {
+				if template.IsDir() {
+					fmt.Println("Filename: ", template.Name())
+					// TODO: Read info.toml
+				}
+			}
+		}
+
+		fmt.Println()
+	}
 }
 
 // CreateFileFromTemplate Creates a template
