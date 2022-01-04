@@ -8,8 +8,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/gobuffalo/packr/v2"
 )
 
 //go:embed templates
@@ -25,7 +23,6 @@ func New() *Generator {
 func (g *Generator) loadTemplate(name string) (string, Language) {
 	language := name
 	template := "default"
-	box := packr.New("Templates", "./templates")
 
 	if strings.Contains(name, ".") {
 		var parts = strings.Split(name, ".")
@@ -39,15 +36,15 @@ func (g *Generator) loadTemplate(name string) (string, Language) {
 	}
 
 	config := LoadLanguageConfigFile(language)
-	templateName := language + "/" + template + "." + config.Extension
-	data, err := box.FindString(templateName)
+	templateName := filepath.Join("templates", language, template+"."+config.Extension)
+	data, err := templateDir.ReadFile(templateName)
 
 	if err != nil {
 		//log.Fatal(errors.New("That template does not exist: " + config.Name + " => " + template))
 		log.Fatal(errors.New("That template does not exist: " + name))
 	}
 
-	return data, config
+	return string(data), config
 }
 
 // TODO: string argument for list language templates
