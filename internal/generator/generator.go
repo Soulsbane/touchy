@@ -47,8 +47,7 @@ func (g *Generator) loadTemplate(name string) (string, Language) {
 	return string(data), config
 }
 
-// TODO: string argument for list language templates
-func (g *Generator) ListTemplates() {
+func (g *Generator) ListTemplates(listArg string) {
 	languageDirs, err := templatesDir.ReadDir("templates")
 
 	if err != nil {

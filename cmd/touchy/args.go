@@ -6,6 +6,7 @@ type ShowCommand struct {
 }
 
 type ListCommand struct {
+	Language string `arg:"positional" help:"Get a list of templates for the given language"`
 }
 
 type CreateCommand struct {

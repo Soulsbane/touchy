@@ -15,7 +15,7 @@ func main() {
 	case args.Create != nil:
 		generator.CreateFileFromTemplate(args.Create.FileName, args.Create.Language)
 	case args.List != nil:
-		generator.ListTemplates()
+		generator.ListTemplates(args.List.Language)
 	}
 
 }
