@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/Soulsbane/touchy/internal/generator"
 	"github.com/alexflint/go-arg"
 )
@@ -11,8 +9,6 @@ func main() {
 	var args args
 
 	arg.MustParse(&args)
-	config := generator.LoadLanguageConfigFile("go")
-	fmt.Println(config.Name)
 	generator := generator.New()
 
 	switch {
