@@ -11,7 +11,7 @@ import (
 )
 
 //go:embed templates
-var templateDir embed.FS
+var templatesDir embed.FS
 
 type Generator struct {
 }
@@ -37,7 +37,7 @@ func (g *Generator) loadTemplate(name string) (string, Language) {
 
 	config := LoadLanguageConfigFile(language)
 	templateName := filepath.Join("templates", language, template+"."+config.Extension)
-	data, err := templateDir.ReadFile(templateName)
+	data, err := templatesDir.ReadFile(templateName)
 
 	if err != nil {
 		//log.Fatal(errors.New("That template does not exist: " + config.Name + " => " + template))
@@ -49,7 +49,7 @@ func (g *Generator) loadTemplate(name string) (string, Language) {
 
 // TODO: string argument for list language templates
 func (g *Generator) ListTemplates() {
-	languageDirs, err := templateDir.ReadDir("templates")
+	languageDirs, err := templatesDir.ReadDir("templates")
 
 	if err != nil {
 		panic(err)
@@ -58,7 +58,7 @@ func (g *Generator) ListTemplates() {
 	for _, languageDir := range languageDirs {
 		if languageDir.IsDir() {
 			fmt.Println("languageDir: " + languageDir.Name())
-			templates, err := templateDir.ReadDir(filepath.Join("templates", languageDir.Name()))
+			templates, err := templatesDir.ReadDir(filepath.Join("templates", languageDir.Name()))
 
 			if err != nil {
 				panic(err)
