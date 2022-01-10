@@ -3,9 +3,9 @@ module github.com/Soulsbane/touchy
 go 1.17
 
 require (
-	github.com/BurntSushi/toml v0.3.1
 	github.com/alexflint/go-arg v1.3.0
 	github.com/logrusorgru/aurora v2.0.3+incompatible
+	github.com/pelletier/go-toml v1.9.4
 )
 
 require (
