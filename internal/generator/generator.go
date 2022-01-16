@@ -35,8 +35,9 @@ func (g *Generator) loadTemplate(name string) (string, Language) {
 		}
 	}
 
-	config := LoadLanguageConfigFile(language)
-	templateName := filepath.Join("templates", language, template+"."+config.Extension)
+	configPath := filepath.Join("templates", language, "config.toml")
+	config := LoadLanguageConfigFile(configPath)
+	templateName := filepath.Join("templates", language, template, template+".template")
 	data, err := templatesDir.ReadFile(templateName)
 
 	if err != nil {

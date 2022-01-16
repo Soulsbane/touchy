@@ -2,10 +2,7 @@ package generator
 
 import (
 	"errors"
-	"io/ioutil"
 	"log"
-	"os"
-	"path/filepath"
 
 	"github.com/pelletier/go-toml/v2"
 )
@@ -18,20 +15,17 @@ type Language struct {
 }
 
 func LoadLanguageConfigFile(languageName string) Language {
-	exePath, _ := os.Executable()
-	configFileName := filepath.Join(filepath.Dir(exePath), "../../internal/generator/templates/", languageName, "/config.toml")
-
-	data, err := ioutil.ReadFile(configFileName)
+	data, err := templatesDir.ReadFile(languageName)
 	config := Language{}
 
 	if err != nil {
-		log.Fatal(errors.New("Failed to load config file: " + configFileName))
+		log.Fatal(errors.New("Failed to load config file: " + languageName))
 	}
 
 	err = toml.Unmarshal(data, &config)
 
 	if err != nil {
-		log.Fatal(errors.New("Failed to read config file: " + configFileName))
+		log.Fatal(errors.New("Failed to read config file: " + languageName))
 	}
 
 	return config
