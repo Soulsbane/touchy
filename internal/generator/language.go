@@ -14,7 +14,7 @@ type Language struct {
 	Extension       string
 }
 
-func LoadLanguageConfigFile(languageName string) Language {
+func loadLanguageConfigFile(languageName string) Language {
 	data, err := templatesDir.ReadFile(languageName)
 	config := Language{}
 
