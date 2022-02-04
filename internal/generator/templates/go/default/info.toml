@@ -1,4 +1,5 @@
 Name = "Default GoLang Template"
-DefaultFileName = "main"
+DefaultOutputFileName = "main"
 Description = "A simple barebones template"
 Extension = "go"
+TemplateFileName = "default"
