@@ -1,4 +1,4 @@
-package generator
+package languages
 
 import (
 	"embed"
@@ -13,14 +13,15 @@ import (
 //go:embed templates
 var templatesDir embed.FS
 
-type Generator struct {
+type Languages struct {
+	languages []Language
 }
 
-func New() *Generator {
-	return &Generator{}
+func New() *Languages {
+	return &Languages{}
 }
 
-func (g *Generator) loadTemplate(name string) (string, Language) {
+func (g *Languages) loadTemplate(name string) (string, Language) {
 	language := name
 	template := "default"
 
@@ -48,7 +49,7 @@ func (g *Generator) loadTemplate(name string) (string, Language) {
 	return string(data), config
 }
 
-func (g *Generator) ListTemplates(listArg string) {
+func (g *Languages) ListTemplates(listArg string) {
 	languageDirs, err := templatesDir.ReadDir("templates")
 
 	if err != nil {
@@ -77,7 +78,7 @@ func (g *Generator) ListTemplates(listArg string) {
 }
 
 // CreateFileFromTemplate Creates a template
-func (g *Generator) CreateFileFromTemplate(customFileName string, languageName string) {
+func (g *Languages) CreateFileFromTemplate(customFileName string, languageName string) {
 	var fileName string
 	template, config := g.loadTemplate(languageName)
 	currentDir, _ := os.Getwd()

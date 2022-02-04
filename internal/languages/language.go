@@ -1,4 +1,4 @@
-package generator
+package languages
 
 type Language struct {
 	DirName       string         // Name of the directory under the templates directory.
@@ -19,10 +19,6 @@ type TemplateInfo struct {
 	Description           string
 	Extension             string
 	TemplateFileName      string
-}
-
-type Languages struct {
-	languages []Language
 }
 
 /*type Language struct {

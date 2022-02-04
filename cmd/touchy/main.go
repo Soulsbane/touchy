@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Soulsbane/touchy/internal/generator"
+	"github.com/Soulsbane/touchy/internal/languages"
 	"github.com/alexflint/go-arg"
 )
 
@@ -9,13 +9,13 @@ func main() {
 	var args args
 
 	arg.MustParse(&args)
-	generator := generator.New()
+	languages := languages.New()
 
 	switch {
 	case args.Create != nil:
-		generator.CreateFileFromTemplate(args.Create.FileName, args.Create.Language)
+		languages.CreateFileFromTemplate(args.Create.FileName, args.Create.Language)
 	case args.List != nil:
-		generator.ListTemplates(args.List.Language)
+		languages.ListTemplates(args.List.Language)
 	}
 
 }
