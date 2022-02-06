@@ -1,4 +1,4 @@
-package languages
+package templates
 
 import (
 	"embed"
@@ -21,7 +21,7 @@ func New() *Languages {
 	return &Languages{}
 }
 
-func (g *Languages) loadTemplate(name string) (string, Language) {
+func (g *Languages) Load(name string) (string, Language) {
 	language := name
 	template := "default"
 
@@ -49,7 +49,7 @@ func (g *Languages) loadTemplate(name string) (string, Language) {
 	return string(data), config
 }
 
-func (g *Languages) ListTemplates(listArg string) {
+func (g *Languages) List(listArg string) {
 	languageDirs, err := templatesDir.ReadDir("templates")
 
 	if err != nil {
@@ -80,7 +80,7 @@ func (g *Languages) ListTemplates(listArg string) {
 // CreateFileFromTemplate Creates a template
 func (g *Languages) CreateFileFromTemplate(customFileName string, languageName string) {
 	var fileName string
-	template, config := g.loadTemplate(languageName)
+	template, config := g.Load(languageName)
 	currentDir, _ := os.Getwd()
 
 	if customFileName == "DefaultFileName" {

@@ -1,4 +1,11 @@
-package languages
+package templates
+
+import (
+	"errors"
+	"log"
+
+	"github.com/BurntSushi/toml"
+)
 
 type Language struct {
 	DirName       string         // Name of the directory under the templates directory.
@@ -45,7 +52,7 @@ func loadLanguageInfoFile(languageName string) Language {
 	return config
 }
 
-
+*/
 func loadLanguageConfigFile(languageName string) Language {
 	data, err := templatesDir.ReadFile(languageName)
 	config := Language{}
@@ -61,4 +68,4 @@ func loadLanguageConfigFile(languageName string) Language {
 	}
 
 	return config
-}*/
+}
