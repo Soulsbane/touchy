@@ -28,12 +28,6 @@ type TemplateInfo struct {
 	TemplateFileName      string
 }
 
-/*type Language struct {
-	Name            string
-	DefaultFileName string
-	Description     string
-	Extension       string
-}*/
 /*
 func loadLanguageInfoFile(languageName string) Language {
 	data, err := templatesDir.ReadFile(languageName)
