@@ -4,7 +4,7 @@ import (
 	"errors"
 	"log"
 
-	"github.com/BurntSushi/toml"
+	"github.com/pelletier/go-toml/v2"
 )
 
 type Language struct {
@@ -53,9 +53,9 @@ func loadLanguageInfoFile(languageName string) Language {
 }
 
 */
-func loadLanguageConfigFile(languageName string) Language {
+func loadLanguageConfigFile(languageName string) LanguageConfig {
 	data, err := templatesDir.ReadFile(languageName)
-	config := Language{}
+	config := LanguageConfig{}
 
 	if err != nil {
 		log.Fatal(errors.New("Failed to load config file: " + languageName))

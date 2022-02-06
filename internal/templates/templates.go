@@ -21,7 +21,7 @@ func New() *Languages {
 	return &Languages{}
 }
 
-func (g *Languages) Load(name string) (string, Language) {
+func (g *Languages) Load(name string) (string, LanguageConfig) {
 	language := name
 	template := "default"
 
@@ -84,7 +84,7 @@ func (g *Languages) CreateFileFromTemplate(customFileName string, languageName s
 	currentDir, _ := os.Getwd()
 
 	if customFileName == "DefaultFileName" {
-		fileName = config.DefaultFileName
+		fileName = config.DefaultOutputFileName
 	} else {
 		fileName = customFileName
 	}
