@@ -36,7 +36,8 @@ func (g *Languages) Load(name string) (string, LanguageConfig) {
 		}
 	}
 
-	configPath := filepath.Join("templates", language, "config.toml")
+	configPath := filepath.Join("templates", language, template, "config.toml")
+	fmt.Println("configPath: " + configPath)
 	config := loadLanguageConfigFile(configPath)
 	templateName := filepath.Join("templates", language, template, template+".template")
 	data, err := templatesDir.ReadFile(templateName)
@@ -88,7 +89,7 @@ func (g *Languages) CreateFileFromTemplate(customFileName string, languageName s
 	} else {
 		fileName = customFileName
 	}
-
+	fmt.Println("Creating file: " + fileName + "." + config.Extension)
 	file, err := os.Create(filepath.Join(currentDir, "/"+fileName+"."+config.Extension))
 
 	if err != nil {

@@ -11,7 +11,7 @@ type ListCommand struct {
 
 type CreateCommand struct {
 	Language string `arg:"positional,required" help:"language to use for template"`
-	FileName string `arg:"positional" help:"Name of the generated file. Uses the key DefaultFileName in the language config file."`
+	FileName string `arg:"positional" default:"DefaultFileName" help:"Name of the generated file. Uses the key DefaultFileName in the language config file."`
 }
 
 type args struct {
