@@ -1,4 +1,4 @@
 Name = "GoLang"
-DefaultFileName = "main"
+DefaultOutputFileName = "main"
 Description = "The GoLang Pogramming language"
 Extension = "go"

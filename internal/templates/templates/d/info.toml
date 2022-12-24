@@ -1,0 +1,4 @@
+Name = "DLang"
+DefaultOutputFileName = "main"
+Description = "The D Pogramming language"
+Extension = "d"

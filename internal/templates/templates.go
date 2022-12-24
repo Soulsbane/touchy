@@ -13,15 +13,15 @@ import (
 //go:embed templates
 var templatesDir embed.FS
 
-type Languages struct {
+type Templates struct {
 	languages []Language
 }
 
-func New() *Languages {
-	return &Languages{}
+func New() *Templates {
+	return &Templates{}
 }
 
-func (g *Languages) Load(name string) (string, LanguageConfig) {
+func (g *Templates) Load(name string) (string, TemplateConfig) {
 	language := name
 	template := "default"
 
@@ -50,7 +50,7 @@ func (g *Languages) Load(name string) (string, LanguageConfig) {
 	return string(data), config
 }
 
-func (g *Languages) List(listArg string) {
+func (g *Templates) List(listArg string) {
 	languageDirs, err := templatesDir.ReadDir("templates")
 
 	if err != nil {
@@ -59,7 +59,13 @@ func (g *Languages) List(listArg string) {
 
 	for _, languageDir := range languageDirs {
 		if languageDir.IsDir() {
-			fmt.Println("languageDir: " + languageDir.Name())
+
+			infoPath := filepath.Join("templates", languageDir.Name(), "info.toml")
+			languageInfo := loadLanguageInfoFile(infoPath)
+
+			fmt.Println("Language Name: ", languageInfo.Name)
+			fmt.Println("Language Description: ", languageInfo.Description)
+
 			templates, err := templatesDir.ReadDir(filepath.Join("templates", languageDir.Name()))
 
 			if err != nil {
@@ -68,8 +74,8 @@ func (g *Languages) List(listArg string) {
 
 			for _, template := range templates {
 				if template.IsDir() {
-					fmt.Println("Filename: ", template.Name())
 					// TODO: Read info.toml
+					fmt.Println("Filename: ", template.Name())
 				}
 			}
 		}
@@ -79,7 +85,7 @@ func (g *Languages) List(listArg string) {
 }
 
 // CreateFileFromTemplate Creates a template
-func (g *Languages) CreateFileFromTemplate(customFileName string, languageName string) {
+func (g *Templates) CreateFileFromTemplate(customFileName string, languageName string) {
 	var fileName string
 	template, config := g.Load(languageName)
 	currentDir, _ := os.Getwd()
@@ -89,7 +95,7 @@ func (g *Languages) CreateFileFromTemplate(customFileName string, languageName s
 	} else {
 		fileName = customFileName
 	}
-	fmt.Println("Creating file: " + fileName + "." + config.Extension)
+
 	file, err := os.Create(filepath.Join(currentDir, "/"+fileName+"."+config.Extension))
 
 	if err != nil {
@@ -99,5 +105,4 @@ func (g *Languages) CreateFileFromTemplate(customFileName string, languageName s
 	defer file.Close()
 
 	file.WriteString(template)
-	//fmt.Println(template)
 }
