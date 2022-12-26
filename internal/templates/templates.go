@@ -100,40 +100,6 @@ func (g *Templates) List(listArg string) {
 	}
 }
 
-func (g *Templates) OldList(listArg string) {
-	languageDirs, err := templatesDir.ReadDir("templates")
-
-	if err != nil {
-		panic(err)
-	}
-
-	for _, languageDir := range languageDirs {
-		if languageDir.IsDir() {
-
-			infoPath := filepath.Join("templates", languageDir.Name(), "info.toml")
-			languageInfo := loadLanguageInfoFile(infoPath)
-
-			fmt.Println("Language Name: ", languageInfo.Name)
-			fmt.Println("Language Description: ", languageInfo.Description)
-
-			templates, err := templatesDir.ReadDir(filepath.Join("templates", languageDir.Name()))
-
-			if err != nil {
-				panic(err)
-			}
-
-			for _, template := range templates {
-				if template.IsDir() {
-					// TODO: Read info.toml
-					fmt.Println("Filename: ", template.Name())
-				}
-			}
-		}
-
-		fmt.Println()
-	}
-}
-
 // CreateFileFromTemplate Creates a template
 func (g *Templates) CreateFileFromTemplate(customFileName string, languageName string) {
 	var fileName string
