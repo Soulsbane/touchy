@@ -14,11 +14,50 @@ import (
 var templatesDir embed.FS
 
 type Templates struct {
-	languages []Language
+	languages map[string]Language
 }
 
 func New() *Templates {
-	return &Templates{}
+	var templates Templates
+
+	templates.languages = make(map[string]Language)
+	templates.findTemplates()
+
+	return &templates
+}
+
+func (g *Templates) findTemplates() {
+	languageDirs, err := templatesDir.ReadDir("templates")
+
+	if err != nil {
+		panic(err)
+	}
+
+	for _, languageDir := range languageDirs {
+		if languageDir.IsDir() {
+			var language Language
+
+			language.TemplateConfigs = make(map[string]TemplateConfig)
+			infoPath := filepath.Join("templates", languageDir.Name(), "info.toml")
+
+			language.Info = loadLanguageInfoFile(infoPath)
+			templates, err := templatesDir.ReadDir(filepath.Join("templates", languageDir.Name()))
+
+			if err != nil {
+				panic(err)
+			}
+
+			for _, template := range templates {
+				if template.IsDir() {
+					configPath := filepath.Join("templates", languageDir.Name(), template.Name(), "config.toml")
+					config := loadLanguageConfigFile(configPath)
+					language.TemplateConfigs[template.Name()] = config
+				}
+			}
+
+			g.languages[languageDir.Name()] = language
+		}
+	}
 }
 
 func (g *Templates) Load(name string) (string, TemplateConfig) {
@@ -37,7 +76,6 @@ func (g *Templates) Load(name string) (string, TemplateConfig) {
 	}
 
 	configPath := filepath.Join("templates", language, template, "config.toml")
-	fmt.Println("configPath: " + configPath)
 	config := loadLanguageConfigFile(configPath)
 	templateName := filepath.Join("templates", language, template, template+".template")
 	data, err := templatesDir.ReadFile(templateName)
@@ -51,6 +89,18 @@ func (g *Templates) Load(name string) (string, TemplateConfig) {
 }
 
 func (g *Templates) List(listArg string) {
+	for languageName, language := range g.languages {
+		fmt.Println("Language: ", languageName)
+
+		for templateName, config := range language.TemplateConfigs {
+			fmt.Println("Template Name: ", templateName)
+			fmt.Println(config.Description)
+			fmt.Println()
+		}
+	}
+}
+
+func (g *Templates) OldList(listArg string) {
 	languageDirs, err := templatesDir.ReadDir("templates")
 
 	if err != nil {

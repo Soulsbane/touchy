@@ -8,23 +8,24 @@ import (
 )
 
 type Language struct {
-	DirName         string           // Name of the directory under the templates directory.
-	Info            LanguageInfo     // Each language has a config file in its root directory call config.toml
-	TemplateConfigs []TemplateConfig // A list of all the templates in the language directory.
+	DirName         string                    // Name of the directory under the templates directory.
+	Info            LanguageInfo              // Each language has a config file in its root directory call config.toml
+	TemplateConfigs map[string]TemplateConfig // A list of all the templates in the language directory.
+}
+
+type BaseConfig struct {
+	Name                  string
+	DefaultOutputFileName string
+	Description           string
+	Extension             string
 }
 
 type TemplateConfig struct {
-	Name                  string
-	DefaultOutputFileName string
-	Description           string
-	Extension             string
+	BaseConfig
 }
 
 type LanguageInfo struct {
-	Name                  string
-	DefaultOutputFileName string
-	Description           string
-	Extension             string
+	BaseConfig
 }
 
 func loadLanguageInfoFile(languageName string) LanguageInfo {
