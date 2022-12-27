@@ -13,6 +13,8 @@ import (
 //go:embed templates
 var templatesDir embed.FS
 
+const CONFIG_FILENAME = "config.toml"
+
 type Templates struct {
 	languages map[string]Language
 }
@@ -37,10 +39,10 @@ func (g *Templates) findTemplates() {
 		if languageDir.IsDir() {
 			var language Language
 
-			language.TemplateConfigs = make(map[string]CommonConfig)
+			language.templateConfigs = make(map[string]CommonConfig)
 			infoPath := filepath.Join("templates", languageDir.Name(), "info.toml")
 
-			language.Info = loadLanguageInfoFile(infoPath)
+			language.infoConfig = loadLanguageInfoFile(infoPath)
 			templates, err := templatesDir.ReadDir(filepath.Join("templates", languageDir.Name()))
 
 			if err != nil {
@@ -51,7 +53,7 @@ func (g *Templates) findTemplates() {
 				if template.IsDir() {
 					configPath := filepath.Join("templates", languageDir.Name(), template.Name(), "config.toml")
 					config := loadLanguageConfigFile(configPath)
-					language.TemplateConfigs[template.Name()] = config
+					language.templateConfigs[template.Name()] = config
 				}
 			}
 
@@ -92,7 +94,7 @@ func (g *Templates) List(listArg string) {
 	for languageName, language := range g.languages {
 		fmt.Println("Language: ", languageName)
 
-		for templateName, config := range language.TemplateConfigs {
+		for templateName, config := range language.templateConfigs {
 			fmt.Println("Template Name: ", templateName)
 			fmt.Println(config.Description)
 			fmt.Println()

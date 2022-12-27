@@ -8,9 +8,9 @@ import (
 )
 
 type Language struct {
-	DirName         string                  // Name of the directory under the templates directory.
-	Info            CommonConfig            // Each language has a config file in its root directory call config.toml
-	TemplateConfigs map[string]CommonConfig // A list of all the templates in the language directory.
+	dirName         string                  // Name of the directory under the templates directory.
+	infoConfig      CommonConfig            // Each language has a config file in its root directory call config.toml
+	templateConfigs map[string]CommonConfig // A list of all the templates in the language directory.
 }
 
 type CommonConfig struct {
