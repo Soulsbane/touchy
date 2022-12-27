@@ -8,29 +8,21 @@ import (
 )
 
 type Language struct {
-	DirName         string                    // Name of the directory under the templates directory.
-	Info            LanguageInfo              // Each language has a config file in its root directory call config.toml
-	TemplateConfigs map[string]TemplateConfig // A list of all the templates in the language directory.
+	DirName         string                  // Name of the directory under the templates directory.
+	Info            CommonConfig            // Each language has a config file in its root directory call config.toml
+	TemplateConfigs map[string]CommonConfig // A list of all the templates in the language directory.
 }
 
-type BaseConfig struct {
+type CommonConfig struct {
 	Name                  string
 	DefaultOutputFileName string
 	Description           string
 	Extension             string
 }
 
-type TemplateConfig struct {
-	BaseConfig
-}
-
-type LanguageInfo struct {
-	BaseConfig
-}
-
-func loadLanguageInfoFile(languageName string) LanguageInfo {
+func loadLanguageInfoFile(languageName string) CommonConfig {
 	data, err := templatesDir.ReadFile(languageName)
-	config := LanguageInfo{}
+	config := CommonConfig{}
 
 	if err != nil {
 		log.Fatal(errors.New("Failed to load config file: " + languageName))
@@ -45,9 +37,9 @@ func loadLanguageInfoFile(languageName string) LanguageInfo {
 	return config
 }
 
-func loadLanguageConfigFile(languageName string) TemplateConfig {
+func loadLanguageConfigFile(languageName string) CommonConfig {
 	data, err := templatesDir.ReadFile(languageName)
-	config := TemplateConfig{}
+	config := CommonConfig{}
 
 	if err != nil {
 		log.Fatal(errors.New("Failed to load config file: " + languageName))

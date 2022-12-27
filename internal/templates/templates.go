@@ -37,7 +37,7 @@ func (g *Templates) findTemplates() {
 		if languageDir.IsDir() {
 			var language Language
 
-			language.TemplateConfigs = make(map[string]TemplateConfig)
+			language.TemplateConfigs = make(map[string]CommonConfig)
 			infoPath := filepath.Join("templates", languageDir.Name(), "info.toml")
 
 			language.Info = loadLanguageInfoFile(infoPath)
@@ -60,7 +60,7 @@ func (g *Templates) findTemplates() {
 	}
 }
 
-func (g *Templates) Load(name string) (string, TemplateConfig) {
+func (g *Templates) Load(name string) (string, CommonConfig) {
 	language := name
 	template := "default"
 
