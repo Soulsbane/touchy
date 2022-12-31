@@ -62,6 +62,33 @@ func (g *Templates) findTemplates() {
 	}
 }
 
+func (g *Templates) GetLanguageTemplateFor(languageName string, templateName string) (string, CommonConfig) {
+	for name, language := range g.languages {
+		if name == languageName {
+			for template, config := range language.templateConfigs {
+				if template == templateName {
+					return g.loadTemplateFile(languageName, templateName), config
+				}
+			}
+		}
+	}
+
+	return "", CommonConfig{}
+}
+
+func (g *Templates) loadTemplateFile(language string, template string) string {
+	templateName := filepath.Join("templates", language, template, template+".template")
+	data, err := templatesDir.ReadFile(templateName)
+
+	if err != nil {
+		//log.Fatal(errors.New("That template does not exist: " + config.Name + " => " + template))
+		log.Fatal(errors.New("That template does not exist: " + templateName))
+	}
+
+	return string(data)
+
+}
+
 func (g *Templates) Load(name string) (string, CommonConfig) {
 	language := name
 	template := "default"
