@@ -112,7 +112,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName, cu
 		fileName = customFileName
 	}
 
-	file, err := os.Create(filepath.Join(currentDir, "/"+fileName+"."+config.Extension))
+	file, err := os.Create(filepath.Join(currentDir, fileName))
 
 	if err != nil {
 		log.Fatal(err)

@@ -17,7 +17,6 @@ type CommonConfig struct {
 	Name                  string
 	DefaultOutputFileName string
 	Description           string
-	Extension             string
 }
 
 func loadLanguageInfoFile(languageName string) CommonConfig {

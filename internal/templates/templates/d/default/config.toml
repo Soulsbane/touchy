@@ -1,4 +1,4 @@
 Name = "DLang"
-DefaultFileName = "app"
+DefaultOutputFileName = "app.d"
 Description = "The D programming language"
-Extension = "d"
+TemplateFileName = "default"
