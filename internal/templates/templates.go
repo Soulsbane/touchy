@@ -107,7 +107,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName, cu
 	template, config := g.GetLanguageTemplateFor(languageName, templateName)
 	currentDir, _ := os.Getwd()
 
-	if customFileName == "DefaultFileName" {
+	if customFileName == "DefaultOutputFileName" {
 		fileName = config.DefaultOutputFileName
 	} else {
 		fileName = customFileName
