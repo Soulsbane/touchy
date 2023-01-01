@@ -13,6 +13,7 @@ import (
 var templatesDir embed.FS
 
 const CONFIG_FILENAME = "config.toml"
+const INFO_FILENAME = "info.toml"
 
 type Templates struct {
 	languages map[string]Language
@@ -39,7 +40,7 @@ func (g *Templates) findTemplates() {
 			var language Language
 
 			language.templateConfigs = make(map[string]CommonConfig)
-			infoPath := filepath.Join("templates", languageDir.Name(), "info.toml")
+			infoPath := filepath.Join("templates", languageDir.Name(), INFO_FILENAME)
 
 			language.infoConfig = loadLanguageInfoFile(infoPath)
 			templates, err := templatesDir.ReadDir(filepath.Join("templates", languageDir.Name()))
@@ -50,7 +51,7 @@ func (g *Templates) findTemplates() {
 
 			for _, template := range templates {
 				if template.IsDir() {
-					configPath := filepath.Join("templates", languageDir.Name(), template.Name(), "config.toml")
+					configPath := filepath.Join("templates", languageDir.Name(), template.Name(), CONFIG_FILENAME)
 					config := loadLanguageConfigFile(configPath)
 					language.templateConfigs[template.Name()] = config
 				}
