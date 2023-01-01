@@ -89,34 +89,6 @@ func (g *Templates) loadTemplateFile(language string, template string) string {
 
 }
 
-func (g *Templates) Load(name string) (string, CommonConfig) {
-	language := name
-	template := "default"
-
-	if strings.Contains(name, ".") {
-		var parts = strings.Split(name, ".")
-
-		language = parts[0]
-		template = parts[1]
-
-		if template == "" {
-			template = "default"
-		}
-	}
-
-	configPath := filepath.Join("templates", language, template, "config.toml")
-	config := loadLanguageConfigFile(configPath)
-	templateName := filepath.Join("templates", language, template, template+".template")
-	data, err := templatesDir.ReadFile(templateName)
-
-	if err != nil {
-		//log.Fatal(errors.New("That template does not exist: " + config.Name + " => " + template))
-		log.Fatal(errors.New("That template does not exist: " + name))
-	}
-
-	return string(data), config
-}
-
 func (g *Templates) List(listArg string) {
 	for languageName, language := range g.languages {
 		fmt.Println("Language: ", languageName)
@@ -130,9 +102,9 @@ func (g *Templates) List(listArg string) {
 }
 
 // CreateFileFromTemplate Creates a template
-func (g *Templates) CreateFileFromTemplate(customFileName string, languageName string) {
+func (g *Templates) CreateFileFromTemplate(languageName string, templateName, customFileName string) {
 	var fileName string
-	template, config := g.Load(languageName)
+	template, config := g.GetLanguageTemplateFor(languageName, templateName)
 	currentDir, _ := os.Getwd()
 
 	if customFileName == "DefaultFileName" {

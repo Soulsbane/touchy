@@ -13,7 +13,7 @@ func main() {
 
 	switch {
 	case args.Create != nil:
-		languages.CreateFileFromTemplate(args.Create.FileName, args.Create.Language)
+		languages.CreateFileFromTemplate(args.Create.Language, args.Create.TemplateName, args.Create.FileName)
 	case args.List != nil:
 		languages.List(args.List.Language)
 	}
