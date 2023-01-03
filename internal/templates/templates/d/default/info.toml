@@ -1,4 +1,3 @@
-Name = "DLang"
+Name = "default"
 DefaultOutputFileName = "app.d"
-Description = "A simple DLang template"
-TemplateFileName = "default"
+Description = "A simple default DLang template"
