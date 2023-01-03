@@ -1,7 +1,5 @@
 package main
 
-import "github.com/logrusorgru/aurora"
-
 type ShowCommand struct {
 }
 
@@ -23,5 +21,5 @@ type args struct {
 }
 
 func (args) Description() string {
-	return aurora.Blue("Creates a file based upon a template.").Bold().String()
+	return "Creates a file based upon a template"
 }
