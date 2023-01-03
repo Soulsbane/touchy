@@ -19,24 +19,7 @@ type CommonConfig struct {
 	Description           string
 }
 
-func loadLanguageInfoFile(languageName string) CommonConfig {
-	data, err := templatesDir.ReadFile(languageName)
-	config := CommonConfig{}
-
-	if err != nil {
-		log.Fatal(errors.New("Failed to load config file: " + languageName))
-	}
-
-	err = toml.Unmarshal(data, &config)
-
-	if err != nil {
-		log.Fatal(errors.New("Failed to read config file: " + languageName))
-	}
-
-	return config
-}
-
-func loadLanguageConfigFile(languageName string) CommonConfig {
+func loadInfoFile(languageName string) CommonConfig {
 	data, err := templatesDir.ReadFile(languageName)
 	config := CommonConfig{}
 
