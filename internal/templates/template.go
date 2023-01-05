@@ -2,7 +2,6 @@ package templates
 
 import (
 	"errors"
-	"log"
 
 	"github.com/pelletier/go-toml/v2"
 )
@@ -19,19 +18,19 @@ type CommonConfig struct {
 	Description           string
 }
 
-func loadInfoFile(languageName string) CommonConfig {
+func loadInfoFile(languageName string) (CommonConfig, error) {
 	data, err := templatesDir.ReadFile(languageName)
 	config := CommonConfig{}
 
 	if err != nil {
-		log.Fatal(errors.New("Failed to load config file: " + languageName))
+		return config, errors.New("Failed to load config file: " + languageName)
 	}
 
 	err = toml.Unmarshal(data, &config)
 
 	if err != nil {
-		log.Fatal(errors.New("Failed to read config file: " + languageName))
+		return config, errors.New("Failed to read config file: " + languageName)
 	}
 
-	return config
+	return config, nil
 }

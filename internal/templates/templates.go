@@ -37,22 +37,38 @@ func (g *Templates) findTemplates() {
 	for _, languageDir := range languageDirs {
 		if languageDir.IsDir() {
 			var language Language
+			defaultConfig := CommonConfig{
+				Name:                  languageDir.Name(),
+				DefaultOutputFileName: "<Unknown>",
+				Description:           "<Unknown>",
+			}
 
 			language.templateConfigs = make(map[string]CommonConfig)
 			infoPath := filepath.Join("templates", languageDir.Name(), INFO_FILENAME)
 
-			language.infoConfig = loadInfoFile(infoPath)
+			language.infoConfig, err = loadInfoFile(infoPath)
+
+			// If there is no info file, use the default config so it at least shows up in the list command
+			if err != nil {
+				language.infoConfig = defaultConfig
+			}
+
 			templates, err := templatesDir.ReadDir(filepath.Join("templates", languageDir.Name()))
 
 			if err != nil {
-				panic(err)
+				panic(err) // TODO: Handle this better?
 			}
 
 			for _, template := range templates {
 				if template.IsDir() {
 					configPath := filepath.Join("templates", languageDir.Name(), template.Name(), INFO_FILENAME)
-					config := loadInfoFile(configPath)
-					language.templateConfigs[template.Name()] = config
+					config, err := loadInfoFile(configPath)
+
+					if err != nil {
+						language.templateConfigs[template.Name()] = defaultConfig
+					} else {
+						language.templateConfigs[template.Name()] = config
+					}
 				}
 			}
 
