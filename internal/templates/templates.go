@@ -101,7 +101,7 @@ func (g *Templates) List(listArg string) {
 }
 
 // CreateFileFromTemplate Creates a template
-func (g *Templates) CreateFileFromTemplate(languageName string, templateName, customFileName string) {
+func (g *Templates) CreateFileFromTemplate(languageName string, templateName string, customFileName string) {
 	var fileName string
 	template, config := g.GetLanguageTemplateFor(languageName, templateName)
 	currentDir, _ := os.Getwd()
@@ -112,13 +112,17 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName, cu
 		fileName = customFileName
 	}
 
-	file, err := os.Create(filepath.Join(currentDir, fileName))
+	if fileName == "" {
+		fmt.Println("Failed to template file. No file name was provided!")
+	} else {
+		file, err := os.Create(filepath.Join(currentDir, fileName))
 
-	if err != nil {
-		log.Fatal(err)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		defer file.Close()
+
+		file.WriteString(template)
 	}
-
-	defer file.Close()
-
-	file.WriteString(template)
 }
