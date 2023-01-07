@@ -29,7 +29,7 @@ func loadInfoFile(languageName string) (CommonConfig, error) {
 	err = toml.Unmarshal(data, &config)
 
 	if err != nil {
-		return config, errors.New("Failed to read config file: " + languageName)
+		return config, errors.New("Failed to read config data: " + languageName)
 	}
 
 	return config, nil
