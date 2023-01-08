@@ -105,8 +105,22 @@ func (g *Templates) loadTemplateFile(language string, template string) string {
 }
 
 func (g *Templates) List(listArg string) {
+	if language, found := g.languages[listArg]; found {
+		for templateName, config := range language.templateConfigs {
+			fmt.Println("Template Name: ", templateName)
+			fmt.Println(config.Description)
+			fmt.Println()
+		}
+	} else if listArg == "all" {
+		g.listAll(listArg)
+	} else {
+		fmt.Println("That language could not be found!")
+	}
+}
+
+func (g *Templates) listAll(listArg string) {
 	for languageName, language := range g.languages {
-		fmt.Println("Language: ", languageName)
+		fmt.Println("Language Name: ", languageName)
 
 		for templateName, config := range language.templateConfigs {
 			fmt.Println("Template Name: ", templateName)
