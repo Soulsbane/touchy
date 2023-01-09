@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/jedib0t/go-pretty/v6/table"
 )
 
 //go:embed templates
@@ -106,15 +108,22 @@ func (g *Templates) loadTemplateFile(language string, template string) string {
 
 func (g *Templates) List(listArg string) {
 	if language, found := g.languages[listArg]; found {
-		for templateName, config := range language.templateConfigs {
-			fmt.Println("Template Name: ", templateName)
-			fmt.Println(config.Description)
-			fmt.Println()
-		}
+		g.listLanguageTemplates(language)
 	} else if listArg == "all" {
 		g.listAll(listArg)
 	} else {
 		fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
+	}
+}
+
+func (g *Templates) listLanguageTemplates(language Language) {
+	outputTable := table.NewWriter()
+
+	outputTable.SetOutputMirror(os.Stdout)
+	for templateName, config := range language.templateConfigs {
+		fmt.Println("Template Name: ", templateName)
+		fmt.Println(config.Description)
+		fmt.Println()
 	}
 }
 
