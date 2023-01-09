@@ -114,7 +114,7 @@ func (g *Templates) List(listArg string) {
 	} else if listArg == "all" {
 		g.listAll(listArg)
 	} else {
-		fmt.Println("That language could not be found!")
+		fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
 	}
 }
 
