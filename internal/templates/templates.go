@@ -120,23 +120,31 @@ func (g *Templates) listLanguageTemplates(language Language) {
 	outputTable := table.NewWriter()
 
 	outputTable.SetOutputMirror(os.Stdout)
+	outputTable.AppendHeader(table.Row{"Template Name", "Description"})
+
 	for templateName, config := range language.templateConfigs {
-		fmt.Println("Template Name: ", templateName)
-		fmt.Println(config.Description)
-		fmt.Println()
+		outputTable.AppendRow(table.Row{templateName, config.Description})
 	}
+
+	outputTable.SetStyle(table.StyleRounded)
+	outputTable.Style().Options.SeparateRows = true
+	outputTable.Render()
 }
 
 func (g *Templates) listAllLanguages(listArg string) {
-	for languageName, language := range g.languages {
-		fmt.Println("Language Name: ", languageName)
+	outputTable := table.NewWriter()
 
-		for templateName, config := range language.templateConfigs {
-			fmt.Println("Template Name: ", templateName)
-			fmt.Println(config.Description)
-			fmt.Println()
-		}
+	outputTable.SetOutputMirror(os.Stdout)
+	outputTable.AppendHeader(table.Row{"Name", "Description", "Default Output File Name"})
+
+	for languageName, language := range g.languages {
+		info := language.infoConfig
+		outputTable.AppendRow(table.Row{languageName, info.Description, info.DefaultOutputFileName})
 	}
+
+	outputTable.SetStyle(table.StyleRounded)
+	outputTable.Style().Options.SeparateRows = true
+	outputTable.Render()
 }
 
 // CreateFileFromTemplate Creates a template
