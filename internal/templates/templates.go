@@ -147,6 +147,18 @@ func (g *Templates) listAllLanguages(listArg string) {
 	outputTable.Render()
 }
 
+func (g *Templates) ShowTemplate(languageName string, templateName string) {
+	if language, found := g.languages[languageName]; found {
+		if _, found := language.templateConfigs[templateName]; found {
+			fmt.Println(g.loadTemplateFile(languageName, templateName))
+		} else {
+			fmt.Println("That template does not exist: ", templateName)
+		}
+	} else {
+		fmt.Println("That language does not exist: ", languageName)
+	}
+}
+
 // CreateFileFromTemplate Creates a template
 func (g *Templates) CreateFileFromTemplate(languageName string, templateName string, customFileName string) {
 	var fileName string

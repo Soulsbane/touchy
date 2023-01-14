@@ -16,6 +16,8 @@ func main() {
 		languages.CreateFileFromTemplate(args.Create.Language, args.Create.TemplateName, args.Create.FileName)
 	case args.List != nil:
 		languages.List(args.List.Language)
+	case args.Show != nil:
+		languages.ShowTemplate(args.Show.Language, args.Show.TemplateName)
 	}
 
 }

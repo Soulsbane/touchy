@@ -1,6 +1,8 @@
 package main
 
 type ShowCommand struct {
+	Language     string `arg:"positional,required" help:"The language that contains the template to show"`
+	TemplateName string `arg:"positional, required" help:"The name of the template to show"`
 }
 
 type ListCommand struct {
