@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/alecthomas/chroma/quick"
 	"github.com/jedib0t/go-pretty/v6/table"
 )
 
@@ -149,8 +150,17 @@ func (g *Templates) listAllLanguages(listArg string) {
 
 func (g *Templates) ShowTemplate(languageName string, templateName string) {
 	if language, found := g.languages[languageName]; found {
-		if _, found := language.templateConfigs[templateName]; found {
-			fmt.Println(g.loadTemplateFile(languageName, templateName))
+		if config, found := language.templateConfigs[templateName]; found {
+			sourceCode := g.loadTemplateFile(languageName, templateName)
+
+			// Formatters: terminal, terminal8, terminal16, terminal256, terminal16m
+			// Styles: https://github.com/alecthomas/chroma/tree/master/styles
+			err := quick.Highlight(os.Stdout, sourceCode, config.DefaultOutputFileName, "terminal256", "monokai")
+
+			if err != nil {
+				fmt.Println(err)
+			}
+
 		} else {
 			fmt.Println("That template does not exist: ", templateName)
 		}
