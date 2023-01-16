@@ -18,7 +18,7 @@ var templatesDir embed.FS
 const INFO_FILENAME = "info.toml"
 
 type Templates struct {
-	languages map[string]Language
+	languages map[string]Language // Map of all languages in the templates directory. Key is the language name.
 }
 
 func New() *Templates {
@@ -80,12 +80,12 @@ func (g *Templates) findTemplates() {
 	}
 }
 
-func (g *Templates) GetLanguageTemplateFor(languageName string, templateName string) (string, CommonConfig) {
+func (g *Templates) GetLanguageTemplateFor(languageName string, name string) (string, CommonConfig) {
 	for name, language := range g.languages {
 		if name == languageName {
-			for template, config := range language.templateConfigs {
-				if template == templateName {
-					return g.loadTemplateFile(languageName, templateName), config
+			for templateName, config := range language.templateConfigs {
+				if templateName == name {
+					return g.loadTemplateFile(languageName, name), config
 				}
 			}
 		}
