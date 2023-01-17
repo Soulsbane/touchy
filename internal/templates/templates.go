@@ -80,6 +80,12 @@ func (g *Templates) findTemplates() {
 	}
 }
 
+func (g *Templates) HasLanguage(languageName string) bool {
+	_, found := g.languages[languageName]
+
+	return found
+}
+
 func (g *Templates) GetLanguageTemplateFor(languageName string, name string) (string, CommonConfig) {
 	for name, language := range g.languages {
 		if name == languageName {
@@ -182,7 +188,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 	}
 
 	if fileName == "" {
-		fmt.Println("Failed to template file. No file name was provided!")
+		fmt.Println("Failed to load template file. No file name was provided!")
 	} else {
 		file, err := os.Create(filepath.Join(currentDir, fileName))
 
