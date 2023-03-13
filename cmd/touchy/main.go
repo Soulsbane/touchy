@@ -1,12 +1,20 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/Soulsbane/touchy/internal/templates"
 	"github.com/alexflint/go-arg"
 )
 
 func main() {
 	var args args
+	cmdLineArgs := os.Args[1:]
+
+	if len(cmdLineArgs) == 0 {
+		fmt.Println("No arguments provided. Use -h or --help for more information.")
+	}
 
 	arg.MustParse(&args)
 	languages := templates.New()
