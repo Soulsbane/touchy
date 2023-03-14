@@ -15,13 +15,13 @@ type CreateCommand struct {
 	FileName     string `arg:"positional" default:"DefaultOutputFileName" help:"Name of the generated file. Uses the key DefaultFileName in the language config file."`
 }
 
-type args struct {
+type commands struct {
 	//TemplateName string       `arg:"positional required"`
 	Create *CreateCommand `arg:"subcommand:create" help:"create a new template."`
 	List   *ListCommand   `arg:"subcommand:list" help:"Show a list of all installed templates."`
 	Show   *ShowCommand   `arg:"subcommand:show" help:"Show the contents of the template file."`
 }
 
-func (args) Description() string {
+func (commands) Description() string {
 	return "Creates a file based upon a template"
 }
