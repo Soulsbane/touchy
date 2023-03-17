@@ -36,7 +36,7 @@ func main() {
 		languages := templates.New()
 		cmd := cmdLineArgs[0]
 
-		if isReservedCommand(cmds, cmd) {
+		if isReservedCommand(cmds, cmd) || cmd == "-h" || cmd == "--help" {
 			arg.MustParse(&cmds)
 
 			switch {
