@@ -86,12 +86,12 @@ func (g *Templates) HasLanguage(languageName string) bool {
 	return found
 }
 
-func (g *Templates) GetLanguageTemplateFor(languageName string, name string) (string, CommonConfig) {
+func (g *Templates) GetLanguageTemplateFor(languageName string, tempName string) (string, CommonConfig) {
 	for name, language := range g.languages {
 		if name == languageName {
 			for templateName, config := range language.templateConfigs {
-				if templateName == name {
-					return g.loadTemplateFile(languageName, name), config
+				if templateName == tempName {
+					return g.loadTemplateFile(languageName, tempName), config
 				}
 			}
 		}
