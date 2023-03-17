@@ -33,16 +33,25 @@ func main() {
 	if len(cmdLineArgs) == 0 {
 		fmt.Println("No arguments provided. Use -h or --help for more information.")
 	} else {
-		arg.MustParse(&cmds)
 		languages := templates.New()
+		cmd := cmdLineArgs[0]
 
-		switch {
-		case cmds.Create != nil:
-			languages.CreateFileFromTemplate(cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
-		case cmds.List != nil:
-			languages.List(cmds.List.Language)
-		case cmds.Show != nil:
-			languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
+		if isReservedCommand(cmds, cmd) {
+			arg.MustParse(&cmds)
+
+			switch {
+			case cmds.Create != nil:
+				languages.CreateFileFromTemplate(cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
+			case cmds.List != nil:
+				languages.List(cmds.List.Language)
+			case cmds.Show != nil:
+				languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
+			}
+		} else {
+			var createCmd CreateCommand
+
+			arg.MustParse(&createCmd)
+			languages.CreateFileFromTemplate(createCmd.Language, createCmd.TemplateName, createCmd.FileName)
 		}
 	}
 }
