@@ -1,5 +1,10 @@
 package main
 
+import (
+	"reflect"
+	"strings"
+)
+
 type ShowCommand struct {
 	Language     string `arg:"positional,required" help:"The language that contains the template to show"`
 	TemplateName string `arg:"positional" default:"default" help:"The name of the template to show"`
@@ -24,4 +29,19 @@ type commands struct {
 
 func (commands) Description() string {
 	return "Creates a file based upon a template"
+}
+func isReservedCommand(cmds commands, command string) bool {
+	// This checks if a command is reserved based on the command existing as a member of the commands struct.
+	dummyVal := reflect.ValueOf(cmds)
+	numFields := dummyVal.NumField()
+
+	for i := 0; i < numFields; i++ {
+		field := dummyVal.Type().Field(i).Name
+
+		if strings.ToLower(field) == command {
+			return true
+		}
+	}
+
+	return false
 }

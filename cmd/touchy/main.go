@@ -3,28 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
-	"reflect"
-	"strings"
 
 	"github.com/Soulsbane/touchy/internal/templates"
 	"github.com/alexflint/go-arg"
 )
-
-func isReservedCommand(cmds commands, command string) bool {
-	// This checks if a command is reserved based on the command existing as a member of the commands struct.
-	dummyVal := reflect.ValueOf(cmds)
-	numFields := dummyVal.NumField()
-
-	for i := 0; i < numFields; i++ {
-		field := dummyVal.Type().Field(i).Name
-
-		if strings.ToLower(field) == command {
-			return true
-		}
-	}
-
-	return false
-}
 
 func main() {
 	var cmds commands
