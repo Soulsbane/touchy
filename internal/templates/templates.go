@@ -155,8 +155,8 @@ func (g *Templates) listAllLanguages(listArg string) {
 }
 
 func (g *Templates) ShowTemplate(languageName string, templateName string) {
-	if language, found := g.languages[languageName]; found {
-		if config, found := language.templateConfigs[templateName]; found {
+	if language, languageFound := g.languages[languageName]; languageFound {
+		if config, configFound := language.templateConfigs[templateName]; configFound {
 			sourceCode := g.loadTemplateFile(languageName, templateName)
 
 			// Formatters: terminal, terminal8, terminal16, terminal256, terminal16m
