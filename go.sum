@@ -1,3 +1,5 @@
+github.com/Soulsbane/goscriptsystem v0.1.0 h1:viU6xskfUX6xn1qT/vjFGa8l2bxErkcv84ERWLWpMfg=
+github.com/Soulsbane/goscriptsystem v0.1.0/go.mod h1:XQxYKA0YJMfS7zZdYHizwLKYQM+O5STt6dTLoiyx8Tk=
 github.com/alecthomas/chroma v0.10.0 h1:7XDcGkCQopCNKjZHfYrNLraA+M7e0fMiJ/Mfikbfjek=
 github.com/alecthomas/chroma v0.10.0/go.mod h1:jtJATyUxlIORhUOFNA9NZDWGAQ8wpxQQqNSB4rjA/1s=
 github.com/alexflint/go-arg v1.4.3 h1:9rwwEBpMXfKQKceuZfYcwuc/7YY7tWJbFsgG5cAU/uo=

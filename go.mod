@@ -10,6 +10,7 @@ require (
 )
 
 require (
+	github.com/Soulsbane/goscriptsystem v0.1.0 // indirect
 	github.com/alexflint/go-scalar v1.2.0 // indirect
 	github.com/dlclark/regexp2 v1.8.1 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
