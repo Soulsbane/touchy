@@ -15,5 +15,7 @@ require (
 	github.com/dlclark/regexp2 v1.8.1 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
+	github.com/yuin/gopher-lua v1.1.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
+	layeh.com/gopher-luar v1.0.10 // indirect
 )
