@@ -190,7 +190,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 	if fileName == "" {
 		fmt.Println("Failed to load template file. No file name was provided!")
 	} else {
-		file, err := os.Create(filepath.Join(currentDir, fileName))
+		file, err := os.Create(filepath.Join(currentDir, filepath.Clean(fileName)))
 
 		if err != nil {
 			log.Fatal(err)
