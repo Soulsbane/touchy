@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/alecthomas/chroma/quick"
 	"github.com/jedib0t/go-pretty/v6/table"
@@ -190,7 +191,11 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 	if fileName == "" {
 		fmt.Println("Failed to load template file. No file name was provided!")
 	} else {
-		file, err := os.Create(filepath.Join(currentDir, filepath.Clean(fileName)))
+		// FIXME: This probably needs to be more robust and moved to its own function
+		// NOTE: Remove any ../ from the file name to prevent writing outside of the current directory
+		cleanFileName := strings.Replace(fileName, ".."+string(os.PathSeparator), "", -1)
+		// NOTE: filepath.Join calls filepath.Clean on the result, so we don't need to call it here
+		file, err := os.Create(filepath.Join(currentDir, cleanFileName))
 
 		if err != nil {
 			log.Fatal(err)
