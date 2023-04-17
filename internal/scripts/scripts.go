@@ -12,3 +12,7 @@ func New() *TouchyScripts {
 	touchyScripts.scriptSystem = goscriptsystem.New(goscriptsystem.NewScriptErrors())
 	return &touchyScripts
 }
+
+func (ts *TouchyScripts) Run(languageName string, scriptName string) {
+
+}

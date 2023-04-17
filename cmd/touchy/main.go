@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Soulsbane/touchy/internal/scripts"
 	"github.com/Soulsbane/touchy/internal/templates"
 	"github.com/alexflint/go-arg"
 )
@@ -28,6 +29,8 @@ func main() {
 				languages.List(cmds.List.Language)
 			case cmds.Show != nil:
 				languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
+			case cmds.Run != nil:
+				scripts.New().Run(cmds.Run.Language, cmds.Run.ScriptName)
 			}
 		} else {
 			var createCmd CreateCommand

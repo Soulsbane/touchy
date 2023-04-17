@@ -20,11 +20,17 @@ type CreateCommand struct {
 	FileName     string `arg:"positional" default:"DefaultOutputFileName" help:"Name of the generated file. Uses the key DefaultFileName in the language config file."`
 }
 
+type RunCommand struct {
+	Language   string `arg:"positional,required" help:"language which the script can be found under"`
+	ScriptName string `arg:"positional" default:"default" help:"Name of the script to run"`
+}
+
 type commands struct {
 	//TemplateName string       `arg:"positional required"`
 	Create *CreateCommand `arg:"subcommand:create" help:"create a new template."`
 	List   *ListCommand   `arg:"subcommand:list" help:"Show a list of all installed templates."`
 	Show   *ShowCommand   `arg:"subcommand:show" help:"Show the contents of the template file."`
+	Run    *RunCommand    `arg:"subcommand:run" help:"Run a script."`
 }
 
 func (commands) Description() string {
