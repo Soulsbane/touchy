@@ -118,7 +118,7 @@ func (g *Templates) List(listArg string) {
 	if language, found := g.languages[listArg]; found {
 		g.listLanguageTemplates(language)
 	} else if listArg == "all" {
-		g.listAllLanguages(listArg)
+		g.listAllLanguages()
 	} else {
 		fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
 	}
@@ -139,7 +139,7 @@ func (g *Templates) listLanguageTemplates(language Language) {
 	outputTable.Render()
 }
 
-func (g *Templates) listAllLanguages(listArg string) {
+func (g *Templates) listAllLanguages() {
 	outputTable := table.NewWriter()
 
 	outputTable.SetOutputMirror(os.Stdout)
