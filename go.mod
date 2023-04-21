@@ -3,6 +3,7 @@ module github.com/Soulsbane/touchy
 go 1.17
 
 require (
+	github.com/Soulsbane/goscriptsystem v0.1.0
 	github.com/alecthomas/chroma v0.10.0
 	github.com/alexflint/go-arg v1.4.3
 	github.com/jedib0t/go-pretty/v6 v6.4.6
@@ -10,7 +11,6 @@ require (
 )
 
 require (
-	github.com/Soulsbane/goscriptsystem v0.1.0 // indirect
 	github.com/alexflint/go-scalar v1.2.0 // indirect
 	github.com/dlclark/regexp2 v1.8.1 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect

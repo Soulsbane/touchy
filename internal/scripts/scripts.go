@@ -1,6 +1,8 @@
 package scripts
 
-import "github.com/Soulsbane/goscriptsystem/goscriptsystem"
+import (
+	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
+)
 
 type TouchyScripts struct {
 	scriptSystem *goscriptsystem.ScriptSystem
