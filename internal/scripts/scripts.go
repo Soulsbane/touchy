@@ -1,8 +1,12 @@
 package scripts
 
 import (
+	"embed"
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 )
+
+//go:embed scripts
+var scriptsDir embed.FS
 
 type TouchyScripts struct {
 	scriptSystem *goscriptsystem.ScriptSystem
