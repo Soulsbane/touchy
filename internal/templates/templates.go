@@ -197,8 +197,12 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 			log.Fatal(err)
 		}
 
-		defer file.Close()
+		_, err = file.WriteString(template)
+		err = file.Close()
 
-		file.WriteString(template)
+		if err != nil {
+			// TODO This function should return an error instead of panicking
+			log.Fatal("Failed to close file: ", err")
+		}
 	}
 }
