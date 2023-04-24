@@ -202,7 +202,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 
 		if err != nil {
 			// TODO This function should return an error instead of panicking
-			log.Fatal("Failed to close file: ", err")
+			log.Fatal("Failed to close file: ", err)
 		}
 	}
 }
