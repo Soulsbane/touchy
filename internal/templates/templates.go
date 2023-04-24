@@ -16,7 +16,7 @@ import (
 //go:embed templates
 var templatesDir embed.FS
 
-const INFO_FILENAME = "info.toml"
+const infoFileName = "info.toml"
 
 type Templates struct {
 	languages map[string]Language // Map of all languages in the templates directory. Key is the language name.
@@ -48,7 +48,7 @@ func (g *Templates) findTemplates() {
 			}
 
 			language.templateConfigs = make(map[string]CommonConfig)
-			infoPath := filepath.Join("templates", languageDir.Name(), INFO_FILENAME)
+			infoPath := filepath.Join("templates", languageDir.Name(), infoFileName)
 
 			language.infoConfig, err = loadInfoFile(infoPath)
 
@@ -65,7 +65,7 @@ func (g *Templates) findTemplates() {
 
 			for _, template := range templates {
 				if template.IsDir() {
-					configPath := filepath.Join("templates", languageDir.Name(), template.Name(), INFO_FILENAME)
+					configPath := filepath.Join("templates", languageDir.Name(), template.Name(), infoFileName)
 					config, err := loadInfoFile(configPath)
 
 					if err != nil {
