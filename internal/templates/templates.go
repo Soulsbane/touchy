@@ -4,6 +4,7 @@ import (
 	"embed"
 	"errors"
 	"fmt"
+	"github.com/Soulsbane/touchy/internal/infofile"
 	"log"
 	"os"
 	"path/filepath"
@@ -15,8 +16,6 @@ import (
 
 //go:embed templates
 var templatesDir embed.FS
-
-const infoFileName = "info.toml"
 
 type Templates struct {
 	languages map[string]Language // Map of all languages in the templates directory. Key is the language name.
@@ -41,16 +40,16 @@ func (g *Templates) findTemplates() {
 	for _, languageDir := range languageDirs {
 		if languageDir.IsDir() {
 			var language Language
-			defaultConfig := CommonConfig{
+			defaultConfig := infofile.InfoFile{
 				Name:                  languageDir.Name(),
 				DefaultOutputFileName: "<Unknown>",
 				Description:           "<Unknown>",
 			}
 
-			language.templateConfigs = make(map[string]CommonConfig)
-			infoPath := filepath.Join("templates", languageDir.Name(), infoFileName)
+			language.templateConfigs = make(map[string]infofile.InfoFile)
+			infoPath := filepath.Join("templates", languageDir.Name(), infofile.DefaultFileName)
 
-			language.infoConfig, err = loadInfoFile(infoPath)
+			language.infoConfig, err = infofile.Load(infoPath, templatesDir)
 
 			// If there is no info file, use the default config so it at least shows up in the list command
 			if err != nil {
@@ -65,8 +64,8 @@ func (g *Templates) findTemplates() {
 
 			for _, template := range templates {
 				if template.IsDir() {
-					configPath := filepath.Join("templates", languageDir.Name(), template.Name(), infoFileName)
-					config, err := loadInfoFile(configPath)
+					configPath := filepath.Join("templates", languageDir.Name(), template.Name(), infofile.DefaultFileName)
+					config, err := infofile.Load(configPath, templatesDir)
 
 					if err != nil {
 						language.templateConfigs[template.Name()] = defaultConfig
@@ -87,7 +86,7 @@ func (g *Templates) HasLanguage(languageName string) bool {
 	return found
 }
 
-func (g *Templates) GetLanguageTemplateFor(languageName string, tempName string) (string, CommonConfig) {
+func (g *Templates) GetLanguageTemplateFor(languageName string, tempName string) (string, infofile.InfoFile) {
 	for name, language := range g.languages {
 		if name == languageName {
 			for templateName, config := range language.templateConfigs {
@@ -98,7 +97,7 @@ func (g *Templates) GetLanguageTemplateFor(languageName string, tempName string)
 		}
 	}
 
-	return "", CommonConfig{}
+	return "", infofile.InfoFile{}
 }
 
 func (g *Templates) loadTemplateFile(language string, template string) string {

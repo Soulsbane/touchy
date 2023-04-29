@@ -6,7 +6,7 @@ import (
 	"github.com/pelletier/go-toml/v2"
 )
 
-const InfoFileName = "info.toml"
+const DefaultFileName = "info.toml"
 
 type InfoFile struct {
 	Name                  string

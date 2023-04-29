@@ -38,7 +38,7 @@ func (ts *TouchyScripts) findScripts() {
 			}
 
 			ts.scripts = make(map[string]infofile.InfoFile)
-			infoFileName := filepath.Join("scripts", dir.Name(), infofile.InfoFileName)
+			infoFileName := filepath.Join("scripts", dir.Name(), infofile.DefaultFileName)
 			config, err := infofile.Load(infoFileName, scriptsDir)
 
 			if err != nil {
