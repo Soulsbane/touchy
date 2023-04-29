@@ -3,7 +3,7 @@ package scripts
 import (
 	"embed"
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
-	"github.com/Soulsbane/touchy/internal/templates"
+	"github.com/Soulsbane/touchy/internal/infofile"
 	"path/filepath"
 )
 
@@ -12,7 +12,7 @@ var scriptsDir embed.FS
 
 type TouchyScripts struct {
 	scriptSystem *goscriptsystem.ScriptSystem
-	scripts      map[string]templates.CommonConfig
+	scripts      map[string]infofile.InfoFile
 }
 
 func New() *TouchyScripts {
@@ -32,14 +32,14 @@ func (ts *TouchyScripts) findScripts() {
 
 	for _, dir := range dirs {
 		if dir.IsDir() {
-			defaultConfig := templates.CommonConfig{
+			defaultConfig := infofile.InfoFile{
 				Name:        dir.Name(),
 				Description: "<Unknown>",
 			}
 
-			ts.scripts = make(map[string]templates.CommonConfig)
-			infoFileName := filepath.Join("scripts", dir.Name(), "info.toml")
-			config, err := templates.LoadInfoFile(infoFileName, scriptsDir)
+			ts.scripts = make(map[string]infofile.InfoFile)
+			infoFileName := filepath.Join("scripts", dir.Name(), infofile.InfoFileName)
+			config, err := infofile.Load(infoFileName, scriptsDir)
 
 			if err != nil {
 				ts.scripts[dir.Name()] = defaultConfig
