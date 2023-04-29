@@ -1,1 +1,30 @@
 package infofile
+
+import (
+	"embed"
+	"errors"
+	"github.com/pelletier/go-toml/v2"
+)
+
+type InfoFile struct {
+	Name                  string
+	DefaultOutputFileName string
+	Description           string
+}
+
+func Load(languageName string, fs embed.FS) (InfoFile, error) {
+	data, err := fs.ReadFile(languageName)
+	config := InfoFile{}
+
+	if err != nil {
+		return config, errors.New("Failed to load config file: " + languageName)
+	}
+
+	err = toml.Unmarshal(data, &config)
+
+	if err != nil {
+		return config, errors.New("Failed to read config data: " + languageName)
+	}
+
+	return config, nil
+}
