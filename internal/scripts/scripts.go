@@ -23,7 +23,7 @@ func New() *TouchyScripts {
 	return &touchyScripts
 }
 
-func (touchyScripts *TouchyScripts) findScripts() {
+func (ts *TouchyScripts) findScripts() {
 	dirs, err := scriptsDir.ReadDir("scripts")
 
 	if err != nil {
@@ -37,14 +37,14 @@ func (touchyScripts *TouchyScripts) findScripts() {
 				Description: "<Unknown>",
 			}
 
-			touchyScripts.scripts = make(map[string]templates.CommonConfig)
+			ts.scripts = make(map[string]templates.CommonConfig)
 			infoFileName := filepath.Join("scripts", dir.Name(), "info.toml")
 			config, err := templates.LoadInfoFile(infoFileName, scriptsDir)
 
 			if err != nil {
-				touchyScripts.scripts[dir.Name()] = defaultConfig
+				ts.scripts[dir.Name()] = defaultConfig
 			} else {
-				touchyScripts.scripts[dir.Name()] = config
+				ts.scripts[dir.Name()] = config
 			}
 		}
 	}
