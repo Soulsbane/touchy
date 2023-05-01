@@ -19,7 +19,9 @@ func New() *TouchyScripts {
 	var touchyScripts TouchyScripts
 
 	touchyScripts.scriptSystem = goscriptsystem.New(goscriptsystem.NewScriptErrors())
+	touchyScripts.registerFunctions()
 	touchyScripts.findScripts()
+
 	return &touchyScripts
 }
 
@@ -48,6 +50,10 @@ func (ts *TouchyScripts) findScripts() {
 			}
 		}
 	}
+}
+
+func (ts *TouchyScripts) registerFunctions() {
+
 }
 
 func (ts *TouchyScripts) Run(languageName string, scriptName string) {
