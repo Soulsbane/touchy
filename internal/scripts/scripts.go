@@ -3,6 +3,7 @@ package scripts
 import (
 	"embed"
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
+	"github.com/Soulsbane/touchy/internal/api"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"path/filepath"
 )
@@ -53,7 +54,7 @@ func (ts *TouchyScripts) findScripts() {
 }
 
 func (ts *TouchyScripts) registerFunctions() {
-
+	ts.scriptSystem.SetGlobal("GetOutputDir", api.GetOutputDir)
 }
 
 func (ts *TouchyScripts) Run(languageName string, scriptName string) {
