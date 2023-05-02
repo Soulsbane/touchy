@@ -2,6 +2,7 @@ package scripts
 
 import (
 	"embed"
+	"fmt"
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/api"
 	"github.com/Soulsbane/touchy/internal/infofile"
@@ -57,6 +58,10 @@ func (ts *TouchyScripts) registerFunctions() {
 	ts.scriptSystem.SetGlobal("GetOutputDir", api.GetOutputDir)
 }
 
-func (ts *TouchyScripts) Run(languageName string, scriptName string) {
-
+func (ts *TouchyScripts) Run(scriptName string) {
+	if _, ok := ts.scripts[scriptName]; !ok {
+		fmt.Println("Script not found: " + scriptName)
+	} else {
+		fmt.Println("Running script: " + scriptName)
+	}
 }

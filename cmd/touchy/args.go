@@ -21,8 +21,7 @@ type CreateCommand struct {
 }
 
 type RunCommand struct {
-	Language   string `arg:"positional,required" help:"language which the script can be found under"`
-	ScriptName string `arg:"positional" default:"default" help:"Name of the script to run"`
+	ScriptName string `arg:"positional,required" help:"Name of the script to run"`
 }
 
 type commands struct {
