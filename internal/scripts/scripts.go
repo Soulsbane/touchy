@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 )
 
+const defaultScriptFileName = "main.lua"
+
 //go:embed scripts
 var scriptsDir embed.FS
 
@@ -62,6 +64,13 @@ func (ts *TouchyScripts) Run(scriptName string) {
 	if _, ok := ts.scripts[scriptName]; !ok {
 		fmt.Println("Script not found: " + scriptName)
 	} else {
-		fmt.Println("Running script: " + scriptName)
+		scriptPath := filepath.Join("scripts", scriptName, defaultScriptFileName)
+		data, err := scriptsDir.ReadFile(scriptPath)
+
+		if err != nil {
+			fmt.Println("Failed to load script: " + scriptName)
+		} else {
+			ts.scriptSystem.DoString(string(data))
+		}
 	}
 }
