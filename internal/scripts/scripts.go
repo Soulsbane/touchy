@@ -6,6 +6,7 @@ import (
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/api"
 	"github.com/Soulsbane/touchy/internal/infofile"
+	"github.com/Soulsbane/touchy/internal/templates"
 	"path/filepath"
 )
 
@@ -19,10 +20,11 @@ type TouchyScripts struct {
 	scripts      map[string]infofile.InfoFile
 }
 
-func New() *TouchyScripts {
+func New(languageTemplates *templates.Templates) *TouchyScripts {
 	var touchyScripts TouchyScripts
 
 	touchyScripts.scriptSystem = goscriptsystem.New(goscriptsystem.NewScriptErrors())
+	touchyScripts.scriptSystem.SetGlobal("Templates", languageTemplates)
 	touchyScripts.registerFunctions()
 	touchyScripts.findScripts()
 
