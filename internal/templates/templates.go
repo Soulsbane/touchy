@@ -88,7 +88,6 @@ func (g *Templates) findTemplates() {
 
 func (g *Templates) HasLanguage(languageName string) bool {
 	_, found := g.languages[languageName]
-
 	return found
 }
 
