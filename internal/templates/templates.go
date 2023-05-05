@@ -91,6 +91,20 @@ func (g *Templates) HasLanguage(languageName string) bool {
 	return found
 }
 
+func (g *Templates) HasTemplate(languageName string, templateName string) bool {
+	language, foundLanguage := g.languages[languageName]
+
+	if foundLanguage {
+		for name, _ := range language.templateConfigs {
+			if templateName == name {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
 func (g *Templates) GetLanguageTemplateFor(languageName string, tempName string) (string, infofile.InfoFile) {
 	for name, language := range g.languages {
 		if name == languageName {
