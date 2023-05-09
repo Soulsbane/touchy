@@ -6,6 +6,7 @@ import (
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/api"
 	"github.com/Soulsbane/touchy/internal/infofile"
+	"github.com/Soulsbane/touchy/internal/path"
 	"github.com/Soulsbane/touchy/internal/templates"
 	"path/filepath"
 )
@@ -60,6 +61,7 @@ func (ts *TouchyScripts) findScripts() {
 
 func (ts *TouchyScripts) registerFunctions() {
 	ts.scriptSystem.SetGlobal("GetOutputDir", api.GetOutputDir)
+	ts.scriptSystem.SetGlobal("GetAppConfigDir", path.GetAppConfigDir)
 }
 
 func (ts *TouchyScripts) Run(scriptName string) {
