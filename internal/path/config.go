@@ -18,3 +18,13 @@ func GetAppConfigDir() (string, error) {
 
 	return filepath.Join(path, companyName, applicationName), nil
 }
+
+func GetScriptsDir() string {
+	path, err := GetAppConfigDir()
+
+	if err != nil {
+		return ""
+	}
+
+	return filepath.Join(path, "scripts")
+}
