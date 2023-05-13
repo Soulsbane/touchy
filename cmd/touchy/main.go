@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/Soulsbane/touchy/internal/path"
 	"os"
 
 	"github.com/Soulsbane/touchy/internal/scripts"
@@ -12,6 +13,8 @@ import (
 func main() {
 	var cmds commands
 	cmdLineArgs := os.Args[1:]
+
+	path.SetupConfigDir()
 
 	if len(cmdLineArgs) == 0 {
 		fmt.Println("No arguments provided. Use -h or --help for more information.")
