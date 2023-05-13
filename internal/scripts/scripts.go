@@ -24,6 +24,7 @@ type TouchyScripts struct {
 func New(languageTemplates *templates.Templates) *TouchyScripts {
 	var touchyScripts TouchyScripts
 
+	touchyScripts.scripts = make(map[string]infofile.InfoFile)
 	touchyScripts.scriptSystem = goscriptsystem.New(goscriptsystem.NewScriptErrors())
 	touchyScripts.scriptSystem.SetGlobal("Templates", languageTemplates)
 	touchyScripts.registerFunctions()
@@ -46,7 +47,6 @@ func (ts *TouchyScripts) findScripts() {
 				Description: "<Unknown>",
 			}
 
-			ts.scripts = make(map[string]infofile.InfoFile)
 			infoFileName := filepath.Join("scripts", dir.Name(), infofile.DefaultFileName)
 			config, err := infofile.Load(infoFileName, scriptsDir)
 
