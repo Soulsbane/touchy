@@ -29,13 +29,13 @@ func New(languageTemplates *templates.Templates) *TouchyScripts {
 	touchyScripts.scriptSystem = goscriptsystem.New(goscriptsystem.NewScriptErrors())
 	touchyScripts.scriptSystem.SetGlobal("Templates", languageTemplates)
 	touchyScripts.registerFunctions()
-	touchyScripts.findScripts()
-	touchyScripts.findScriptsInConfigDir()
+	touchyScripts.findEmbeddedScripts()
+	touchyScripts.findConfigDirScripts()
 
 	return &touchyScripts
 }
 
-func (ts *TouchyScripts) findScriptsInConfigDir() {
+func (ts *TouchyScripts) findConfigDirScripts() {
 	configScriptsDir := path.GetScriptsDir()
 	configDirs, err := os.ReadDir(configScriptsDir)
 
@@ -63,7 +63,7 @@ func (ts *TouchyScripts) findScriptsInConfigDir() {
 	}
 }
 
-func (ts *TouchyScripts) findScripts() {
+func (ts *TouchyScripts) findEmbeddedScripts() {
 	dirs, err := embedsDir.ReadDir("scripts")
 
 	if err != nil {
