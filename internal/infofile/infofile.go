@@ -12,6 +12,7 @@ type InfoFile struct {
 	Name                  string
 	DefaultOutputFileName string
 	Description           string
+	Embedded              bool
 }
 
 func Load(languageName string, fs embed.FS) (InfoFile, error) {

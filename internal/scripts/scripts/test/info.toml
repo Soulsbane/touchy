@@ -1,2 +1,3 @@
 Name = "test"
 Description = "A simple script"
+Embedded = true
