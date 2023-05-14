@@ -15,7 +15,7 @@ import (
 )
 
 //go:embed templates
-var templatesDir embed.FS
+var embedsDir embed.FS
 
 type Language struct {
 	// dirName         string                  // Name of the directory under the templates directory.
@@ -37,7 +37,7 @@ func New() *Templates {
 }
 
 func (g *Templates) findTemplates() {
-	languageDirs, err := templatesDir.ReadDir("templates")
+	languageDirs, err := embedsDir.ReadDir("templates")
 
 	if err != nil {
 		panic(err)
@@ -55,14 +55,14 @@ func (g *Templates) findTemplates() {
 			language.templateConfigs = make(map[string]infofile.InfoFile)
 			infoPath := filepath.Join("templates", languageDir.Name(), infofile.DefaultFileName)
 
-			language.infoConfig, err = infofile.Load(infoPath, templatesDir)
+			language.infoConfig, err = infofile.Load(infoPath, embedsDir)
 
 			// If there is no info file, use the default config so it at least shows up in the list command
 			if err != nil {
 				language.infoConfig = defaultConfig
 			}
 
-			templates, err := templatesDir.ReadDir(filepath.Join("templates", languageDir.Name()))
+			templates, err := embedsDir.ReadDir(filepath.Join("templates", languageDir.Name()))
 
 			if err != nil {
 				panic(err) // TODO: Handle this better?
@@ -71,7 +71,7 @@ func (g *Templates) findTemplates() {
 			for _, template := range templates {
 				if template.IsDir() {
 					configPath := filepath.Join("templates", languageDir.Name(), template.Name(), infofile.DefaultFileName)
-					config, err := infofile.Load(configPath, templatesDir)
+					config, err := infofile.Load(configPath, embedsDir)
 
 					if err != nil {
 						language.templateConfigs[template.Name()] = defaultConfig
@@ -121,7 +121,7 @@ func (g *Templates) GetLanguageTemplateFor(languageName string, tempName string)
 
 func (g *Templates) loadTemplateFile(language string, template string) string {
 	templateName := filepath.Join("templates", language, template, template+".template")
-	data, err := templatesDir.ReadFile(templateName)
+	data, err := embedsDir.ReadFile(templateName)
 
 	if err != nil {
 		//log.Fatal(errors.New("That template does not exist: " + config.Name + " => " + template))
