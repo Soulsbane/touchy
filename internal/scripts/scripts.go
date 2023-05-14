@@ -15,7 +15,7 @@ import (
 const defaultScriptFileName = "main.lua"
 
 //go:embed scripts
-var scriptsDir embed.FS
+var embedsDir embed.FS
 
 type TouchyScripts struct {
 	scriptSystem *goscriptsystem.ScriptSystem
@@ -52,7 +52,7 @@ func (ts *TouchyScripts) findScriptsInConfigDir() {
 			}
 
 			infoFileName := filepath.Join("scripts", dir.Name(), infofile.DefaultFileName)
-			config, err := infofile.Load(infoFileName, scriptsDir)
+			config, err := infofile.Load(infoFileName, embedsDir)
 
 			if err != nil {
 				ts.scripts[dir.Name()] = defaultConfig
@@ -64,7 +64,7 @@ func (ts *TouchyScripts) findScriptsInConfigDir() {
 }
 
 func (ts *TouchyScripts) findScripts() {
-	dirs, err := scriptsDir.ReadDir("scripts")
+	dirs, err := embedsDir.ReadDir("scripts")
 
 	if err != nil {
 		panic(err)
@@ -79,7 +79,7 @@ func (ts *TouchyScripts) findScripts() {
 			}
 
 			infoFileName := filepath.Join("scripts", dir.Name(), infofile.DefaultFileName)
-			config, err := infofile.Load(infoFileName, scriptsDir)
+			config, err := infofile.Load(infoFileName, embedsDir)
 
 			if err != nil {
 				ts.scripts[dir.Name()] = defaultConfig
@@ -101,7 +101,7 @@ func (ts *TouchyScripts) Run(scriptName string) {
 	} else {
 		if ts.scripts[scriptName].Embedded {
 			scriptPath := filepath.Join("scripts", scriptName, defaultScriptFileName)
-			data, err := scriptsDir.ReadFile(scriptPath)
+			data, err := embedsDir.ReadFile(scriptPath)
 
 			if err != nil {
 				fmt.Println("Failed to load script: " + scriptName)
