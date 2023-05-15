@@ -8,6 +8,7 @@ import (
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/path"
 	"github.com/Soulsbane/touchy/internal/templates"
+	"io/fs"
 	"os"
 	"path/filepath"
 )
@@ -43,25 +44,7 @@ func (ts *TouchyScripts) findConfigDirScripts() {
 		fmt.Println("Failed to read config directory: ", err)
 	}
 
-	for _, dir := range configDirs {
-		if dir.IsDir() {
-			defaultConfig := infofile.InfoFile{
-				Name:        dir.Name(),
-				Description: "<Unknown>",
-				Embedded:    false,
-			}
-
-			infoFileName := filepath.Join("scripts", dir.Name(), infofile.DefaultFileName)
-			config, err := infofile.Load(infoFileName, embedsDir)
-
-			if err != nil {
-				ts.scripts[dir.Name()] = defaultConfig
-			} else {
-				config.Embedded = false
-				ts.scripts[dir.Name()] = config
-			}
-		}
-	}
+	ts.findScripts(configDirs, false, embedsDir)
 }
 
 func (ts *TouchyScripts) findEmbeddedScripts() {
@@ -70,22 +53,25 @@ func (ts *TouchyScripts) findEmbeddedScripts() {
 	if err != nil {
 		panic(err)
 	}
+	ts.findScripts(dirs, true, embedsDir)
+}
 
+func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool, fs embed.FS) {
 	for _, dir := range dirs {
 		if dir.IsDir() {
 			defaultConfig := infofile.InfoFile{
 				Name:        dir.Name(),
 				Description: "<Unknown>",
-				Embedded:    true,
+				Embedded:    embedded,
 			}
 
 			infoFileName := filepath.Join("scripts", dir.Name(), infofile.DefaultFileName)
-			config, err := infofile.Load(infoFileName, embedsDir)
+			config, err := infofile.Load(infoFileName, fs)
 
 			if err != nil {
 				ts.scripts[dir.Name()] = defaultConfig
 			} else {
-				config.Embedded = true
+				config.Embedded = embedded
 				ts.scripts[dir.Name()] = config
 			}
 		}
