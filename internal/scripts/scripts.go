@@ -57,6 +57,7 @@ func (ts *TouchyScripts) findConfigDirScripts() {
 			if err != nil {
 				ts.scripts[dir.Name()] = defaultConfig
 			} else {
+				config.Embedded = false
 				ts.scripts[dir.Name()] = config
 			}
 		}
@@ -84,6 +85,7 @@ func (ts *TouchyScripts) findEmbeddedScripts() {
 			if err != nil {
 				ts.scripts[dir.Name()] = defaultConfig
 			} else {
+				config.Embedded = true
 				ts.scripts[dir.Name()] = config
 			}
 		}
