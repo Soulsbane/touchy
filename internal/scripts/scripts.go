@@ -51,8 +51,9 @@ func (ts *TouchyScripts) findEmbeddedScripts() {
 	dirs, err := embedsDir.ReadDir("scripts")
 
 	if err != nil {
-		panic(err)
+		fmt.Println("Failed to read embeds directory: ", err)
 	}
+
 	ts.findScripts(dirs, true, embedsDir)
 }
 
