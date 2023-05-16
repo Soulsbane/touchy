@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/Soulsbane/touchy/internal/path"
 	"os"
 
+	"github.com/Soulsbane/touchy/internal/path"
 	"github.com/Soulsbane/touchy/internal/scripts"
 	"github.com/Soulsbane/touchy/internal/templates"
 	"github.com/alexflint/go-arg"

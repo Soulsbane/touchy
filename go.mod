@@ -1,6 +1,6 @@
 module github.com/Soulsbane/touchy
 
-go 1.17
+go 1.18
 
 require (
 	github.com/Soulsbane/goscriptsystem v0.1.0
@@ -8,6 +8,7 @@ require (
 	github.com/alexflint/go-arg v1.4.3
 	github.com/jedib0t/go-pretty/v6 v6.4.6
 	github.com/pelletier/go-toml/v2 v2.0.7
+	golang.org/x/exp v0.0.0-20230515195305-f3d0a9c9a5cc
 )
 
 require (

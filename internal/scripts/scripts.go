@@ -8,6 +8,7 @@ import (
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/path"
 	"github.com/Soulsbane/touchy/internal/templates"
+	"golang.org/x/exp/slices"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -20,13 +21,12 @@ var embedsDir embed.FS
 
 type TouchyScripts struct {
 	scriptSystem *goscriptsystem.ScriptSystem
-	scripts      map[string]infofile.InfoFile
+	scripts      []infofile.InfoFile
 }
 
 func New(languageTemplates *templates.Templates) *TouchyScripts {
 	var touchyScripts TouchyScripts
 
-	touchyScripts.scripts = make(map[string]infofile.InfoFile)
 	touchyScripts.scriptSystem = goscriptsystem.New(goscriptsystem.NewScriptErrors())
 	touchyScripts.scriptSystem.SetGlobal("Templates", languageTemplates)
 	touchyScripts.registerFunctions()
@@ -70,10 +70,10 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool, fs embed
 			config, err := infofile.Load(infoFileName, fs)
 
 			if err != nil {
-				ts.scripts[dir.Name()] = defaultConfig
+				ts.scripts = append(ts.scripts, defaultConfig)
 			} else {
 				config.Embedded = embedded
-				ts.scripts[dir.Name()] = config
+				ts.scripts = append(ts.scripts, config)
 			}
 		}
 	}
@@ -85,27 +85,32 @@ func (ts *TouchyScripts) registerFunctions() {
 }
 
 func (ts *TouchyScripts) Run(scriptName string) {
-	if _, ok := ts.scripts[scriptName]; !ok {
-		fmt.Println("Script not found: " + scriptName)
-	} else {
-		if ts.scripts[scriptName].Embedded {
-			scriptPath := filepath.Join("scripts", scriptName, defaultScriptFileName)
-			data, err := embedsDir.ReadFile(scriptPath)
+	idx := slices.IndexFunc(ts.scripts, func(c infofile.InfoFile) bool { return c.Name == scriptName })
 
-			if err != nil {
-				fmt.Println("Failed to load script: " + scriptName)
-			} else {
-				ts.scriptSystem.DoString(string(data))
-			}
-		} else {
-			scriptPath := filepath.Join(path.GetScriptsDir(), scriptName, defaultScriptFileName)
-			data, err := os.ReadFile(scriptPath)
+	if idx >= 0 {
+		scriptInfo := ts.scripts[idx]
+		if scriptInfo.Name == scriptName {
+			if scriptInfo.Embedded {
+				scriptPath := filepath.Join("scripts", scriptName, defaultScriptFileName)
+				data, err := embedsDir.ReadFile(scriptPath)
 
-			if err != nil {
-				fmt.Println(err)
+				if err != nil {
+					fmt.Println("Failed to load script: " + scriptName)
+				} else {
+					ts.scriptSystem.DoString(string(data))
+				}
 			} else {
-				ts.scriptSystem.DoString(string(data))
+				scriptPath := filepath.Join(path.GetScriptsDir(), scriptName, defaultScriptFileName)
+				data, err := os.ReadFile(scriptPath)
+
+				if err != nil {
+					fmt.Println(err)
+				} else {
+					ts.scriptSystem.DoString(string(data))
+				}
 			}
 		}
+	} else {
+		fmt.Println("Script not found: " + scriptName)
 	}
 }
