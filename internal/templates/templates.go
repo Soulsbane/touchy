@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Soulsbane/touchy/internal/infofile"
+	"golang.org/x/exp/slices"
 	"log"
 	"os"
 	"path/filepath"
@@ -19,8 +20,8 @@ var embedsDir embed.FS
 
 type Language struct {
 	// dirName         string                  // Name of the directory under the template's directory.
-	infoConfig      infofile.InfoFile            // Each language has a config file in its root directory call config.toml
-	templateConfigs map[string]infofile.InfoFile // A list of all the templates in the language directory. The key is the template dir name.
+	infoConfig      infofile.InfoFile   // Each language has a config file in its root directory call config.toml
+	templateConfigs []infofile.InfoFile // A list of all the templates in the language directory. The key is the template dir name.
 }
 
 type Templates struct {
@@ -52,7 +53,6 @@ func (g *Templates) findTemplates() {
 				Description:           "<Unknown>",
 			}
 
-			language.templateConfigs = make(map[string]infofile.InfoFile)
 			infoPath := filepath.Join("templates", languageDir.Name(), infofile.DefaultFileName)
 
 			language.infoConfig, err = infofile.Load(infoPath, embedsDir)
@@ -74,9 +74,9 @@ func (g *Templates) findTemplates() {
 					config, err := infofile.Load(configPath, embedsDir)
 
 					if err != nil {
-						language.templateConfigs[template.Name()] = defaultConfig
+						language.templateConfigs = append(language.templateConfigs, defaultConfig)
 					} else {
-						language.templateConfigs[template.Name()] = config
+						language.templateConfigs = append(language.templateConfigs, config)
 					}
 				}
 			}
@@ -95,24 +95,26 @@ func (g *Templates) HasTemplate(languageName string, templateName string) bool {
 	language, foundLanguage := g.languages[languageName]
 
 	if foundLanguage {
-		for name, _ := range language.templateConfigs {
-			if templateName == name {
-				return true
-			}
+		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.Name == templateName })
+
+		if idx >= 0 {
+			return true
 		}
+
+		return false
 	}
 
 	return false
 }
 
-func (g *Templates) GetLanguageTemplateFor(languageName string, tempName string) (string, infofile.InfoFile) {
-	for name, language := range g.languages {
-		if name == languageName {
-			for templateName, config := range language.templateConfigs {
-				if templateName == tempName {
-					return g.loadTemplateFile(languageName, tempName), config
-				}
-			}
+func (g *Templates) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
+	language, foundLanguage := g.languages[languageName]
+
+	if foundLanguage {
+		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.Name == templateName })
+
+		if idx >= 0 {
+			return g.loadTemplateFile(languageName, templateName), language.templateConfigs[idx]
 		}
 	}
 
@@ -124,7 +126,6 @@ func (g *Templates) loadTemplateFile(language string, template string) string {
 	data, err := embedsDir.ReadFile(templateName)
 
 	if err != nil {
-		//log.Fatal(errors.New("That template does not exist: " + config.Name + " => " + template))
 		log.Fatal(errors.New("That template does not exist: " + templateName))
 	}
 
@@ -175,12 +176,14 @@ func (g *Templates) listAllLanguages() {
 
 func (g *Templates) ShowTemplate(languageName string, templateName string) {
 	if language, languageFound := g.languages[languageName]; languageFound {
-		if config, configFound := language.templateConfigs[templateName]; configFound {
+		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.Name == templateName })
+
+		if idx >= 0 {
 			sourceCode := g.loadTemplateFile(languageName, templateName)
 
 			// Formatters: terminal, terminal8, terminal16, terminal256, terminal16m
 			// Styles: https://github.com/alecthomas/chroma/tree/master/styles
-			err := quick.Highlight(os.Stdout, sourceCode, config.DefaultOutputFileName, "terminal256", "monokai")
+			err := quick.Highlight(os.Stdout, sourceCode, language.templateConfigs[idx].DefaultOutputFileName, "terminal256", "monokai")
 
 			if err != nil {
 				fmt.Println(err)
