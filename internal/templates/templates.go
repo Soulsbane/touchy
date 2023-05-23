@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"golang.org/x/exp/slices"
+	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
@@ -32,29 +33,36 @@ func New() *Templates {
 	var templates Templates
 
 	templates.languages = make(map[string]Language)
-	templates.findTemplates()
+	templates.findEmbeddedTemplates()
 
 	return &templates
 }
 
-func (g *Templates) findTemplates() {
-	languageDirs, err := embedsDir.ReadDir("templates")
+func (g *Templates) findEmbeddedTemplates() {
+	dirs, err := embedsDir.ReadDir("templates")
 
 	if err != nil {
 		panic(err)
 	}
 
-	for _, languageDir := range languageDirs {
+	g.findTemplates(dirs, true, embedsDir)
+}
+
+func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool, fs embed.FS) {
+	for _, languageDir := range dirs {
 		if languageDir.IsDir() {
 			var language Language
+			var err error
+
 			defaultConfig := infofile.InfoFile{
 				Name:                  languageDir.Name(),
 				DefaultOutputFileName: "<Unknown>",
 				Description:           "<Unknown>",
+				Embedded:              embedded,
 			}
 
 			infoPath := filepath.Join("templates", languageDir.Name(), infofile.DefaultFileName)
-
+			// NOTE: Error: non-name language.infoConfig on left side of := if the err variable is not declared beforehand.
 			language.infoConfig, err = infofile.Load(infoPath, embedsDir)
 
 			// If there is no info file, use the default config so it at least shows up in the list command
@@ -76,6 +84,7 @@ func (g *Templates) findTemplates() {
 					if err != nil {
 						language.templateConfigs = append(language.templateConfigs, defaultConfig)
 					} else {
+						config.Embedded = embedded
 						language.templateConfigs = append(language.templateConfigs, config)
 					}
 				}
