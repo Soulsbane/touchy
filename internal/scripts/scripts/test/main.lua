@@ -9,3 +9,4 @@ print("Has language template gozer/busted: ", Templates:HasTemplate("gozer", "bu
 
 local appConfigDir, configErr = GetAppConfigDir()
 print("GetAppConfigDir: ", appConfigDir)
+print("GetTemplatesDir: ", GetTemplatesDir())

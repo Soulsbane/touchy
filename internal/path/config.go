@@ -36,3 +36,13 @@ func GetScriptsDir() string {
 
 	return filepath.Join(path, "scripts")
 }
+
+func GetTemplatesDir() string {
+	path, err := GetAppConfigDir()
+
+	if err != nil {
+		return ""
+	}
+
+	return filepath.Join(path, "templates")
+}

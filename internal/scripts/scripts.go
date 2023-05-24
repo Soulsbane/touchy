@@ -82,6 +82,7 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool, fs embed
 func (ts *TouchyScripts) registerFunctions() {
 	ts.scriptSystem.SetGlobal("GetOutputDir", api.GetOutputDir)
 	ts.scriptSystem.SetGlobal("GetAppConfigDir", path.GetAppConfigDir)
+	ts.scriptSystem.SetGlobal("GetTemplatesDir", path.GetTemplatesDir)
 }
 
 func (ts *TouchyScripts) Run(scriptName string) {
