@@ -158,8 +158,8 @@ func (g *Templates) listLanguageTemplates(language Language) {
 	outputTable.SetOutputMirror(os.Stdout)
 	outputTable.AppendHeader(table.Row{"Template Name", "Description"})
 
-	for templateName, config := range language.templateConfigs {
-		outputTable.AppendRow(table.Row{templateName, config.Description})
+	for _, config := range language.templateConfigs {
+		outputTable.AppendRow(table.Row{config.Name, config.Description})
 	}
 
 	outputTable.SetStyle(table.StyleRounded)
