@@ -4,6 +4,7 @@ import (
 	"embed"
 	"errors"
 	"github.com/pelletier/go-toml/v2"
+	"os"
 )
 
 const DefaultFileName = "info.toml"
@@ -15,8 +16,16 @@ type InfoFile struct {
 	Embedded              bool
 }
 
-func Load(languageName string, fs embed.FS) (InfoFile, error) {
-	data, err := fs.ReadFile(languageName)
+func Load(languageName string, embedded bool, fs embed.FS) (InfoFile, error) {
+	var data []byte
+	var err error
+
+	if embedded {
+		data, err = fs.ReadFile(languageName)
+	} else {
+		data, err = os.ReadFile(languageName)
+	}
+
 	config := InfoFile{}
 
 	if err != nil {

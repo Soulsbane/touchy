@@ -67,7 +67,7 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool, fs embed
 			}
 
 			infoFileName := filepath.Join("scripts", dir.Name(), infofile.DefaultFileName)
-			config, err := infofile.Load(infoFileName, fs)
+			config, err := infofile.Load(infoFileName, embedded, fs)
 
 			if err != nil {
 				ts.scripts = append(ts.scripts, defaultConfig)

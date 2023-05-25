@@ -33,9 +33,20 @@ func New() *Templates {
 	var templates Templates
 
 	templates.languages = make(map[string]Language)
+	templates.findUserTemplates()
 	templates.findEmbeddedTemplates()
 
 	return &templates
+}
+
+func (g *Templates) findUserTemplates() {
+	dirs, err := os.ReadDir(path.GetTemplatesDir())
+
+	if err != nil {
+		panic(err)
+	}
+
+	g.findTemplates(dirs, false, embedsDir)
 }
 
 func (g *Templates) findEmbeddedTemplates() {
@@ -49,10 +60,19 @@ func (g *Templates) findEmbeddedTemplates() {
 }
 
 func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool, fs embed.FS) {
+	var templatePath string
+
+	if embedded {
+		templatePath = "templates"
+	} else {
+		templatePath = path.GetTemplatesDir()
+	}
+
 	for _, languageDir := range dirs {
 		if languageDir.IsDir() {
 			var language Language
 			var err error
+			var templates []os.DirEntry
 
 			defaultConfig := infofile.InfoFile{
 				Name:                  languageDir.Name(),
@@ -61,25 +81,30 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool, fs embed.FS
 				Embedded:              embedded,
 			}
 
-			infoPath := filepath.Join("templates", languageDir.Name(), infofile.DefaultFileName)
+			infoPath := filepath.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
 			// NOTE: Error: non-name language.infoConfig on left side of := if the err variable is not declared beforehand.
-			language.infoConfig, err = infofile.Load(infoPath, embedsDir)
+			language.infoConfig, err = infofile.Load(infoPath, embedded, embedsDir)
 
 			// If there is no info file, use the default config so it at least shows up in the list command
 			if err != nil {
+				fmt.Println("Failed to find", languageDir.Name(), "'s info.toml")
 				language.infoConfig = defaultConfig
 			}
 
-			templates, err := embedsDir.ReadDir(filepath.Join("templates", languageDir.Name()))
+			if embedded {
+				templates, err = embedsDir.ReadDir(filepath.Join(templatePath, languageDir.Name()))
+			} else {
+				templates, err = os.ReadDir(filepath.Join(templatePath, languageDir.Name()))
+			}
 
 			if err != nil {
-				panic(err) // TODO: Handle this better?
+				fmt.Println("Could not read directory: ", err) // TODO: Handle this better?
 			}
 
 			for _, template := range templates {
 				if template.IsDir() {
-					configPath := filepath.Join("templates", languageDir.Name(), template.Name(), infofile.DefaultFileName)
-					config, err := infofile.Load(configPath, embedsDir)
+					configPath := filepath.Join(templatePath, languageDir.Name(), template.Name(), infofile.DefaultFileName)
+					config, err := infofile.Load(configPath, embedded, embedsDir)
 
 					if err != nil {
 						language.templateConfigs = append(language.templateConfigs, defaultConfig)
@@ -123,23 +148,32 @@ func (g *Templates) GetLanguageTemplateFor(languageName string, templateName str
 		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.Name == templateName })
 
 		if idx >= 0 {
-			return g.loadTemplateFile(languageName, templateName), language.templateConfigs[idx]
+			info := language.templateConfigs[idx]
+			return g.loadTemplateFile(languageName, templateName, info), language.templateConfigs[idx]
 		}
 	}
 
 	return "", infofile.InfoFile{}
 }
 
-func (g *Templates) loadTemplateFile(language string, template string) string {
-	templateName := filepath.Join("templates", language, template, template+".template")
-	data, err := embedsDir.ReadFile(templateName)
+func (g *Templates) loadTemplateFile(language string, template string, info infofile.InfoFile) string {
+	var data []byte
+	var templateName string
+	var err error
+
+	if info.Embedded {
+		templateName = filepath.Join("templates", language, template, template+".template")
+		data, err = embedsDir.ReadFile(templateName)
+	} else {
+		templateName = filepath.Join(path.GetTemplatesDir(), language, template, template+".template")
+		data, err = os.ReadFile(templateName)
+	}
 
 	if err != nil {
 		log.Fatal(errors.New("That template does not exist: " + templateName))
 	}
 
 	return string(data)
-
 }
 
 func (g *Templates) List(listArg string) {
@@ -188,7 +222,7 @@ func (g *Templates) ShowTemplate(languageName string, templateName string) {
 		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.Name == templateName })
 
 		if idx >= 0 {
-			sourceCode := g.loadTemplateFile(languageName, templateName)
+			sourceCode := g.loadTemplateFile(languageName, templateName, language.templateConfigs[idx])
 
 			// Formatters: terminal, terminal8, terminal16, terminal256, terminal16m
 			// Styles: https://github.com/alecthomas/chroma/tree/master/styles
