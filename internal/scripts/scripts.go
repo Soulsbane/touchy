@@ -44,7 +44,7 @@ func (ts *TouchyScripts) findConfigDirScripts() {
 		fmt.Println("Failed to read config directory: ", err)
 	}
 
-	ts.findScripts(configDirs, false, embedsDir)
+	ts.findScripts(configDirs, false)
 }
 
 func (ts *TouchyScripts) findEmbeddedScripts() {
@@ -54,27 +54,34 @@ func (ts *TouchyScripts) findEmbeddedScripts() {
 		fmt.Println("Failed to read embeds directory: ", err)
 	}
 
-	ts.findScripts(dirs, true, embedsDir)
+	ts.findScripts(dirs, true)
 }
 
-func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool, fs embed.FS) {
+func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool) {
 	for _, dir := range dirs {
 		if dir.IsDir() {
-			defaultConfig := infofile.InfoFile{
-				Name:        dir.Name(),
-				Description: "<Unknown>",
-				Embedded:    embedded,
-			}
+			var data []byte
+			var infoFilePath string
+			var err error
 
-			infoFileName := filepath.Join("scripts", dir.Name(), infofile.DefaultFileName)
-			config, err := infofile.Load(infoFileName, embedded, fs)
+			if embedded {
+				infoFilePath = filepath.Join("scripts", dir.Name(), infofile.DefaultFileName)
+				data, err = embedsDir.ReadFile(infoFilePath)
 
-			if err != nil {
-				ts.scripts = append(ts.scripts, defaultConfig)
+				if err != nil {
+					fmt.Println("Failed to load config file: " + infoFilePath)
+				}
 			} else {
-				config.Embedded = embedded
-				ts.scripts = append(ts.scripts, config)
+				infoFilePath = filepath.Join(path.GetScriptsDir(), dir.Name(), infofile.DefaultFileName)
+				data, err = os.ReadFile(infoFilePath)
+
+				if err != nil {
+					fmt.Println("Failed to load config file: " + infoFilePath)
+				}
 			}
+
+			config := infofile.LoadSimple(dir.Name(), infoFilePath, embedded, data)
+			ts.scripts = append(ts.scripts, config)
 		}
 	}
 }
