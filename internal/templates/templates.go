@@ -46,7 +46,7 @@ func (g *Templates) findUserTemplates() {
 		panic(err)
 	}
 
-	g.findTemplates(dirs, false, embedsDir)
+	g.findTemplates(dirs, false)
 }
 
 func (g *Templates) findEmbeddedTemplates() {
@@ -56,10 +56,10 @@ func (g *Templates) findEmbeddedTemplates() {
 		panic(err)
 	}
 
-	g.findTemplates(dirs, true, embedsDir)
+	g.findTemplates(dirs, true)
 }
 
-func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool, fs embed.FS) {
+func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 	var templatePath string
 
 	if embedded {
