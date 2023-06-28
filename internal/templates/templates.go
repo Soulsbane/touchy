@@ -43,7 +43,7 @@ func (g *Templates) findUserTemplates() {
 	dirs, err := os.ReadDir(path.GetTemplatesDir())
 
 	if err != nil {
-		panic(err)
+		//panic(err)
 	}
 
 	g.findTemplates(dirs, false)
