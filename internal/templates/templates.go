@@ -72,23 +72,22 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 		if languageDir.IsDir() {
 			var language Language
 			var err error
+			var data []byte
 			var templates []os.DirEntry
-
-			defaultConfig := infofile.InfoFile{
-				Name:                  languageDir.Name(),
-				DefaultOutputFileName: "<Unknown>",
-				Description:           "<Unknown>",
-				Embedded:              embedded,
-			}
 
 			infoPath := filepath.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
 			// NOTE: Error: non-name language.infoConfig on left side of := if the err variable is not declared beforehand.
-			language.infoConfig, err = infofile.Load(infoPath, embedded, embedsDir)
+			if embedded {
+				data, err = embedsDir.ReadFile(infoPath)
+			} else {
+				data, err = os.ReadFile(infoPath)
+			}
+
+			language.infoConfig = infofile.LoadSimple(languageDir.Name(), infoPath, embedded, data)
 
 			// If there is no info file, use the default config so it at least shows up in the list command
 			if err != nil {
 				fmt.Println("Failed to find", languageDir.Name(), "'s info.toml")
-				language.infoConfig = defaultConfig
 			}
 
 			if embedded {
@@ -103,11 +102,23 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 
 			for _, template := range templates {
 				if template.IsDir() {
+					var data []byte
 					configPath := filepath.Join(templatePath, languageDir.Name(), template.Name(), infofile.DefaultFileName)
-					config, err := infofile.Load(configPath, embedded, embedsDir)
+
+					if embedded {
+						data, err = embedsDir.ReadFile(configPath)
+					} else {
+						data, err = os.ReadFile(configPath)
+					}
 
 					if err != nil {
-						language.templateConfigs = append(language.templateConfigs, defaultConfig)
+						fmt.Println("Failed to find", template.Name(), "'s info.toml")
+					}
+
+					config := infofile.LoadSimple(template.Name(), configPath, embedded, data)
+
+					if err != nil {
+						language.templateConfigs = append(language.templateConfigs, config)
 					} else {
 						config.Embedded = embedded
 						language.templateConfigs = append(language.templateConfigs, config)
