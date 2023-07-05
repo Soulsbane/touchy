@@ -29,6 +29,26 @@ type Templates struct {
 	languages map[string]Language // Map of all languages in the templates directory. Key is the language name.
 }
 
+func getFileData(path string, embedded bool) ([]byte, error) {
+	if embedded {
+		data, err := embedsDir.ReadFile(path)
+
+		if err != nil {
+			return data, err
+		} else {
+			return data, nil
+		}
+	} else {
+		data, err := os.ReadFile(path)
+
+		if err != nil {
+			return data, err
+		} else {
+			return data, nil
+		}
+	}
+}
+
 func New() *Templates {
 	var templates Templates
 
@@ -71,23 +91,14 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 	for _, languageDir := range dirs {
 		if languageDir.IsDir() {
 			var language Language
-			var err error
-			var data []byte
 			var templates []os.DirEntry
 
 			infoPath := filepath.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
-			// NOTE: Error: non-name language.infoConfig on left side of := if the err variable is not declared beforehand.
-			if embedded {
-				data, err = embedsDir.ReadFile(infoPath)
-			} else {
-				data, err = os.ReadFile(infoPath)
-			}
-
+			data, err := getFileData(infoPath, embedded)
 			language.infoConfig = infofile.LoadSimple(languageDir.Name(), infoPath, embedded, data)
 
-			// If there is no info file, use the default config so it at least shows up in the list command
 			if err != nil {
-				fmt.Println("Failed to find", languageDir.Name(), "'s info.toml")
+				fmt.Println(err)
 			}
 
 			if embedded {
@@ -102,27 +113,16 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 
 			for _, template := range templates {
 				if template.IsDir() {
-					var data []byte
 					configPath := filepath.Join(templatePath, languageDir.Name(), template.Name(), infofile.DefaultFileName)
+					templateData, fileReadErr := getFileData(configPath, embedded)
 
-					if embedded {
-						data, err = embedsDir.ReadFile(configPath)
-					} else {
-						data, err = os.ReadFile(configPath)
+					if fileReadErr != nil {
+						fmt.Println(fileReadErr)
 					}
 
-					if err != nil {
-						fmt.Println("Failed to find", template.Name(), "'s info.toml")
-					}
-
-					config := infofile.LoadSimple(template.Name(), configPath, embedded, data)
-
-					if err != nil {
-						language.templateConfigs = append(language.templateConfigs, config)
-					} else {
-						config.Embedded = embedded
-						language.templateConfigs = append(language.templateConfigs, config)
-					}
+					config := infofile.LoadSimple(template.Name(), configPath, embedded, templateData)
+					config.Embedded = embedded
+					language.templateConfigs = append(language.templateConfigs, config)
 				}
 			}
 
