@@ -80,7 +80,7 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool) {
 				}
 			}
 
-			config := infofile.LoadSimple(dir.Name(), infoFilePath, embedded, data)
+			config := infofile.Load(dir.Name(), infoFilePath, embedded, data)
 			ts.scripts = append(ts.scripts, config)
 		}
 	}

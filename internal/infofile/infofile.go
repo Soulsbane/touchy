@@ -1,11 +1,8 @@
 package infofile
 
 import (
-	"embed"
-	"errors"
 	"fmt"
 	"github.com/pelletier/go-toml/v2"
-	"os"
 )
 
 const DefaultFileName = "info.toml"
@@ -17,7 +14,7 @@ type InfoFile struct {
 	Embedded              bool
 }
 
-func LoadSimple(name string, infoFilePath string, embedded bool, data []byte) InfoFile {
+func Load(name string, infoFilePath string, embedded bool, data []byte) InfoFile {
 	var err error
 	config := InfoFile{
 		Name:        name,
@@ -32,29 +29,4 @@ func LoadSimple(name string, infoFilePath string, embedded bool, data []byte) In
 	}
 
 	return config
-}
-
-func Load(languageName string, embedded bool, fs embed.FS) (InfoFile, error) {
-	var data []byte
-	var err error
-
-	if embedded {
-		data, err = fs.ReadFile(languageName)
-	} else {
-		data, err = os.ReadFile(languageName)
-	}
-
-	config := InfoFile{}
-
-	if err != nil {
-		return config, errors.New("Failed to load config file: " + languageName)
-	}
-
-	err = toml.Unmarshal(data, &config)
-
-	if err != nil {
-		return config, errors.New("Failed to read config data: " + languageName)
-	}
-
-	return config, nil
 }

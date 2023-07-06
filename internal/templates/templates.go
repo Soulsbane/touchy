@@ -95,7 +95,7 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 
 			infoPath := filepath.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
 			data, err := getFileData(infoPath, embedded)
-			language.infoConfig = infofile.LoadSimple(languageDir.Name(), infoPath, embedded, data)
+			language.infoConfig = infofile.Load(languageDir.Name(), infoPath, embedded, data)
 
 			if err != nil {
 				fmt.Println(err)
@@ -120,7 +120,7 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 						fmt.Println(fileReadErr)
 					}
 
-					config := infofile.LoadSimple(template.Name(), configPath, embedded, templateData)
+					config := infofile.Load(template.Name(), configPath, embedded, templateData)
 					config.Embedded = embedded
 					language.templateConfigs = append(language.templateConfigs, config)
 				}
