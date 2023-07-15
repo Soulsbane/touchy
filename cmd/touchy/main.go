@@ -31,7 +31,10 @@ func main() {
 			case cmds.List != nil:
 				languages.List(cmds.List.Language)
 			case cmds.Show != nil:
-				languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
+				err := languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
+				if err != nil {
+					fmt.Println(err)
+				}
 			case cmds.Run != nil:
 				scriptToRun := scripts.New(languages)
 				err := scriptToRun.Run(cmds.Run.ScriptName)

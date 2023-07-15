@@ -228,7 +228,7 @@ func (g *Templates) listAllLanguages() {
 	outputTable.Render()
 }
 
-func (g *Templates) ShowTemplate(languageName string, templateName string) {
+func (g *Templates) ShowTemplate(languageName string, templateName string) error {
 	if language, languageFound := g.languages[languageName]; languageFound {
 		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.Name == templateName })
 
@@ -240,15 +240,17 @@ func (g *Templates) ShowTemplate(languageName string, templateName string) {
 			err := quick.Highlight(os.Stdout, sourceCode, language.templateConfigs[idx].DefaultOutputFileName, "terminal256", "monokai")
 
 			if err != nil {
-				fmt.Println(err)
+				return err
 			}
 
 		} else {
-			fmt.Println("That template does not exist: ", templateName)
+			return fmt.Errorf("That template does not exist: %s", templateName)
 		}
 	} else {
-		fmt.Println("That language does not exist: ", languageName)
+		return fmt.Errorf("That language does not exist: %s", languageName)
 	}
+
+	return nil
 }
 
 // CreateFileFromTemplate Creates a template
