@@ -93,7 +93,7 @@ func (ts *TouchyScripts) registerFunctions() {
 	ts.scriptSystem.SetGlobal("GetTemplatesDir", path.GetTemplatesDir)
 }
 
-func (ts *TouchyScripts) Run(scriptName string) {
+func (ts *TouchyScripts) Run(scriptName string) error {
 	idx := slices.IndexFunc(ts.scripts, func(c infofile.InfoFile) bool { return c.Name == scriptName })
 
 	if idx >= 0 {
@@ -104,22 +104,26 @@ func (ts *TouchyScripts) Run(scriptName string) {
 				data, err := embedsDir.ReadFile(scriptPath)
 
 				if err != nil {
-					fmt.Println("Failed to load script: " + scriptName)
+					return fmt.Errorf("Failed to load script: %s" + scriptName)
 				} else {
 					ts.scriptSystem.DoString(string(data))
+					return nil
 				}
 			} else {
 				scriptPath := filepath.Join(path.GetScriptsDir(), scriptName, defaultScriptFileName)
 				data, err := os.ReadFile(scriptPath)
 
 				if err != nil {
-					fmt.Println(err)
+					return fmt.Errorf("Failed to load script: %s" + scriptName)
 				} else {
 					ts.scriptSystem.DoString(string(data))
+					return nil
 				}
 			}
 		}
 	} else {
-		fmt.Println("Script not found: " + scriptName)
+		return fmt.Errorf("Script not found: %s", scriptName)
 	}
+
+	return nil
 }

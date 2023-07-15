@@ -33,7 +33,12 @@ func main() {
 			case cmds.Show != nil:
 				languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
 			case cmds.Run != nil:
-				scripts.New(languages).Run(cmds.Run.ScriptName)
+				scriptToRun := scripts.New(languages)
+				err := scriptToRun.Run(cmds.Run.ScriptName)
+
+				if err != nil {
+					fmt.Println(err)
+				}
 			}
 		} else {
 			var createCmd CreateCommand
