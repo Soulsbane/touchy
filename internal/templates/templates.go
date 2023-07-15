@@ -252,7 +252,7 @@ func (g *Templates) ShowTemplate(languageName string, templateName string) {
 }
 
 // CreateFileFromTemplate Creates a template
-func (g *Templates) CreateFileFromTemplate(languageName string, templateName string, customFileName string) {
+func (g *Templates) CreateFileFromTemplate(languageName string, templateName string, customFileName string) error {
 	var fileName string
 	template, config := g.GetLanguageTemplateFor(languageName, templateName)
 	currentDir, _ := os.Getwd()
@@ -264,20 +264,27 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 	}
 
 	if fileName == "" {
-		fmt.Println("Failed to load template file. No file name was provided!")
+		return fmt.Errorf("Failed to load template file. No file name was provided!")
 	} else {
-		file, err := os.Create(filepath.Join(currentDir, path.CleanPath(fileName)))
+		fullFileName := filepath.Join(currentDir, path.CleanPath(fileName))
+		file, err := os.Create(fullFileName)
 
 		if err != nil {
-			log.Fatal(err)
+			return fmt.Errorf("Failed to create file: %s", fullFileName)
 		}
 
 		_, err = file.WriteString(template)
+
+		if err != nil {
+			return fmt.Errorf("Failed to write to file: %s", fullFileName)
+		}
+
 		err = file.Close()
 
 		if err != nil {
-			// TODO This function should return an error instead of panicking
-			log.Fatal("Failed to close file: ", err)
+			return fmt.Errorf("Failed to close file: %s", fullFileName)
 		}
 	}
+
+	return nil
 }
