@@ -27,11 +27,16 @@ func main() {
 
 			switch {
 			case cmds.Create != nil:
-				languages.CreateFileFromTemplate(cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
+				err := languages.CreateFileFromTemplate(cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
+
+				if err != nil {
+					fmt.Println(err)
+				}
 			case cmds.List != nil:
 				languages.List(cmds.List.Language)
 			case cmds.Show != nil:
 				err := languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
+
 				if err != nil {
 					fmt.Println(err)
 				}
@@ -47,7 +52,11 @@ func main() {
 			var createCmd CreateCommand
 
 			arg.MustParse(&createCmd)
-			languages.CreateFileFromTemplate(createCmd.Language, createCmd.TemplateName, createCmd.FileName)
+			err := languages.CreateFileFromTemplate(createCmd.Language, createCmd.TemplateName, createCmd.FileName)
+
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 	}
 }
