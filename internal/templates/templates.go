@@ -2,12 +2,10 @@ package templates
 
 import (
 	"embed"
-	"errors"
 	"fmt"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"golang.org/x/exp/slices"
 	"io/fs"
-	"log"
 	"os"
 	"path/filepath"
 
@@ -160,14 +158,21 @@ func (g *Templates) GetLanguageTemplateFor(languageName string, templateName str
 
 		if idx >= 0 {
 			info := language.templateConfigs[idx]
-			return g.loadTemplateFile(languageName, templateName, info), language.templateConfigs[idx]
+			//return g.loadTemplateFile(languageName, templateName, info), language.templateConfigs[idx]
+			data, err := g.loadTemplateFile(languageName, templateName, info)
+
+			if err != nil {
+				return "", language.templateConfigs[idx]
+			} else {
+				return data, language.templateConfigs[idx]
+			}
 		}
 	}
 
 	return "", infofile.InfoFile{}
 }
 
-func (g *Templates) loadTemplateFile(language string, template string, info infofile.InfoFile) string {
+func (g *Templates) loadTemplateFile(language string, template string, info infofile.InfoFile) (string, error) {
 	var data []byte
 	var templateName string
 	var err error
@@ -175,16 +180,17 @@ func (g *Templates) loadTemplateFile(language string, template string, info info
 	if info.Embedded {
 		templateName = filepath.Join("templates", language, template, template+".template")
 		data, err = embedsDir.ReadFile(templateName)
+
 	} else {
 		templateName = filepath.Join(path.GetTemplatesDir(), language, template, template+".template")
 		data, err = os.ReadFile(templateName)
 	}
 
-	if err != nil {
-		log.Fatal(errors.New("That template does not exist: " + templateName))
+	if err != nil { // We couldn't read from the embedded file or the file in user's config directory so return an error
+		return "", fmt.Errorf("That template does not exist: %s", templateName)
 	}
 
-	return string(data)
+	return string(data), nil
 }
 
 func (g *Templates) List(listArg string) {
@@ -233,11 +239,15 @@ func (g *Templates) ShowTemplate(languageName string, templateName string) error
 		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.Name == templateName })
 
 		if idx >= 0 {
-			sourceCode := g.loadTemplateFile(languageName, templateName, language.templateConfigs[idx])
+			sourceCode, err := g.loadTemplateFile(languageName, templateName, language.templateConfigs[idx])
+
+			if err != nil {
+				return fmt.Errorf("That template does not exist: %s", templateName)
+			}
 
 			// Formatters: terminal, terminal8, terminal16, terminal256, terminal16m
 			// Styles: https://github.com/alecthomas/chroma/tree/master/styles
-			err := quick.Highlight(os.Stdout, sourceCode, language.templateConfigs[idx].DefaultOutputFileName, "terminal256", "monokai")
+			err = quick.Highlight(os.Stdout, sourceCode, language.templateConfigs[idx].DefaultOutputFileName, "terminal256", "monokai")
 
 			if err != nil {
 				return err
