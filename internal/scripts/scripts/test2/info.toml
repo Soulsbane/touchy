@@ -1,0 +1,3 @@
+Name = "test2"
+Description = "Test for using the templates API"
+Embedded = true
