@@ -42,6 +42,8 @@ func main() {
 				}
 			case cmds.Run != nil:
 				scriptToRun := scripts.New(languages)
+				scriptToRun.RegisterAPI()
+
 				err := scriptToRun.Run(cmds.Run.ScriptName)
 
 				if err != nil {

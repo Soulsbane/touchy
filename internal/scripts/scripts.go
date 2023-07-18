@@ -29,7 +29,6 @@ func New(languageTemplates *templates.Templates) *TouchyScripts {
 
 	touchyScripts.scriptSystem = goscriptsystem.New(goscriptsystem.NewScriptErrors())
 	touchyScripts.scriptSystem.SetGlobal("Templates", languageTemplates)
-	touchyScripts.registerFunctions()
 	touchyScripts.findEmbeddedScripts()
 	touchyScripts.findConfigDirScripts()
 
@@ -86,7 +85,7 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool) {
 	}
 }
 
-func (ts *TouchyScripts) registerFunctions() {
+func (ts *TouchyScripts) RegisterAPI() {
 	ts.scriptSystem.SetGlobal("GetOutputDir", api.GetOutputDir)
 	ts.scriptSystem.SetGlobal("GetAppConfigDir", path.GetAppConfigDir)
 	ts.scriptSystem.SetGlobal("GetScriptsDir", path.GetScriptsDir)
