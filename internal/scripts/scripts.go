@@ -24,11 +24,10 @@ type TouchyScripts struct {
 	scripts      []infofile.InfoFile
 }
 
-func New(languageTemplates *templates.Templates) *TouchyScripts {
+func New() *TouchyScripts {
 	var touchyScripts TouchyScripts
 
 	touchyScripts.scriptSystem = goscriptsystem.New(goscriptsystem.NewScriptErrors())
-	touchyScripts.scriptSystem.SetGlobal("Templates", languageTemplates)
 	touchyScripts.findEmbeddedScripts()
 	touchyScripts.findConfigDirScripts()
 
@@ -90,6 +89,9 @@ func (ts *TouchyScripts) RegisterAPI() {
 	ts.scriptSystem.SetGlobal("GetAppConfigDir", path.GetAppConfigDir)
 	ts.scriptSystem.SetGlobal("GetScriptsDir", path.GetScriptsDir)
 	ts.scriptSystem.SetGlobal("GetTemplatesDir", path.GetTemplatesDir)
+
+	templatesObject := templates.New()
+	ts.scriptSystem.SetGlobal("Templates", templatesObject)
 }
 
 func (ts *TouchyScripts) Run(scriptName string) error {

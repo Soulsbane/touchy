@@ -41,7 +41,7 @@ func main() {
 					fmt.Println(err)
 				}
 			case cmds.Run != nil:
-				scriptToRun := scripts.New(languages)
+				scriptToRun := scripts.New()
 				scriptToRun.RegisterAPI()
 
 				err := scriptToRun.Run(cmds.Run.ScriptName)
