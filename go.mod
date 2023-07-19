@@ -3,7 +3,7 @@ module github.com/Soulsbane/touchy
 go 1.18
 
 require (
-	github.com/Soulsbane/goscriptsystem v0.1.0
+	github.com/Soulsbane/goscriptsystem v0.1.1
 	github.com/alecthomas/chroma v0.10.0
 	github.com/alexflint/go-arg v1.4.3
 	github.com/jedib0t/go-pretty/v6 v6.4.6
@@ -18,5 +18,5 @@ require (
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/yuin/gopher-lua v1.1.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
-	layeh.com/gopher-luar v1.0.10 // indirect
+	layeh.com/gopher-luar v1.0.11 // indirect
 )
