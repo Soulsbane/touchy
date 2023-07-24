@@ -1,8 +1,13 @@
 package api
 
-import "os"
+import (
+	"os"
+	"path"
+)
 
-func GetOutputDir() string {
-	dir, _ := os.Getwd()
-	return dir
+type IO struct {
+}
+
+func (io *IO) CreateDirInOutputDir(name string) error {
+	return os.MkdirAll(path.Join(GetOutputDir(), name), 0755)
 }
