@@ -209,7 +209,6 @@ func (g *Templates) listLanguageTemplates(language Language) {
 
 	outputTable.SetOutputMirror(os.Stdout)
 	outputTable.SetTitle("Templates")
-	outputTable.Style().Title.Align = text.AlignCenter
 	outputTable.AppendHeader(table.Row{"Template Name", "Description"})
 
 	for _, config := range language.templateConfigs {
@@ -218,6 +217,7 @@ func (g *Templates) listLanguageTemplates(language Language) {
 
 	outputTable.SetStyle(table.StyleRounded)
 	outputTable.Style().Options.SeparateRows = true
+	outputTable.Style().Title.Align = text.AlignCenter
 	outputTable.Render()
 }
 
@@ -226,7 +226,6 @@ func (g *Templates) listAllLanguages() {
 
 	outputTable.SetOutputMirror(os.Stdout)
 	outputTable.SetTitle("Templates")
-	outputTable.Style().Title.Align = text.AlignCenter
 	outputTable.AppendHeader(table.Row{"Name", "Description", "Default Output File Name"})
 
 	for languageName, language := range g.languages {
@@ -236,6 +235,7 @@ func (g *Templates) listAllLanguages() {
 
 	outputTable.SetStyle(table.StyleRounded)
 	outputTable.Style().Options.SeparateRows = true
+	outputTable.Style().Title.Align = text.AlignCenter
 	outputTable.Render()
 }
 

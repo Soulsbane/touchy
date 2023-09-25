@@ -92,7 +92,6 @@ func (g *TouchyScripts) List(listArg string) {
 	outputTable.SetOutputMirror(os.Stdout)
 	outputTable.SetTitle("Scripts")
 	outputTable.AppendHeader(table.Row{"Script Name", "Description"})
-	outputTable.Style().Title.Align = text.AlignCenter
 
 	for _, script := range g.scripts {
 		outputTable.AppendRow(table.Row{script.Name})
@@ -100,6 +99,7 @@ func (g *TouchyScripts) List(listArg string) {
 
 	outputTable.SetStyle(table.StyleRounded)
 	outputTable.Style().Options.SeparateRows = true
+	outputTable.Style().Title.Align = text.AlignCenter
 	outputTable.Render()
 }
 
