@@ -4,6 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"github.com/Soulsbane/touchy/internal/infofile"
+	"github.com/jedib0t/go-pretty/v6/text"
 	"golang.org/x/exp/slices"
 	"io/fs"
 	"os"
@@ -207,6 +208,8 @@ func (g *Templates) listLanguageTemplates(language Language) {
 	outputTable := table.NewWriter()
 
 	outputTable.SetOutputMirror(os.Stdout)
+	outputTable.SetTitle("Templates")
+	outputTable.Style().Title.Align = text.AlignCenter
 	outputTable.AppendHeader(table.Row{"Template Name", "Description"})
 
 	for _, config := range language.templateConfigs {
@@ -222,6 +225,8 @@ func (g *Templates) listAllLanguages() {
 	outputTable := table.NewWriter()
 
 	outputTable.SetOutputMirror(os.Stdout)
+	outputTable.SetTitle("Templates")
+	outputTable.Style().Title.Align = text.AlignCenter
 	outputTable.AppendHeader(table.Row{"Name", "Description", "Default Output File Name"})
 
 	for languageName, language := range g.languages {

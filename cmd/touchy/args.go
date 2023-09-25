@@ -11,7 +11,8 @@ type ShowCommand struct {
 }
 
 type ListCommand struct {
-	Language string `arg:"positional" default:"all" help:"Get a list of templates for the given language"`
+	Type     string `arg:"positional" default:"all" help:"Option to list either scripts, templates or all"`
+	Language string `arg:"positional" default:"all" help:"Get a list of templates or scripts for the given language"`
 }
 
 type CreateCommand struct {

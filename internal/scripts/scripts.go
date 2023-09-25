@@ -8,6 +8,8 @@ import (
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/path"
 	"github.com/Soulsbane/touchy/internal/templates"
+	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/jedib0t/go-pretty/v6/text"
 	"golang.org/x/exp/slices"
 	"io/fs"
 	"os"
@@ -82,6 +84,23 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool) {
 			ts.scripts = append(ts.scripts, config)
 		}
 	}
+}
+
+func (g *TouchyScripts) List(listArg string) {
+	outputTable := table.NewWriter()
+
+	outputTable.SetOutputMirror(os.Stdout)
+	outputTable.SetTitle("Scripts")
+	outputTable.AppendHeader(table.Row{"Script Name", "Description"})
+	outputTable.Style().Title.Align = text.AlignCenter
+
+	for _, script := range g.scripts {
+		outputTable.AppendRow(table.Row{script.Name})
+	}
+
+	outputTable.SetStyle(table.StyleRounded)
+	outputTable.Style().Options.SeparateRows = true
+	outputTable.Render()
 }
 
 func (ts *TouchyScripts) RegisterAPI() {
