@@ -4,7 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"github.com/Soulsbane/touchy/internal/infofile"
-	"github.com/jedib0t/go-pretty/v6/text"
+	"github.com/Soulsbane/touchy/internal/ui"
 	"golang.org/x/exp/slices"
 	"io/fs"
 	"os"
@@ -215,9 +215,7 @@ func (g *Templates) listLanguageTemplates(language Language) {
 		outputTable.AppendRow(table.Row{config.Name, config.Description})
 	}
 
-	outputTable.SetStyle(table.StyleRounded)
-	outputTable.Style().Options.SeparateRows = true
-	outputTable.Style().Title.Align = text.AlignCenter
+	outputTable.SetStyle(ui.TouchyStyle)
 	outputTable.Render()
 }
 
@@ -233,9 +231,7 @@ func (g *Templates) listAllLanguages() {
 		outputTable.AppendRow(table.Row{languageName, info.Description, info.DefaultOutputFileName})
 	}
 
-	outputTable.SetStyle(table.StyleRounded)
-	outputTable.Style().Options.SeparateRows = true
-	outputTable.Style().Title.Align = text.AlignCenter
+	outputTable.SetStyle(ui.TouchyStyle)
 	outputTable.Render()
 }
 

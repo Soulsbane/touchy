@@ -8,8 +8,8 @@ import (
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/path"
 	"github.com/Soulsbane/touchy/internal/templates"
+	"github.com/Soulsbane/touchy/internal/ui"
 	"github.com/jedib0t/go-pretty/v6/table"
-	"github.com/jedib0t/go-pretty/v6/text"
 	"golang.org/x/exp/slices"
 	"io/fs"
 	"os"
@@ -97,9 +97,7 @@ func (g *TouchyScripts) List(listArg string) {
 		outputTable.AppendRow(table.Row{script.Name})
 	}
 
-	outputTable.SetStyle(table.StyleRounded)
-	outputTable.Style().Options.SeparateRows = true
-	outputTable.Style().Title.Align = text.AlignCenter
+	outputTable.SetStyle(ui.TouchyStyle)
 	outputTable.Render()
 }
 
