@@ -205,33 +205,23 @@ func (g *Templates) List(listArg string) {
 }
 
 func (g *Templates) listLanguageTemplates(language Language) {
-	outputTable := table.NewWriter()
-
-	outputTable.SetOutputMirror(os.Stdout)
-	outputTable.SetTitle("Templates")
-	outputTable.AppendHeader(table.Row{"Template Name", "Description"})
+	outputTable := ui.CreateNewTableWriter("Templates", "Template Name", "Description")
 
 	for _, config := range language.templateConfigs {
 		outputTable.AppendRow(table.Row{config.Name, config.Description})
 	}
 
-	outputTable.SetStyle(ui.TouchyStyle)
 	outputTable.Render()
 }
 
 func (g *Templates) listAllLanguages() {
-	outputTable := table.NewWriter()
-
-	outputTable.SetOutputMirror(os.Stdout)
-	outputTable.SetTitle("Templates")
-	outputTable.AppendHeader(table.Row{"Name", "Description", "Default Output File Name"})
+	outputTable := ui.CreateNewTableWriter("Templates", "Template Name", "Description", "Default Output File Name")
 
 	for languageName, language := range g.languages {
 		info := language.infoConfig
 		outputTable.AppendRow(table.Row{languageName, info.Description, info.DefaultOutputFileName})
 	}
 
-	outputTable.SetStyle(ui.TouchyStyle)
 	outputTable.Render()
 }
 

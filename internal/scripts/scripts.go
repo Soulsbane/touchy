@@ -87,17 +87,12 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool) {
 }
 
 func (g *TouchyScripts) List(listArg string) {
-	outputTable := table.NewWriter()
-
-	outputTable.SetOutputMirror(os.Stdout)
-	outputTable.SetTitle("Scripts")
-	outputTable.AppendHeader(table.Row{"Script Name", "Description"})
+	outputTable := ui.CreateNewTableWriter("Scripts", "Script Name", "Description")
 
 	for _, script := range g.scripts {
 		outputTable.AppendRow(table.Row{script.Name})
 	}
 
-	outputTable.SetStyle(ui.TouchyStyle)
 	outputTable.Render()
 }
 
