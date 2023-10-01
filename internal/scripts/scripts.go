@@ -90,7 +90,7 @@ func (g *TouchyScripts) List(listArg string) {
 	outputTable := ui.CreateNewTableWriter("Scripts", "Script Name", "Description")
 
 	for _, script := range g.scripts {
-		outputTable.AppendRow(table.Row{script.Name})
+		outputTable.AppendRow(table.Row{script.Name, script.Description})
 	}
 
 	outputTable.Render()
