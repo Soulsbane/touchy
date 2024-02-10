@@ -37,7 +37,7 @@ func (commands) Description() string {
 	return "Creates a file based upon a template"
 }
 func isReservedCommand(cmds commands, command string) bool {
-	// This checks if a command is reserved based on the command existing as a member of the commands struct.
+	// This checks if a command is reserved based on the command existing as a member of the command's struct.
 	dummyVal := reflect.ValueOf(cmds)
 	numFields := dummyVal.NumField()
 
