@@ -103,10 +103,10 @@ func (ts *TouchyScripts) RegisterAPI() {
 	ts.scriptSystem.SetGlobal("GetTemplatesDir", path.GetTemplatesDir)
 
 	templatesObject := templates.New()
-	path := &api.Path{}
+	pathAPI := &api.Path{}
 
 	ts.scriptSystem.SetGlobal("Templates", templatesObject)
-	ts.scriptSystem.SetGlobal("Path", path)
+	ts.scriptSystem.SetGlobal("Path", pathAPI)
 }
 
 func (ts *TouchyScripts) Run(scriptName string) error {
