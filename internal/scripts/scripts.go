@@ -29,7 +29,7 @@ type TouchyScripts struct {
 func New() *TouchyScripts {
 	var touchyScripts TouchyScripts
 
-	touchyScripts.scriptSystem = goscriptsystem.New(goscriptsystem.NewScriptErrors())
+	touchyScripts.scriptSystem = goscriptsystem.New(goscriptsystem.NewStdOutScriptErrors())
 	touchyScripts.findEmbeddedScripts()
 	touchyScripts.findConfigDirScripts()
 
