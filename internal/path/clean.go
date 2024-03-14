@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 )
 
-// https://github.com/opencontainers/runc/blob/main/libcontainer/utils/utils.go
+// CleanPath taken from https://github.com/opencontainers/runc/blob/main/libcontainer/utils/utils.go
 func CleanPath(path string) string {
 	if path == "" {
 		return ""
