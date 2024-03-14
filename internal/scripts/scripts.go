@@ -86,10 +86,10 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool) {
 	}
 }
 
-func (g *TouchyScripts) List(listArg string) {
+func (ts *TouchyScripts) List(listArg string) {
 	outputTable := ui.CreateNewTableWriter("Scripts", "Script Name", "Description")
 
-	for _, script := range g.scripts {
+	for _, script := range ts.scripts {
 		outputTable.AppendRow(table.Row{script.Name, script.Description})
 	}
 
