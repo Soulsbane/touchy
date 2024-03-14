@@ -120,7 +120,7 @@ func (ts *TouchyScripts) Run(scriptName string) error {
 				data, err := embedsDir.ReadFile(scriptPath)
 
 				if err != nil {
-					return fmt.Errorf("Failed to load script: %s", scriptName)
+					return fmt.Errorf("failed to load script: %s", scriptName)
 				} else {
 					ts.scriptSystem.DoString(string(data))
 					return nil
@@ -130,7 +130,7 @@ func (ts *TouchyScripts) Run(scriptName string) error {
 				data, err := os.ReadFile(scriptPath)
 
 				if err != nil {
-					return fmt.Errorf("Failed to load script: %s", scriptName)
+					return fmt.Errorf("failed to load script: %s", scriptName)
 				} else {
 					ts.scriptSystem.DoString(string(data))
 					return nil
@@ -138,7 +138,7 @@ func (ts *TouchyScripts) Run(scriptName string) error {
 			}
 		}
 	} else {
-		return fmt.Errorf("Script not found: %s", scriptName)
+		return fmt.Errorf("script not found: %s", scriptName)
 	}
 
 	return nil
