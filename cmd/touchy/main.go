@@ -14,7 +14,11 @@ func main() {
 	var cmds commands
 	cmdLineArgs := os.Args[1:]
 
-	path.SetupConfigDir()
+	err := path.SetupConfigDir()
+
+	if err != nil {
+		fmt.Println("Failed to setup config directory: ", err)
+	}
 
 	if len(cmdLineArgs) == 0 {
 		fmt.Println("No arguments provided. Use -h or --help for more information.")

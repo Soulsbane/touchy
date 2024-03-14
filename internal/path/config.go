@@ -8,12 +8,14 @@ import (
 const companyName = "Raijinsoft"
 const applicationName = "touchy"
 
-func SetupConfigDir() {
+func SetupConfigDir() error {
 	configScriptsDir := GetScriptsDir()
 
 	if _, err := os.Stat(configScriptsDir); os.IsNotExist(err) || configScriptsDir == "" {
-		os.MkdirAll(configScriptsDir, os.ModePerm)
+		return os.MkdirAll(configScriptsDir, os.ModePerm)
 	}
+
+	return nil
 }
 
 // GetAppConfigDir returns the path to the config directory for the application using companyName and applicationName.
