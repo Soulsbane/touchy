@@ -1,6 +1,9 @@
 package main
 
 import (
+	"github.com/Soulsbane/touchy/internal/infofile"
+	"github.com/Soulsbane/touchy/internal/ui"
+	"github.com/jedib0t/go-pretty/v6/table"
 	"reflect"
 	"strings"
 )
@@ -50,4 +53,14 @@ func isReservedCommand(cmds commands, command string) bool {
 	}
 
 	return false
+}
+
+func ListScripts(scripts []infofile.InfoFile) {
+	outputTable := ui.CreateNewTableWriter("Scripts", "Script Name", "Description")
+
+	for _, script := range scripts {
+		outputTable.AppendRow(table.Row{script.Name, script.Description})
+	}
+
+	outputTable.Render()
 }
