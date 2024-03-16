@@ -84,6 +84,16 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool) {
 	}
 }
 
+func (ts *TouchyScripts) GetScriptInfoFor(scriptName string) *infofile.InfoFile {
+	idx := slices.IndexFunc(ts.scripts, func(c infofile.InfoFile) bool { return c.Name == scriptName })
+
+	if idx >= 0 {
+		return &ts.scripts[idx]
+	}
+
+	return nil
+}
+
 func (ts *TouchyScripts) GetListOfScripts() []infofile.InfoFile {
 	scripts := ts.scripts
 	return scripts
