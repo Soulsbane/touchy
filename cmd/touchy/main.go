@@ -44,12 +44,12 @@ func main() {
 					scripts := scriptToRun.GetListOfScripts()
 					ListScripts(scripts)
 					fmt.Println("")
-					languages.List(cmds.List.Language)
+					ListTemplates(cmds.List.Language)
 				} else if cmds.List.Type == "scripts" {
 					scripts := scriptToRun.GetListOfScripts()
 					ListScripts(scripts)
 				} else if cmds.List.Type == "templates" {
-					languages.List(cmds.List.Language)
+					ListTemplates(cmds.List.Language)
 				}
 			case cmds.Show != nil:
 				err := languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)

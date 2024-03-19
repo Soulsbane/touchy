@@ -4,7 +4,6 @@ import (
 	"embed"
 	"fmt"
 	"github.com/Soulsbane/touchy/internal/infofile"
-	"github.com/Soulsbane/touchy/internal/ui"
 	"golang.org/x/exp/slices"
 	"io/fs"
 	"os"
@@ -12,7 +11,6 @@ import (
 
 	"github.com/Soulsbane/touchy/internal/path"
 	"github.com/alecthomas/chroma/quick"
-	"github.com/jedib0t/go-pretty/v6/table"
 )
 
 //go:embed templates
@@ -26,6 +24,14 @@ type Language struct {
 
 type Templates struct {
 	languages map[string]Language // Map of all languages in the templates directory. Key is the language name.
+}
+
+func (lang *Language) GetInfoFile() infofile.InfoFile {
+	return lang.infoConfig
+}
+
+func (lang *Language) GetTemplatesInfoFiles() []infofile.InfoFile {
+	return lang.templateConfigs
 }
 
 func getFileData(path string, embedded bool) ([]byte, error) {
@@ -194,35 +200,22 @@ func (g *Templates) loadTemplateFile(language string, template string, info info
 	return string(data), nil
 }
 
-func (g *Templates) List(listArg string) {
-	if language, found := g.languages[listArg]; found {
-		g.listLanguageTemplates(language)
-	} else if listArg == "all" {
-		g.listAllLanguages()
-	} else {
-		fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
-	}
+//func (g *Templates) List(listArg string) {
+//	if language, found := g.languages[listArg]; found {
+//		g.listLanguageTemplates(language)
+//	} else if listArg == "all" {
+//		g.listAllLanguages()
+//	} else {
+//		fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
+//	}
+//}
+
+func (g *Templates) GetListOfLanguageTemplates(language Language) []infofile.InfoFile {
+	return language.templateConfigs
 }
 
-func (g *Templates) listLanguageTemplates(language Language) {
-	outputTable := ui.CreateNewTableWriter("Templates", "Template Name", "Description")
-
-	for _, config := range language.templateConfigs {
-		outputTable.AppendRow(table.Row{config.Name, config.Description})
-	}
-
-	outputTable.Render()
-}
-
-func (g *Templates) listAllLanguages() {
-	outputTable := ui.CreateNewTableWriter("Templates", "Template Name", "Description", "Default Output File Name")
-
-	for languageName, language := range g.languages {
-		info := language.infoConfig
-		outputTable.AppendRow(table.Row{languageName, info.Description, info.DefaultOutputFileName})
-	}
-
-	outputTable.Render()
+func (g *Templates) GetListOfAllLanguages() map[string]Language {
+	return g.languages
 }
 
 func (g *Templates) ShowTemplate(languageName string, templateName string) error {

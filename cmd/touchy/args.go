@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/Soulsbane/touchy/internal/infofile"
+	"github.com/Soulsbane/touchy/internal/templates"
 	"github.com/Soulsbane/touchy/internal/ui"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"reflect"
@@ -60,6 +61,19 @@ func ListScripts(scripts []infofile.InfoFile) {
 
 	for _, script := range scripts {
 		outputTable.AppendRow(table.Row{script.Name, script.Description})
+	}
+
+	outputTable.Render()
+}
+
+func ListTemplates(listArg string) {
+	temps := templates.New()
+	languages := temps.GetListOfAllLanguages()
+	outputTable := ui.CreateNewTableWriter("Templates", "Language", "Description", "Default Output File Name")
+
+	for languageName, language := range languages {
+		info := language.GetInfoFile()
+		outputTable.AppendRow(table.Row{languageName, info.Description, info.DefaultOutputFileName})
 	}
 
 	outputTable.Render()
