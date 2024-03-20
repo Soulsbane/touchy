@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/templates"
 	"github.com/Soulsbane/touchy/internal/ui"
@@ -69,12 +70,28 @@ func ListScripts(scripts []infofile.InfoFile) {
 func ListTemplates(listArg string) {
 	temps := templates.New()
 	languages := temps.GetListOfAllLanguages()
-	outputTable := ui.CreateNewTableWriter("Templates", "Language", "Description", "Default Output File Name")
 
-	for languageName, language := range languages {
-		info := language.GetInfoFile()
-		outputTable.AppendRow(table.Row{languageName, info.Description, info.DefaultOutputFileName})
+	if languageTemplates, found := languages[listArg]; found {
+		languageInfo := languageTemplates.GetInfoFile()
+		outputTable := ui.CreateNewTableWriter(languageInfo.Name+" Templates", "Name", "Description", "Default Output File Name")
+
+		for _, info := range languageTemplates.GetTemplatesInfoFiles() {
+			outputTable.AppendRow(table.Row{info.Name, info.Description, info.DefaultOutputFileName})
+		}
+
+		outputTable.Render()
+	} else if listArg == "all" {
+		for _, language := range languages {
+			languageInfo := language.GetInfoFile()
+			outputTable := ui.CreateNewTableWriter(languageInfo.Name+" Templates", "Name", "Description", "Default Output File Name")
+
+			for _, info := range language.GetTemplatesInfoFiles() {
+				outputTable.AppendRow(table.Row{info.Name, info.Description, info.DefaultOutputFileName})
+			}
+
+			outputTable.Render()
+		}
+	} else {
+		fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
 	}
-
-	outputTable.Render()
 }
