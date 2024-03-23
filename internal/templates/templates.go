@@ -200,16 +200,6 @@ func (g *Templates) loadTemplateFile(language string, template string, info info
 	return string(data), nil
 }
 
-//func (g *Templates) List(listArg string) {
-//	if language, found := g.languages[listArg]; found {
-//		g.listLanguageTemplates(language)
-//	} else if listArg == "all" {
-//		g.listAllLanguages()
-//	} else {
-//		fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
-//	}
-//}
-
 func (g *Templates) GetListOfLanguageTemplates(language Language) []infofile.InfoFile {
 	return language.templateConfigs
 }
