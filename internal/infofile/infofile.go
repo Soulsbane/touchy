@@ -14,6 +14,26 @@ type InfoFile struct {
 	Embedded              bool
 }
 
+func (i *InfoFile) GetName() string {
+	return i.Name
+}
+
+func (i *InfoFile) GetDefaultOutputFileName() string {
+	return i.DefaultOutputFileName
+}
+
+func (i *InfoFile) GetDescription() string {
+	return i.Description
+}
+
+func (i *InfoFile) IsEmbedded() bool {
+	return i.Embedded
+}
+
+func (i *InfoFile) SetEmbedded(embedded bool) {
+	i.Embedded = embedded
+}
+
 func Load(name string, infoFilePath string, embedded bool, data []byte) InfoFile {
 	var err error
 	config := InfoFile{

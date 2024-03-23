@@ -85,7 +85,7 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool) {
 }
 
 func (ts *TouchyScripts) GetScriptInfoFor(scriptName string) *infofile.InfoFile {
-	idx := slices.IndexFunc(ts.scripts, func(c infofile.InfoFile) bool { return c.Name == scriptName })
+	idx := slices.IndexFunc(ts.scripts, func(c infofile.InfoFile) bool { return c.GetName() == scriptName })
 
 	if idx >= 0 {
 		return &ts.scripts[idx]
@@ -113,12 +113,12 @@ func (ts *TouchyScripts) RegisterAPI() {
 }
 
 func (ts *TouchyScripts) Run(scriptName string) error {
-	idx := slices.IndexFunc(ts.scripts, func(c infofile.InfoFile) bool { return c.Name == scriptName })
+	idx := slices.IndexFunc(ts.scripts, func(c infofile.InfoFile) bool { return c.GetName() == scriptName })
 
 	if idx >= 0 {
 		scriptInfo := ts.scripts[idx]
-		if scriptInfo.Name == scriptName {
-			if scriptInfo.Embedded {
+		if scriptInfo.GetName() == scriptName {
+			if scriptInfo.IsEmbedded() {
 				scriptPath := filepath.Join("scripts", scriptName, defaultScriptFileName)
 				data, err := embedsDir.ReadFile(scriptPath)
 

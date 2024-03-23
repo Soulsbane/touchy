@@ -22,12 +22,12 @@ type ListCommand struct {
 
 type CreateCommand struct {
 	Language     string `arg:"positional,required" help:"language to use for template"`
-	TemplateName string `arg:"positional" default:"default" help:"Name of the template to use"`
-	FileName     string `arg:"positional" default:"DefaultOutputFileName" help:"Name of the generated file. Uses the key DefaultFileName in the language config file."`
+	TemplateName string `arg:"positional" default:"default" help:"name of the template to use"`
+	FileName     string `arg:"positional" default:"DefaultOutputFileName" help:"name of the generated file. Uses the key DefaultFileName in the language config file."`
 }
 
 type RunCommand struct {
-	ScriptName string `arg:"positional,required" help:"Name of the script to run"`
+	ScriptName string `arg:"positional,required" help:"name of the script to run"`
 }
 
 type commands struct {
@@ -58,10 +58,10 @@ func isReservedCommand(cmds commands, command string) bool {
 }
 
 func ListScripts(scripts []infofile.InfoFile) {
-	outputTable := ui.CreateNewTableWriter("Scripts", "Script Name", "Description")
+	outputTable := ui.CreateNewTableWriter("Scripts", "Script name", "Description")
 
 	for _, script := range scripts {
-		outputTable.AppendRow(table.Row{script.Name, script.Description})
+		outputTable.AppendRow(table.Row{script.GetName(), script.GetDescription()})
 	}
 
 	outputTable.Render()
@@ -73,20 +73,20 @@ func ListTemplates(listArg string) {
 
 	if languageTemplates, found := languages[listArg]; found {
 		languageInfo := languageTemplates.GetInfoFile()
-		outputTable := ui.CreateNewTableWriter(languageInfo.Name+" Templates", "Name", "Description", "Default Output File Name")
+		outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
 
 		for _, info := range languageTemplates.GetTemplatesInfoFiles() {
-			outputTable.AppendRow(table.Row{info.Name, info.Description, info.DefaultOutputFileName})
+			outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
 		}
 
 		outputTable.Render()
 	} else if listArg == "all" {
 		for _, language := range languages {
 			languageInfo := language.GetInfoFile()
-			outputTable := ui.CreateNewTableWriter(languageInfo.Name+" Templates", "Name", "Description", "Default Output File Name")
+			outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
 
 			for _, info := range language.GetTemplatesInfoFiles() {
-				outputTable.AppendRow(table.Row{info.Name, info.Description, info.DefaultOutputFileName})
+				outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
 			}
 
 			outputTable.Render()
