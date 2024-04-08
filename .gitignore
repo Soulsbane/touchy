@@ -14,3 +14,4 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 cmd/touchy/touchy
+/cmd/touchy/20MB-TESTFILE.ORG.pdf

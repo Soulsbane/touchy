@@ -3,15 +3,16 @@ package scripts
 import (
 	"embed"
 	"fmt"
+	"io/fs"
+	"os"
+	"path/filepath"
+
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/api"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/path"
 	"github.com/Soulsbane/touchy/internal/templates"
 	"golang.org/x/exp/slices"
-	"io/fs"
-	"os"
-	"path/filepath"
 )
 
 const defaultScriptFileName = "main.lua"
@@ -105,6 +106,7 @@ func (ts *TouchyScripts) RegisterAPI() {
 	ts.scriptSystem.SetGlobal("GetAppConfigDir", path.GetAppConfigDir)
 	ts.scriptSystem.SetGlobal("GetScriptsDir", path.GetScriptsDir)
 	ts.scriptSystem.SetGlobal("GetTemplatesDir", path.GetTemplatesDir)
+	ts.scriptSystem.SetGlobal("DownloadFile", api.DownloadFile)
 
 	templatesObject := templates.New()
 	pathAPI := &api.Path{}
