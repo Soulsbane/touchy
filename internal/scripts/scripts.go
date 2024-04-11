@@ -3,6 +3,7 @@ package scripts
 import (
 	"embed"
 	"fmt"
+	libs "github.com/vadv/gopher-lua-libs"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -113,6 +114,7 @@ func (ts *TouchyScripts) RegisterAPI() {
 
 	ts.scriptSystem.SetGlobal("Templates", templatesObject)
 	ts.scriptSystem.SetGlobal("Path", pathAPI)
+	libs.Preload(ts.scriptSystem.GetState())
 }
 
 func (ts *TouchyScripts) Run(scriptName string) error {

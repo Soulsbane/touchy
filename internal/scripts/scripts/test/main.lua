@@ -22,3 +22,6 @@ if hasErr then
 	print("DownloadFile Error: ", errString)
 end
 
+local filepath = require("filepath")
+local result = filepath.dir("/var/tmp/file.name")
+print(result)
