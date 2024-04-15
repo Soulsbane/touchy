@@ -41,6 +41,9 @@ func DownloadFile(destinationPath string, url string) (bool, string) {
 	return true, ""
 }
 
+// DownloadFileWithProgress downloads a file from a given URL along with a progress bar displayed in the terminal
+// and saves it to the specified file path. Returns a true indicating if the download was successful and false if not.
+// The error string is returned in the second parameter.
 func DownloadFileWithProgress(destinationPath string, url string) (bool, string) {
 	tempDestinationPath := destinationPath + ".tmp"
 	req, err := http.NewRequest("GET", url, nil)
