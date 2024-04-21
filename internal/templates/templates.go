@@ -36,17 +36,13 @@ func (lang *Language) GetTemplatesInfoFiles() []infofile.InfoFile {
 
 func getFileData(path string, embedded bool) ([]byte, error) {
 	if embedded {
-		data, err := embedsDir.ReadFile(path)
-
-		if err != nil {
+		if data, err := embedsDir.ReadFile(path); err != nil {
 			return data, err
 		} else {
 			return data, nil
 		}
 	} else {
-		data, err := os.ReadFile(path)
-
-		if err != nil {
+		if data, err := os.ReadFile(path); err != nil {
 			return data, err
 		} else {
 			return data, nil
