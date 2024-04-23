@@ -42,13 +42,13 @@ func main() {
 				}
 			case cmds.List != nil:
 				if cmds.List.Type == "all" {
-					scripts := scriptToRun.GetListOfScripts()
-					ListScripts(scripts)
+					scriptsList := scriptToRun.GetListOfScripts()
+					ListScripts(scriptsList)
 					fmt.Println("")
 					ListTemplates(cmds.List.Language)
 				} else if cmds.List.Type == "scripts" {
-					scripts := scriptToRun.GetListOfScripts()
-					ListScripts(scripts)
+					scriptsList := scriptToRun.GetListOfScripts()
+					ListScripts(scriptsList)
 				} else if cmds.List.Type == "templates" {
 					ListTemplates(cmds.List.Language)
 				}
