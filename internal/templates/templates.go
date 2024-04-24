@@ -247,22 +247,9 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 		return fmt.Errorf("Failed to load template file. No file name was provided!")
 	} else {
 		fullFileName := filepath.Join(currentDir, path.CleanPath(fileName))
-		file, err := os.Create(fullFileName)
 
-		if err != nil {
-			return fmt.Errorf("Failed to create file: %s", fullFileName)
-		}
-
-		_, err = file.WriteString(template)
-
-		if err != nil {
-			return fmt.Errorf("Failed to write to file: %s", fullFileName)
-		}
-
-		err = file.Close()
-
-		if err != nil {
-			return fmt.Errorf("Failed to close file: %s", fullFileName)
+		if err := os.WriteFile(fullFileName, []byte(template), 0644); err != nil {
+			return fmt.Errorf("Failed to create template file: %s", fullFileName)
 		}
 	}
 
