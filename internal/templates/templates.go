@@ -233,25 +233,35 @@ func (g *Templates) ShowTemplate(languageName string, templateName string) error
 
 // CreateFileFromTemplate Creates a template
 func (g *Templates) CreateFileFromTemplate(languageName string, templateName string, customFileName string) error {
-	var fileName string
-	template, config := g.GetLanguageTemplateFor(languageName, templateName)
-	currentDir, _ := os.Getwd()
+	if g.HasLanguage(languageName) {
+		if g.HasTemplate(languageName, templateName) {
+			var fileName string
+			template, config := g.GetLanguageTemplateFor(languageName, templateName)
+			currentDir, _ := os.Getwd()
 
-	if customFileName == "DefaultOutputFileName" {
-		fileName = config.GetDefaultOutputFileName()
-	} else {
-		fileName = customFileName
-	}
+			if customFileName == "DefaultOutputFileName" {
+				fileName = config.GetDefaultOutputFileName()
+			} else {
+				fileName = customFileName
+			}
 
-	if fileName == "" {
-		return fmt.Errorf("Failed to load template file. No file name was provided!")
-	} else {
-		fullFileName := filepath.Join(currentDir, path.CleanPath(fileName))
+			if fileName == "" {
+				return fmt.Errorf("Failed to load default template file for: ", templateName)
+			} else {
+				fullFileName := filepath.Join(currentDir, path.CleanPath(fileName))
 
-		if err := os.WriteFile(fullFileName, []byte(template), 0644); err != nil {
-			return fmt.Errorf("Failed to create template file: %s", fullFileName)
+				if err := os.WriteFile(fullFileName, []byte(template), 0644); err != nil {
+					return fmt.Errorf("Failed to create template file: %s", fullFileName)
+				}
+			}
+
+			return nil
+		} else {
+			return fmt.Errorf("That template was not found: %s", templateName)
+
 		}
+	} else {
+		return fmt.Errorf("That language was not found: %s", languageName)
 	}
 
-	return nil
 }
