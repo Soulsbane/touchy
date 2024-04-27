@@ -46,6 +46,8 @@ func main() {
 					ListScripts(scriptsList)
 					fmt.Println("")
 					ListTemplates(cmds.List.Language)
+				} else if cmds.List.Type == "languages" {
+					ListLanguages()
 				} else if cmds.List.Type == "scripts" {
 					scriptsList := scriptToRun.GetListOfScripts()
 					ListScripts(scriptsList)
