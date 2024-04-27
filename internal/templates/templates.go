@@ -246,7 +246,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 			}
 
 			if fileName == "" {
-				return fmt.Errorf("Failed to load default template file for: ", templateName)
+				return fmt.Errorf("Failed to load default template file for: %s", templateName)
 			} else {
 				fullFileName := filepath.Join(currentDir, path.CleanPath(fileName))
 
