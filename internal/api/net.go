@@ -72,19 +72,19 @@ func DownloadFileWithProgress(destinationPath string, url string) (bool, string)
 	f, err := os.OpenFile(tempDestinationPath, os.O_CREATE|os.O_WRONLY, 0644)
 
 	if err != nil {
-		return false, fmt.Sprintf("failed create file: ", err.Error())
+		return false, fmt.Sprintf("failed create file: %s", err.Error())
 	}
 
 	_, err = io.Copy(io.MultiWriter(f, bar), resp.Body)
 
 	if err != nil {
-		return false, fmt.Sprintf("failed create file: ", err.Error())
+		return false, fmt.Sprintf("failed create file: %s", err.Error())
 	}
 
 	err = os.Rename(tempDestinationPath, destinationPath)
 
 	if err != nil {
-		return false, fmt.Sprintf("failed create file: ", err.Error())
+		return false, fmt.Sprintf("failed create file: %s", err.Error())
 	}
 
 	return true, ""
