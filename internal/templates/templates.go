@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Soulsbane/touchy/internal/path"
+	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/alecthomas/chroma/quick"
 )
 
@@ -61,7 +61,7 @@ func New() *Templates {
 }
 
 func (g *Templates) findUserTemplates() {
-	dirs, err := os.ReadDir(path.GetTemplatesDir())
+	dirs, err := os.ReadDir(pathutils.GetTemplatesDir())
 
 	if err != nil {
 		//panic(err)
@@ -86,7 +86,7 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 	if embedded {
 		templatePath = "templates"
 	} else {
-		templatePath = path.GetTemplatesDir()
+		templatePath = pathutils.GetTemplatesDir()
 	}
 
 	for _, languageDir := range dirs {
@@ -183,7 +183,7 @@ func (g *Templates) loadTemplateFile(language string, template string, info info
 		data, err = embedsDir.ReadFile(templateName)
 
 	} else {
-		templateName = filepath.Join(path.GetTemplatesDir(), language, template, template+".template")
+		templateName = filepath.Join(pathutils.GetTemplatesDir(), language, template, template+".template")
 		data, err = os.ReadFile(templateName)
 	}
 
@@ -248,7 +248,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 			if fileName == "" {
 				return fmt.Errorf("Failed to load default template file for: %s", templateName)
 			} else {
-				fullFileName := filepath.Join(currentDir, path.CleanPath(fileName))
+				fullFileName := filepath.Join(currentDir, pathutils.CleanPath(fileName))
 
 				if err := os.WriteFile(fullFileName, []byte(template), 0644); err != nil {
 					return fmt.Errorf("Failed to create template file: %s", fullFileName)

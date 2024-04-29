@@ -11,7 +11,7 @@ import (
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/api"
 	"github.com/Soulsbane/touchy/internal/infofile"
-	"github.com/Soulsbane/touchy/internal/path"
+	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/Soulsbane/touchy/internal/templates"
 	"golang.org/x/exp/slices"
 )
@@ -37,7 +37,7 @@ func New() *TouchyScripts {
 }
 
 func (ts *TouchyScripts) findConfigDirScripts() {
-	configScriptsDir := path.GetScriptsDir()
+	configScriptsDir := pathutils.GetScriptsDir()
 	configDirs, err := os.ReadDir(configScriptsDir)
 
 	if err != nil {
@@ -72,7 +72,7 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool) {
 					fmt.Println("Failed to load config file: " + infoFilePath)
 				}
 			} else {
-				infoFilePath = filepath.Join(path.GetScriptsDir(), dir.Name(), infofile.DefaultFileName)
+				infoFilePath = filepath.Join(pathutils.GetScriptsDir(), dir.Name(), infofile.DefaultFileName)
 				data, err = os.ReadFile(infoFilePath)
 
 				if err != nil {
@@ -104,9 +104,9 @@ func (ts *TouchyScripts) GetListOfScripts() []infofile.InfoFile {
 
 func (ts *TouchyScripts) RegisterAPI() {
 	ts.scriptSystem.SetGlobal("GetOutputDir", api.GetOutputDir)
-	ts.scriptSystem.SetGlobal("GetAppConfigDir", path.GetAppConfigDir)
-	ts.scriptSystem.SetGlobal("GetScriptsDir", path.GetScriptsDir)
-	ts.scriptSystem.SetGlobal("GetTemplatesDir", path.GetTemplatesDir)
+	ts.scriptSystem.SetGlobal("GetAppConfigDir", pathutils.GetAppConfigDir)
+	ts.scriptSystem.SetGlobal("GetScriptsDir", pathutils.GetScriptsDir)
+	ts.scriptSystem.SetGlobal("GetTemplatesDir", pathutils.GetTemplatesDir)
 	ts.scriptSystem.SetGlobal("DownloadFile", api.DownloadFile)
 	ts.scriptSystem.SetGlobal("DownloadFileWithProgress", api.DownloadFileWithProgress)
 
@@ -135,7 +135,7 @@ func (ts *TouchyScripts) Run(scriptName string) error {
 					return nil
 				}
 			} else {
-				scriptPath := filepath.Join(path.GetScriptsDir(), scriptName, defaultScriptFileName)
+				scriptPath := filepath.Join(pathutils.GetScriptsDir(), scriptName, defaultScriptFileName)
 				data, err := os.ReadFile(scriptPath)
 
 				if err != nil {

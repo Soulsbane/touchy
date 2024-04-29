@@ -1,4 +1,4 @@
-package path
+package pathutils
 
 import (
 	"os"
@@ -18,7 +18,7 @@ func SetupConfigDir() error {
 	return nil
 }
 
-// GetAppConfigDir returns the path to the config directory for the application using companyName and applicationName.
+// GetAppConfigDir returns the pathutils to the config directory for the application using companyName and applicationName.
 func GetAppConfigDir() (string, error) {
 	path, err := os.UserConfigDir()
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/alexflint/go-arg"
 
-	"github.com/Soulsbane/touchy/internal/path"
+	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/Soulsbane/touchy/internal/scripts"
 	"github.com/Soulsbane/touchy/internal/templates"
 )
@@ -15,7 +15,7 @@ func main() {
 	var cmds commands
 	cmdLineArgs := os.Args[1:]
 
-	err := path.SetupConfigDir()
+	err := pathutils.SetupConfigDir()
 
 	if err != nil {
 		fmt.Println("Failed to setup config directory: ", err)
