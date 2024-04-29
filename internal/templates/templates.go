@@ -4,13 +4,12 @@ import (
 	"embed"
 	"fmt"
 	"github.com/Soulsbane/touchy/internal/infofile"
+	"github.com/Soulsbane/touchy/internal/pathutils"
+	"github.com/alecthomas/chroma/quick"
 	"golang.org/x/exp/slices"
 	"io/fs"
 	"os"
-	"path/filepath"
-
-	"github.com/Soulsbane/touchy/internal/pathutils"
-	"github.com/alecthomas/chroma/quick"
+	"path"
 )
 
 //go:embed templates
@@ -94,7 +93,7 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 			var language Language
 			var templates []os.DirEntry
 
-			infoPath := filepath.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
+			infoPath := path.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
 			data, err := getFileData(infoPath, embedded)
 			language.infoConfig = infofile.Load(languageDir.Name(), infoPath, embedded, data)
 
@@ -103,9 +102,9 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 			}
 
 			if embedded {
-				templates, err = embedsDir.ReadDir(filepath.Join(templatePath, languageDir.Name()))
+				templates, err = embedsDir.ReadDir(path.Join(templatePath, languageDir.Name()))
 			} else {
-				templates, err = os.ReadDir(filepath.Join(templatePath, languageDir.Name()))
+				templates, err = os.ReadDir(path.Join(templatePath, languageDir.Name()))
 			}
 
 			if err != nil {
@@ -114,7 +113,7 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 
 			for _, template := range templates {
 				if template.IsDir() {
-					configPath := filepath.Join(templatePath, languageDir.Name(), template.Name(), infofile.DefaultFileName)
+					configPath := path.Join(templatePath, languageDir.Name(), template.Name(), infofile.DefaultFileName)
 					templateData, fileReadErr := getFileData(configPath, embedded)
 
 					if fileReadErr != nil {
@@ -179,11 +178,11 @@ func (g *Templates) loadTemplateFile(language string, template string, info info
 	var err error
 
 	if info.IsEmbedded() {
-		templateName = filepath.Join("templates", language, template, template+".template")
+		templateName = path.Join("templates", language, template, template+".template")
 		data, err = embedsDir.ReadFile(templateName)
 
 	} else {
-		templateName = filepath.Join(pathutils.GetTemplatesDir(), language, template, template+".template")
+		templateName = path.Join(pathutils.GetTemplatesDir(), language, template, template+".template")
 		data, err = os.ReadFile(templateName)
 	}
 
@@ -248,7 +247,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 			if fileName == "" {
 				return fmt.Errorf("Failed to load default template file for: %s", templateName)
 			} else {
-				fullFileName := filepath.Join(currentDir, pathutils.CleanPath(fileName))
+				fullFileName := path.Join(currentDir, pathutils.CleanPath(fileName))
 
 				if err := os.WriteFile(fullFileName, []byte(template), 0644); err != nil {
 					return fmt.Errorf("Failed to create template file: %s", fullFileName)

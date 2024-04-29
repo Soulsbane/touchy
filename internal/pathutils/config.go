@@ -2,7 +2,7 @@ package pathutils
 
 import (
 	"os"
-	"path/filepath"
+	"path"
 )
 
 const companyName = "Raijinsoft"
@@ -18,33 +18,33 @@ func SetupConfigDir() error {
 	return nil
 }
 
-// GetAppConfigDir returns the pathutils to the config directory for the application using companyName and applicationName.
+// GetAppConfigDir returns the path to the config directory for the application using companyName and applicationName.
 func GetAppConfigDir() (string, error) {
-	path, err := os.UserConfigDir()
+	configPath, err := os.UserConfigDir()
 
 	if err != nil {
 		return "", err
 	}
 
-	return filepath.Join(path, companyName, applicationName), nil
+	return path.Join(configPath, companyName, applicationName), nil
 }
 
 func GetScriptsDir() string {
-	path, err := GetAppConfigDir()
+	configPath, err := GetAppConfigDir()
 
 	if err != nil {
 		return ""
 	}
 
-	return filepath.Join(path, "scripts")
+	return path.Join(configPath, "scripts")
 }
 
 func GetTemplatesDir() string {
-	path, err := GetAppConfigDir()
+	configPath, err := GetAppConfigDir()
 
 	if err != nil {
 		return ""
 	}
 
-	return filepath.Join(path, "templates")
+	return path.Join(configPath, "templates")
 }

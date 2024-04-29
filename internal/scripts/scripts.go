@@ -3,17 +3,16 @@ package scripts
 import (
 	"embed"
 	"fmt"
-	libs "github.com/vadv/gopher-lua-libs"
-	"io/fs"
-	"os"
-	"path/filepath"
-
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/api"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/Soulsbane/touchy/internal/templates"
+	libs "github.com/vadv/gopher-lua-libs"
 	"golang.org/x/exp/slices"
+	"io/fs"
+	"os"
+	"path"
 )
 
 const defaultScriptFileName = "main.lua"
@@ -65,14 +64,14 @@ func (ts *TouchyScripts) findScripts(dirs []fs.DirEntry, embedded bool) {
 			var err error
 
 			if embedded {
-				infoFilePath = filepath.Join("scripts", dir.Name(), infofile.DefaultFileName)
+				infoFilePath = path.Join("scripts", dir.Name(), infofile.DefaultFileName)
 				data, err = embedsDir.ReadFile(infoFilePath)
 
 				if err != nil {
 					fmt.Println("Failed to load config file: " + infoFilePath)
 				}
 			} else {
-				infoFilePath = filepath.Join(pathutils.GetScriptsDir(), dir.Name(), infofile.DefaultFileName)
+				infoFilePath = path.Join(pathutils.GetScriptsDir(), dir.Name(), infofile.DefaultFileName)
 				data, err = os.ReadFile(infoFilePath)
 
 				if err != nil {
@@ -125,7 +124,7 @@ func (ts *TouchyScripts) Run(scriptName string) error {
 		scriptInfo := ts.scripts[idx]
 		if scriptInfo.GetName() == scriptName {
 			if scriptInfo.IsEmbedded() {
-				scriptPath := filepath.Join("scripts", scriptName, defaultScriptFileName)
+				scriptPath := path.Join("scripts", scriptName, defaultScriptFileName)
 				data, err := embedsDir.ReadFile(scriptPath)
 
 				if err != nil {
@@ -135,7 +134,7 @@ func (ts *TouchyScripts) Run(scriptName string) error {
 					return nil
 				}
 			} else {
-				scriptPath := filepath.Join(pathutils.GetScriptsDir(), scriptName, defaultScriptFileName)
+				scriptPath := path.Join(pathutils.GetScriptsDir(), scriptName, defaultScriptFileName)
 				data, err := os.ReadFile(scriptPath)
 
 				if err != nil {
