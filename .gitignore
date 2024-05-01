@@ -15,3 +15,5 @@
 # vendor/
 cmd/touchy/touchy
 /cmd/touchy/20MB-TESTFILE.ORG.pdf
+
+dist/
