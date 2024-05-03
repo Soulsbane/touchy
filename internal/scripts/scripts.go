@@ -106,6 +106,7 @@ func (ts *TouchyScripts) RegisterAPI() {
 	ts.scriptSystem.SetGlobal("GetAppConfigDir", pathutils.GetAppConfigDir)
 	ts.scriptSystem.SetGlobal("GetScriptsDir", pathutils.GetScriptsDir)
 	ts.scriptSystem.SetGlobal("GetTemplatesDir", pathutils.GetTemplatesDir)
+	ts.scriptSystem.SetGlobal("CleanPath", pathutils.CleanPath)
 	ts.scriptSystem.SetGlobal("DownloadFile", api.DownloadFile)
 	ts.scriptSystem.SetGlobal("DownloadFileWithProgress", api.DownloadFileWithProgress)
 
