@@ -1,6 +1,5 @@
 print("Hello from main.lua")
 print("Output Directory:", GetOutputDir())
-print("Path:Output Directory:", Path:GetOutputDir())
 Templates:ShowTemplate("go", "default")
 print("Has language Go: ", Templates:HasLanguage("go"))
 print("Has language template go/default: ", Templates:HasTemplate("go", "default"))

@@ -102,7 +102,7 @@ func (ts *TouchyScripts) GetListOfScripts() []infofile.InfoFile {
 }
 
 func (ts *TouchyScripts) RegisterAPI() {
-	ts.scriptSystem.SetGlobal("GetOutputDir", api.GetOutputDir)
+	ts.scriptSystem.SetGlobal("GetOutputDir", pathutils.GetOutputDir)
 	ts.scriptSystem.SetGlobal("GetAppConfigDir", pathutils.GetAppConfigDir)
 	ts.scriptSystem.SetGlobal("GetScriptsDir", pathutils.GetScriptsDir)
 	ts.scriptSystem.SetGlobal("GetTemplatesDir", pathutils.GetTemplatesDir)
@@ -111,10 +111,9 @@ func (ts *TouchyScripts) RegisterAPI() {
 	ts.scriptSystem.SetGlobal("DownloadFileWithProgress", api.DownloadFileWithProgress)
 
 	templatesObject := templates.New()
-	pathAPI := &api.Path{}
 
 	ts.scriptSystem.SetGlobal("Templates", templatesObject)
-	ts.scriptSystem.SetGlobal("Path", pathAPI)
+	ts.scriptSystem.SetGlobal("Path", pathutils.GetOutputDir)
 	libs.Preload(ts.scriptSystem.GetState())
 }
 

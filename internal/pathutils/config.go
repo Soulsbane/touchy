@@ -18,6 +18,11 @@ func SetupConfigDir() error {
 	return nil
 }
 
+func GetOutputDir() string {
+	dir, _ := os.Getwd()
+	return dir
+}
+
 // GetAppConfigDir returns the path to the config directory for the application using companyName and applicationName.
 func GetAppConfigDir() (string, error) {
 	configPath, err := os.UserConfigDir()
