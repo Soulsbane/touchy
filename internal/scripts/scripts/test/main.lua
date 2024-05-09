@@ -6,7 +6,7 @@ print("Has language template go/default: ", Templates:HasTemplate("go", "default
 print("Has language gozer: ", Templates:HasLanguage("gozer"))
 print("Has language template gozer/busted: ", Templates:HasTemplate("gozer", "busted"))
 
-local appConfigDir, configErr = GetAppConfigDir()
+local appConfigDir = GetAppConfigDir()
 print("GetAppConfigDir: ", appConfigDir)
 print("GetScriptsDir: ", GetScriptsDir())
 print("GetTemplatesDir: ", GetTemplatesDir())
