@@ -111,8 +111,10 @@ func (ts *TouchyScripts) RegisterAPI() {
 	ts.scriptSystem.SetGlobal("DownloadFileWithProgress", api.DownloadFileWithProgress)
 
 	templatesObject := templates.New()
+	promptsObject := api.NewPrompts()
 
 	ts.scriptSystem.SetGlobal("Templates", templatesObject)
+	ts.scriptSystem.SetGlobal("Prompts", promptsObject)
 	ts.scriptSystem.SetGlobal("Path", pathutils.GetOutputDir)
 	libs.Preload(ts.scriptSystem.GetState())
 }
