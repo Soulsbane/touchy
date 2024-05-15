@@ -36,3 +36,10 @@ func (p *Prompts) ConfirmationPrompt(message string) bool {
 		return true
 	}
 }
+
+func (p *Prompts) InputPrompt(message string, defaultValue string) string {
+	value, err := prompt.New().Ask(message).Input(defaultValue)
+	checkForPromptError(err)
+
+	return value
+}

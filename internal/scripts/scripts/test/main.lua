@@ -34,3 +34,6 @@ if shouldExit then
 else
 	print("Not exiting script")
 end
+
+local inputtedValue = Prompts:InputPrompt("Input Test Value: ", "Default Value")
+print("Inputted Value: ", inputtedValue)
