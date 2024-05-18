@@ -50,3 +50,10 @@ func (p *Prompts) ChoicePrompt(message string, choices []string) string {
 
 	return choice
 }
+
+func (p *Prompts) ChoicePromptWithDefault(message string, choices []string, defaultIndex int) string {
+	choice, err := prompt.New().Ask(message).Choose(choices, choose.WithDefaultIndex(defaultIndex))
+	checkForPromptError(err)
+
+	return choice
+}
