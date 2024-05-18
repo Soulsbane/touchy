@@ -43,3 +43,10 @@ func (p *Prompts) InputPrompt(message string, defaultValue string) string {
 
 	return value
 }
+
+func (p *Prompts) ChoicePrompt(message string, choices []string) string {
+	choice, err := prompt.New().Ask(message).Choose(choices)
+	checkForPromptError(err)
+
+	return choice
+}

@@ -37,3 +37,6 @@ end
 
 local inputtedValue = Prompts:InputPrompt("Input Test Value: ", "Default Value")
 print("Inputted Value: ", inputtedValue)
+
+local choice = Prompts:ChoicePrompt("Choose a value", {"Option 1", "Option 2", "Option 3"})
+print("Choice: ", choice)
