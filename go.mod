@@ -18,6 +18,7 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
+	github.com/Iilun/survey/v2 v2.5.1 // indirect
 	github.com/VividCortex/ewma v1.2.0 // indirect
 	github.com/alessio/shellescape v1.4.2 // indirect
 	github.com/alexflint/go-scalar v1.2.0 // indirect
@@ -38,6 +39,7 @@ require (
 	github.com/fatih/color v1.17.0 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
@@ -45,6 +47,7 @@ require (
 	github.com/mattn/go-localereader v0.0.1 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/mattn/go-sqlite3 v1.14.22 // indirect
+	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect

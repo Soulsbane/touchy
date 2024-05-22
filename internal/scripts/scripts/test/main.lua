@@ -38,7 +38,7 @@ end
 local inputtedValue = Prompts:InputPrompt("Input Test Value: ", "Default Value")
 print("Inputted Value: ", inputtedValue)
 
-local choice = Prompts:ChoicePrompt("Choose a value", {"Option 1", "Option 2", "Option 3"})
+local choice = Prompts:ChoicePrompt("Choose a value", {"Option 1", "Option 2", "Option 3"}, "Option 2")
 print("Choice: ", choice)
 
 local anotherChoice = Prompts:ChoicePromptWithDefault("Choose a value", {"Another Option 1", "Another Option 2", "Another Option 3"}, 2)
