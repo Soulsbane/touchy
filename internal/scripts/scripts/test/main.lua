@@ -40,3 +40,8 @@ print("Inputted Value: ", inputtedValue)
 
 local choice = Prompts:ChoicePrompt("Choose a value", {"Option 1", "Option 2", "Option 3"}, "Option 2")
 print("Choice: ", choice)
+
+local choices = Prompts:MultiSelectPrompt("Favorite Animals?", {"Cat", "Dog", "Bird", "Whale"}, {"Cat", "Whale"})
+for _, v in choices() do
+	print (v)
+end
