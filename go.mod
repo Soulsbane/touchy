@@ -11,7 +11,7 @@ require (
 	github.com/cqroot/prompt v0.9.3
 	github.com/jedib0t/go-pretty/v6 v6.5.9
 	github.com/pelletier/go-toml/v2 v2.2.2
-	github.com/schollz/progressbar/v3 v3.14.2
+	github.com/schollz/progressbar/v3 v3.14.3
 	github.com/vadv/gopher-lua-libs v0.5.0
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842
 )
@@ -22,7 +22,7 @@ require (
 	github.com/alessio/shellescape v1.4.2 // indirect
 	github.com/alexflint/go-scalar v1.2.0 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
-	github.com/aws/aws-sdk-go v1.53.5 // indirect
+	github.com/aws/aws-sdk-go v1.53.7 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cbroglie/mustache v1.4.0 // indirect
