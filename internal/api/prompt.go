@@ -1,26 +1,10 @@
 package api
 
 import (
-	"errors"
-	"fmt"
 	"github.com/Iilun/survey/v2"
-	"github.com/cqroot/prompt"
-	"github.com/cqroot/prompt/choose"
-	"os"
 )
 
 type Prompts struct {
-}
-
-func checkForPromptError(err error) {
-	if err != nil {
-		if errors.Is(err, prompt.ErrUserQuit) {
-			fmt.Println("Error:", err)
-			os.Exit(1)
-		} else {
-			panic(err)
-		}
-	}
 }
 
 func NewPrompts() *Prompts {
@@ -73,13 +57,6 @@ func (p *Prompts) ChoicePrompt(message string, choices []string, defaultValue st
 	if err != nil {
 		return defaultValue
 	}
-
-	return choice
-}
-
-func (p *Prompts) ChoicePromptWithDefault(message string, choices []string, defaultIndex int) string {
-	choice, err := prompt.New().Ask(message).Choose(choices, choose.WithDefaultIndex(defaultIndex))
-	checkForPromptError(err)
 
 	return choice
 }
