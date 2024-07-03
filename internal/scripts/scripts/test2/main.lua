@@ -7,3 +7,11 @@ print(info.Name)
 print(info.Description)
 print(info.DefaultOutputFileName)
 print(info.Embedded)
+
+local err = IO:CreateDirAll("test/path")
+
+if err then
+	print(err:Error())
+else
+	print("No error")
+end

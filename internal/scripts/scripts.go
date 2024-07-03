@@ -112,9 +112,11 @@ func (ts *TouchyScripts) RegisterAPI() {
 
 	templatesObject := templates.New()
 	promptsObject := api.NewPrompts()
+	ioObject := api.NewIO()
 
 	ts.scriptSystem.SetGlobal("Templates", templatesObject)
 	ts.scriptSystem.SetGlobal("Prompts", promptsObject)
+	ts.scriptSystem.SetGlobal("IO", ioObject)
 	libs.Preload(ts.scriptSystem.GetState())
 }
 
