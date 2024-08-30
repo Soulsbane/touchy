@@ -63,7 +63,7 @@ func (g *Templates) findUserTemplates() {
 	dirs, err := os.ReadDir(pathutils.GetTemplatesDir())
 
 	if err != nil {
-		//panic(err)
+		// panic(err) // TODO: add error handling
 	}
 
 	g.findTemplates(dirs, false)
@@ -158,7 +158,6 @@ func (g *Templates) GetLanguageTemplateFor(languageName string, templateName str
 
 		if idx >= 0 {
 			info := language.templateConfigs[idx]
-			//return g.loadTemplateFile(languageName, templateName, info), language.templateConfigs[idx]
 			data, err := g.loadTemplateFile(languageName, templateName, info)
 
 			if err != nil {

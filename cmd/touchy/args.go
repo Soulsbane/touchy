@@ -31,7 +31,7 @@ type RunCommand struct {
 }
 
 type commands struct {
-	//TemplateName string       `arg:"positional required"`
+	// TemplateName string       `arg:"positional required"`
 	Create *CreateCommand `arg:"subcommand:create" help:"create a new template."`
 	List   *ListCommand   `arg:"subcommand:list" help:"Show a list of all installed templates."`
 	Show   *ShowCommand   `arg:"subcommand:show" help:"Show the contents of the template file."`
