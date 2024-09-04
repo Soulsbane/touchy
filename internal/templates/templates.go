@@ -14,6 +14,9 @@ import (
 
 //go:embed templates
 var embedsDir embed.FS
+var ErrTemplateNotFound = fmt.Errorf("template not found")
+var ErrLanguageNotFound = fmt.Errorf("language not found")
+var ErrFileNameEmpty = fmt.Errorf("output filename not specified")
 
 type Language struct {
 	// dirName         string                  // name of the directory under the template's directory.
@@ -182,7 +185,7 @@ func (g *Templates) loadTemplateFile(language string, template string, info info
 	}
 
 	if err != nil { // We couldn't read from the embedded file or the file in user's config directory so return an error
-		return "", fmt.Errorf("That template does not exist: %s", templateName)
+		return "", ErrTemplateNotFound
 	}
 
 	return string(data), nil
@@ -204,7 +207,7 @@ func (g *Templates) ShowTemplate(languageName string, templateName string) error
 			sourceCode, err := g.loadTemplateFile(languageName, templateName, language.templateConfigs[idx])
 
 			if err != nil {
-				return fmt.Errorf("That template does not exist: %s", templateName)
+				return ErrTemplateNotFound
 			}
 
 			// Formatters: terminal, terminal8, terminal16, terminal256, terminal16m
@@ -216,10 +219,10 @@ func (g *Templates) ShowTemplate(languageName string, templateName string) error
 			}
 
 		} else {
-			return fmt.Errorf("That template does not exist: %s", templateName)
+			return ErrTemplateNotFound
 		}
 	} else {
-		return fmt.Errorf("That language does not exist: %s", languageName)
+		return ErrLanguageNotFound
 	}
 
 	return nil
@@ -230,6 +233,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 	if g.HasLanguage(languageName) {
 		if g.HasTemplate(languageName, templateName) {
 			var fileName string
+
 			template, config := g.GetLanguageTemplateFor(languageName, templateName)
 			currentDir, _ := os.Getwd()
 
@@ -240,7 +244,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 			}
 
 			if fileName == "" {
-				return fmt.Errorf("Failed to load default template file for: %s", templateName)
+				return ErrFileNameEmpty
 			} else {
 				fullFileName := path.Join(currentDir, pathutils.CleanPath(fileName))
 
@@ -251,11 +255,10 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 
 			return nil
 		} else {
-			return fmt.Errorf("That template was not found: %s", templateName)
-
+			return ErrTemplateNotFound
 		}
 	} else {
-		return fmt.Errorf("That language was not found: %s", languageName)
+		return ErrLanguageNotFound
 	}
 
 }

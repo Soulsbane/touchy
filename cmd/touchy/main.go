@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -11,6 +12,19 @@ import (
 	"github.com/Soulsbane/touchy/internal/templates"
 )
 
+func handleError(err error, templateName string, languageName string) {
+	if errors.Is(err, templates.ErrLanguageNotFound) {
+		fmt.Println("Language not found:", languageName)
+	}
+
+	if errors.Is(err, templates.ErrTemplateNotFound) {
+		fmt.Println("Template not found:", templateName)
+	}
+
+	if errors.Is(err, templates.ErrFileNameEmpty) {
+		fmt.Println("Error: output filename not specified")
+	}
+}
 func main() {
 	var cmds commands
 	cmdLineArgs := os.Args[1:]
@@ -38,7 +52,7 @@ func main() {
 				err := languages.CreateFileFromTemplate(cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
 
 				if err != nil {
-					fmt.Println(err)
+					handleError(err, cmds.Create.TemplateName, cmds.Create.Language)
 				}
 			case cmds.List != nil:
 				switch cmds.List.Type {
@@ -59,7 +73,7 @@ func main() {
 				err := languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
 
 				if err != nil {
-					fmt.Println(err)
+					handleError(err, cmds.Show.TemplateName, cmds.Show.Language)
 				}
 			case cmds.Run != nil:
 				err := scriptToRun.Run(cmds.Run.ScriptName)
@@ -75,7 +89,7 @@ func main() {
 			err := languages.CreateFileFromTemplate(createCmd.Language, createCmd.TemplateName, createCmd.FileName)
 
 			if err != nil {
-				fmt.Println(err)
+				handleError(err, createCmd.TemplateName, createCmd.Language)
 			}
 		}
 	}
