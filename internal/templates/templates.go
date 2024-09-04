@@ -140,11 +140,7 @@ func (g *Templates) HasTemplate(languageName string, templateName string) bool {
 	if language, foundLanguage := g.languages[languageName]; foundLanguage {
 		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
 
-		if idx >= 0 {
-			return true
-		}
-
-		return false
+		return idx >= 0
 	}
 
 	return false
