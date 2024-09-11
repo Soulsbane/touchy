@@ -15,14 +15,12 @@ import (
 func handleError(err error, templateName string, languageName string) {
 	if errors.Is(err, templates.ErrLanguageNotFound) {
 		fmt.Println("Language not found:", languageName)
-	}
-
-	if errors.Is(err, templates.ErrTemplateNotFound) {
+	} else if errors.Is(err, templates.ErrTemplateNotFound) {
 		fmt.Println("Template not found:", templateName)
-	}
-
-	if errors.Is(err, templates.ErrFileNameEmpty) {
+	} else if errors.Is(err, templates.ErrFileNameEmpty) {
 		fmt.Println("Error: output filename not specified")
+	} else {
+		fmt.Println("Error:", err)
 	}
 }
 func main() {

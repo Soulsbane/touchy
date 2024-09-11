@@ -17,6 +17,7 @@ var embedsDir embed.FS
 var ErrTemplateNotFound = fmt.Errorf("template not found")
 var ErrLanguageNotFound = fmt.Errorf("language not found")
 var ErrFileNameEmpty = fmt.Errorf("output filename not specified")
+var ErrFailedToCreateFile = fmt.Errorf("failed to create file %s")
 
 type Language struct {
 	// dirName         string                  // name of the directory under the template's directory.
@@ -249,7 +250,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 				fullFileName := path.Join(currentDir, pathutils.CleanPath(fileName))
 
 				if err := os.WriteFile(fullFileName, []byte(template), 0644); err != nil {
-					return fmt.Errorf("Failed to create template file: %s", fullFileName)
+					return fmt.Errorf("%w %s", ErrFailedToCreateFile, fullFileName)
 				}
 			}
 
