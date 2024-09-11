@@ -19,6 +19,7 @@ var ErrTemplateNotFound = errors.New("template not found")
 var ErrLanguageNotFound = errors.New("language not found")
 var ErrFileNameEmpty = errors.New("output filename not specified")
 var ErrFailedToCreateFile = errors.New("failed to create file")
+var ErrNoUserTemplatesDir = errors.New("no user templates found")
 
 type Language struct {
 	// dirName         string                  // name of the directory under the template's directory.
@@ -54,37 +55,37 @@ func getFileData(path string, embedded bool) ([]byte, error) {
 	}
 }
 
-func New() *Templates {
+func New() (*Templates, error, error) {
 	var templates Templates
 
 	templates.languages = make(map[string]Language)
-	templates.findUserTemplates()
-	templates.findEmbeddedTemplates()
+	userTemplatesErr := templates.findUserTemplates()
+	embeddedTemplatesErr := templates.findEmbeddedTemplates()
 
-	return &templates
+	return &templates, userTemplatesErr, embeddedTemplatesErr
 }
 
-func (g *Templates) findUserTemplates() {
+func (g *Templates) findUserTemplates() error {
 	dirs, err := os.ReadDir(pathutils.GetTemplatesDir())
 
 	if err != nil {
-		// panic(err) // TODO: add error handling
+		return fmt.Errorf("%w: %v", ErrNoUserTemplatesDir, err)
 	}
 
-	g.findTemplates(dirs, false)
+	return g.findTemplates(dirs, false)
 }
 
-func (g *Templates) findEmbeddedTemplates() {
+func (g *Templates) findEmbeddedTemplates() error {
 	dirs, err := embedsDir.ReadDir("templates")
 
 	if err != nil {
 		panic(err)
 	}
 
-	g.findTemplates(dirs, true)
+	return g.findTemplates(dirs, true)
 }
 
-func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
+func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) error {
 	var templatePath string
 
 	if embedded {
@@ -134,6 +135,8 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) {
 			g.languages[languageDir.Name()] = language
 		}
 	}
+
+	return nil // TODO: Handle errors
 }
 
 func (g *Templates) HasLanguage(languageName string) bool {

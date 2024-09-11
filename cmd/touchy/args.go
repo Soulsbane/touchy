@@ -57,10 +57,7 @@ func isReservedCommand(cmds commands, command string) bool {
 	return false
 }
 
-func ListLanguages() {
-	temps := templates.New()
-	languages := temps.GetListOfAllLanguages()
-
+func ListLanguages(languages map[string]templates.Language) {
 	outputTable := ui.CreateNewTableWriter("Languages", "Name", "Long Name", "Description")
 
 	for name, language := range languages {
@@ -82,10 +79,7 @@ func ListScripts(scripts []infofile.InfoFile) {
 	outputTable.Render()
 }
 
-func ListTemplates(listArg string) {
-	temps := templates.New()
-	languages := temps.GetListOfAllLanguages()
-
+func ListTemplates(listArg string, languages map[string]templates.Language) {
 	if languageTemplates, found := languages[listArg]; found {
 		languageInfo := languageTemplates.GetInfoFile()
 		outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")

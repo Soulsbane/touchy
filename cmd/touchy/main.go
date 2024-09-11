@@ -13,14 +13,16 @@ import (
 )
 
 func handleError(err error, templateName string, languageName string) {
-	if errors.Is(err, templates.ErrLanguageNotFound) {
-		fmt.Println("Language not found:", languageName)
-	} else if errors.Is(err, templates.ErrTemplateNotFound) {
-		fmt.Println("Template not found:", templateName)
-	} else if errors.Is(err, templates.ErrFileNameEmpty) {
-		fmt.Println("Error: output filename not specified")
-	} else {
-		fmt.Println("Error:", err)
+	if err != nil {
+		if errors.Is(err, templates.ErrLanguageNotFound) {
+			fmt.Println("Language not found:", languageName)
+		} else if errors.Is(err, templates.ErrTemplateNotFound) {
+			fmt.Println("Template not found:", templateName)
+		} else if errors.Is(err, templates.ErrFileNameEmpty) {
+			fmt.Println("Error: output filename not specified")
+		} else {
+			fmt.Println("Error:", err)
+		}
 	}
 }
 
@@ -37,7 +39,13 @@ func main() {
 	if len(cmdLineArgs) == 0 {
 		fmt.Println("No arguments provided. Use -h or --help for more information.")
 	} else {
-		languages := templates.New()
+		languages, userTemplatesErr, embeddedTemplatesErr := templates.New()
+
+		if userTemplatesErr != nil || embeddedTemplatesErr != nil {
+			handleError(userTemplatesErr, "", "")
+			handleError(embeddedTemplatesErr, "", "")
+		}
+
 		scriptToRun := scripts.New()
 		cmd := cmdLineArgs[0]
 
@@ -59,14 +67,14 @@ func main() {
 					scriptsList := scriptToRun.GetListOfScripts()
 					ListScripts(scriptsList)
 					fmt.Println("")
-					ListTemplates(cmds.List.Language)
+					ListTemplates(cmds.List.Language, languages.GetListOfAllLanguages())
 				case "languages":
-					ListLanguages()
+					ListLanguages(languages.GetListOfAllLanguages())
 				case "scripts":
 					scriptsList := scriptToRun.GetListOfScripts()
 					ListScripts(scriptsList)
 				case "templates":
-					ListTemplates(cmds.List.Language)
+					ListTemplates(cmds.List.Language, languages.GetListOfAllLanguages())
 				}
 			case cmds.Show != nil:
 				err := languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
