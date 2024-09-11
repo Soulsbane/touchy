@@ -2,6 +2,7 @@ package templates
 
 import (
 	"embed"
+	"errors"
 	"fmt"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/pathutils"
@@ -14,10 +15,10 @@ import (
 
 //go:embed templates
 var embedsDir embed.FS
-var ErrTemplateNotFound = fmt.Errorf("template not found")
-var ErrLanguageNotFound = fmt.Errorf("language not found")
-var ErrFileNameEmpty = fmt.Errorf("output filename not specified")
-var ErrFailedToCreateFile = fmt.Errorf("failed to create file %s")
+var ErrTemplateNotFound = errors.New("template not found")
+var ErrLanguageNotFound = errors.New("language not found")
+var ErrFileNameEmpty = errors.New("output filename not specified")
+var ErrFailedToCreateFile = errors.New("failed to create file")
 
 type Language struct {
 	// dirName         string                  // name of the directory under the template's directory.
