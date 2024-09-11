@@ -23,6 +23,7 @@ func handleError(err error, templateName string, languageName string) {
 		fmt.Println("Error:", err)
 	}
 }
+
 func main() {
 	var cmds commands
 	cmdLineArgs := os.Args[1:]
