@@ -14,13 +14,14 @@ import (
 
 func handleError(err error, templateName string, languageName string) {
 	if err != nil {
-		if errors.Is(err, templates.ErrLanguageNotFound) {
+		switch {
+		case errors.Is(err, templates.ErrLanguageNotFound):
 			fmt.Println("Language not found:", languageName)
-		} else if errors.Is(err, templates.ErrTemplateNotFound) {
+		case errors.Is(err, templates.ErrTemplateNotFound):
 			fmt.Println("Template not found:", templateName)
-		} else if errors.Is(err, templates.ErrFileNameEmpty) {
+		case errors.Is(err, templates.ErrFileNameEmpty):
 			fmt.Println("Error: output filename not specified")
-		} else {
+		default:
 			fmt.Println("Error:", err)
 		}
 	}
