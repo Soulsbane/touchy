@@ -27,6 +27,14 @@ func handleError(err error, templateName string, languageName string) {
 	}
 }
 
+func handleCreateCommand(languages *templates.Templates, languageName string, templateName string, fileName string) {
+	err := languages.CreateFileFromTemplate(languageName, templateName, fileName)
+
+	if err != nil {
+		handleError(err, templateName, languageName)
+	}
+}
+
 func main() {
 	var cmds commands
 	cmdLineArgs := os.Args[1:]
@@ -57,11 +65,7 @@ func main() {
 
 			switch {
 			case cmds.Create != nil:
-				err := languages.CreateFileFromTemplate(cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
-
-				if err != nil {
-					handleError(err, cmds.Create.TemplateName, cmds.Create.Language)
-				}
+				handleCreateCommand(languages, cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
 			case cmds.List != nil:
 				switch cmds.List.Type {
 				case "all":
