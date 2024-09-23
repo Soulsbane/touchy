@@ -11,7 +11,7 @@ require (
 	github.com/alexflint/go-arg v1.5.1
 	github.com/jedib0t/go-pretty/v6 v6.5.9
 	github.com/pelletier/go-toml/v2 v2.2.3
-	github.com/schollz/progressbar/v3 v3.14.6
+	github.com/schollz/progressbar/v3 v3.15.0
 	github.com/vadv/gopher-lua-libs v0.5.0
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
 )
@@ -43,7 +43,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
-	github.com/prometheus/client_golang v1.20.3 // indirect
+	github.com/prometheus/client_golang v1.20.4 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.59.1 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
