@@ -40,7 +40,12 @@ func handleCreateCommand(languages *templates.Templates, languageName string, te
 
 func main() {
 	var cmds commands
+
 	cmdLineArgs := os.Args[1:]
+	cmd := cmdLineArgs[0]
+	scriptToRun := scripts.New()
+
+	scriptToRun.RegisterAPI()
 
 	err := pathutils.SetupConfigDir()
 
@@ -57,11 +62,6 @@ func main() {
 			handleError(userTemplatesErr, "", "")
 			handleError(embeddedTemplatesErr, "", "")
 		}
-
-		scriptToRun := scripts.New()
-		cmd := cmdLineArgs[0]
-
-		scriptToRun.RegisterAPI()
 
 		if isReservedCommand(cmds, cmd) || cmd == "-h" || cmd == "--help" {
 			arg.MustParse(&cmds)
