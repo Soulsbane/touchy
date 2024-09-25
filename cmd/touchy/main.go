@@ -83,6 +83,8 @@ func main() {
 					ListScripts(scriptsList)
 				case "templates":
 					ListTemplates(cmds.List.Language, languages.GetListOfAllLanguages())
+				default:
+					fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
 				}
 			case cmds.Show != nil:
 				err := languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
