@@ -21,6 +21,9 @@ func handleError(err error, templateName string, languageName string) {
 			fmt.Println("Template not found:", templateName)
 		case errors.Is(err, templates.ErrFileNameEmpty):
 			fmt.Println("Error: output filename not specified")
+		case errors.Is(err, templates.ErrNoUserTemplatesDir):
+			// TODO: Maybe notify user where the user templates is or if it should be created?
+			fmt.Println("Warning: no user templates found!")
 		default:
 			fmt.Println("Error:", err)
 		}
