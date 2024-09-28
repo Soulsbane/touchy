@@ -3,12 +3,12 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/Soulsbane/touchy/internal/scripts"
 	"os"
 
 	"github.com/alexflint/go-arg"
 
 	"github.com/Soulsbane/touchy/internal/pathutils"
-	"github.com/Soulsbane/touchy/internal/scripts"
 	"github.com/Soulsbane/touchy/internal/templates"
 )
 
@@ -38,14 +38,34 @@ func handleCreateCommand(languages *templates.Templates, languageName string, te
 	}
 }
 
+func handleListCommand(languages *templates.Templates, listType string, languageName string) {
+	scriptToRun := scripts.New()
+
+	scriptToRun.RegisterAPI()
+
+	switch listType {
+	case "all":
+		scriptsList := scriptToRun.GetListOfScripts()
+		ListScripts(scriptsList)
+		fmt.Println("")
+		ListTemplates(languageName, languages.GetListOfAllLanguages())
+	case "languages":
+		ListLanguages(languages.GetListOfAllLanguages())
+	case "scripts":
+		scriptsList := scriptToRun.GetListOfScripts()
+		ListScripts(scriptsList)
+	case "templates":
+		ListTemplates(languageName, languages.GetListOfAllLanguages())
+	default:
+		fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
+	}
+}
+
 func main() {
 	var cmds commands
 
 	cmdLineArgs := os.Args[1:]
 	cmd := cmdLineArgs[0]
-	scriptToRun := scripts.New()
-
-	scriptToRun.RegisterAPI()
 
 	err := pathutils.SetupConfigDir()
 
@@ -70,22 +90,7 @@ func main() {
 			case cmds.Create != nil:
 				handleCreateCommand(languages, cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
 			case cmds.List != nil:
-				switch cmds.List.Type {
-				case "all":
-					scriptsList := scriptToRun.GetListOfScripts()
-					ListScripts(scriptsList)
-					fmt.Println("")
-					ListTemplates(cmds.List.Language, languages.GetListOfAllLanguages())
-				case "languages":
-					ListLanguages(languages.GetListOfAllLanguages())
-				case "scripts":
-					scriptsList := scriptToRun.GetListOfScripts()
-					ListScripts(scriptsList)
-				case "templates":
-					ListTemplates(cmds.List.Language, languages.GetListOfAllLanguages())
-				default:
-					fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
-				}
+				handleListCommand(languages, cmds.List.Type, cmds.List.Language)
 			case cmds.Show != nil:
 				err := languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
 
@@ -93,6 +98,9 @@ func main() {
 					handleError(err, cmds.Show.TemplateName, cmds.Show.Language)
 				}
 			case cmds.Run != nil:
+				scriptToRun := scripts.New()
+
+				scriptToRun.RegisterAPI()
 				err := scriptToRun.Run(cmds.Run.ScriptName)
 
 				if err != nil {
