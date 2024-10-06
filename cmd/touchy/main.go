@@ -90,15 +90,13 @@ func handleShowCommand(languageName string, templateName string) {
 
 func main() {
 	var cmds commands
-
 	cmdLineArgs := os.Args[1:]
-	cmd := cmdLineArgs[0]
-
-	setupScriptsAndTemplates()
 
 	if len(cmdLineArgs) == 0 {
 		fmt.Println("No arguments provided. Use -h or --help for more information.")
 	} else {
+		cmd := cmdLineArgs[0]
+		setupScriptsAndTemplates()
 
 		if isReservedCommand(cmds, cmd) || cmd == "-h" || cmd == "--help" {
 			arg.MustParse(&cmds)
