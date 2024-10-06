@@ -88,6 +88,14 @@ func handleShowCommand(languageName string, templateName string) {
 	}
 }
 
+func handleRunCommand(scriptName string) {
+	err := touchyScripts.Run(scriptName)
+
+	if err != nil {
+		handleError(err, scriptName, "")
+	}
+}
+
 func main() {
 	var cmds commands
 	cmdLineArgs := os.Args[1:]
@@ -109,11 +117,7 @@ func main() {
 			case cmds.Show != nil:
 				handleShowCommand(cmds.Show.Language, cmds.Show.TemplateName)
 			case cmds.Run != nil:
-				err := touchyScripts.Run(cmds.Run.ScriptName)
-
-				if err != nil {
-					fmt.Println(err)
-				}
+				handleRunCommand(cmds.Run.ScriptName)
 			}
 		} else {
 			var createCmd CreateCommand
