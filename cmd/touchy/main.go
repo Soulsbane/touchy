@@ -3,17 +3,37 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/Soulsbane/touchy/internal/scripts"
 	"os"
 
 	"github.com/alexflint/go-arg"
 
-	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/Soulsbane/touchy/internal/templates"
 )
 
 var languageTemplates *templates.Templates
 var touchyScripts *scripts.TouchyScripts
+
+func setupScriptsAndTemplates() {
+	var userTemplatesErr error
+	var embeddedTemplatesErr error
+
+	pathUtilsErr := pathutils.SetupConfigDir()
+
+	if pathUtilsErr != nil {
+		fmt.Println("Failed to setup config directory: ", pathUtilsErr)
+	}
+
+	touchyScripts = scripts.New()
+	touchyScripts.RegisterAPI()
+	languageTemplates, userTemplatesErr, embeddedTemplatesErr = templates.New()
+
+	if userTemplatesErr != nil || embeddedTemplatesErr != nil {
+		handleError(userTemplatesErr, "", "")
+		handleError(embeddedTemplatesErr, "", "")
+	}
+}
 
 func handleError(err error, templateName string, languageName string) {
 	if err != nil {
@@ -74,26 +94,11 @@ func main() {
 	cmdLineArgs := os.Args[1:]
 	cmd := cmdLineArgs[0]
 
-	pathUtilsErr := pathutils.SetupConfigDir()
-
-	if pathUtilsErr != nil {
-		fmt.Println("Failed to setup config directory: ", pathUtilsErr)
-	}
+	setupScriptsAndTemplates()
 
 	if len(cmdLineArgs) == 0 {
 		fmt.Println("No arguments provided. Use -h or --help for more information.")
 	} else {
-		var userTemplatesErr error
-		var embeddedTemplatesErr error
-
-		touchyScripts = scripts.New()
-		touchyScripts.RegisterAPI()
-		languageTemplates, userTemplatesErr, embeddedTemplatesErr = templates.New()
-
-		if userTemplatesErr != nil || embeddedTemplatesErr != nil {
-			handleError(userTemplatesErr, "", "")
-			handleError(embeddedTemplatesErr, "", "")
-		}
 
 		if isReservedCommand(cmds, cmd) || cmd == "-h" || cmd == "--help" {
 			arg.MustParse(&cmds)
