@@ -12,6 +12,9 @@ import (
 	"github.com/Soulsbane/touchy/internal/templates"
 )
 
+var languageTemplates *templates.Templates
+var touchyScripts *scripts.TouchyScripts
+
 func handleError(err error, templateName string, languageName string) {
 	if err != nil {
 		switch {
@@ -30,34 +33,38 @@ func handleError(err error, templateName string, languageName string) {
 	}
 }
 
-func handleCreateCommand(languages *templates.Templates, languageName string, templateName string, fileName string) {
-	err := languages.CreateFileFromTemplate(languageName, templateName, fileName)
+func handleCreateCommand(languageName string, templateName string, fileName string) {
+	err := languageTemplates.CreateFileFromTemplate(languageName, templateName, fileName)
 
 	if err != nil {
 		handleError(err, templateName, languageName)
 	}
 }
 
-func handleListCommand(languages *templates.Templates, listType string, languageName string) {
-	scriptToRun := scripts.New()
-
-	scriptToRun.RegisterAPI()
-
+func handleListCommand(listType string, languageName string) {
 	switch listType {
 	case "all":
-		scriptsList := scriptToRun.GetListOfScripts()
+		scriptsList := touchyScripts.GetListOfScripts()
 		ListScripts(scriptsList)
 		fmt.Println("")
-		ListTemplates(languageName, languages.GetListOfAllLanguages())
-	case "languages":
-		ListLanguages(languages.GetListOfAllLanguages())
+		ListTemplates(languageName, languageTemplates.GetListOfAllLanguages())
+	case "languageTemplates":
+		ListLanguages(languageTemplates.GetListOfAllLanguages())
 	case "scripts":
-		scriptsList := scriptToRun.GetListOfScripts()
+		scriptsList := touchyScripts.GetListOfScripts()
 		ListScripts(scriptsList)
 	case "templates":
-		ListTemplates(languageName, languages.GetListOfAllLanguages())
+		ListTemplates(languageName, languageTemplates.GetListOfAllLanguages())
 	default:
 		fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
+	}
+}
+
+func handleShowCommand(languageName string, templateName string) {
+	err := languageTemplates.ShowTemplate(languageName, templateName)
+
+	if err != nil {
+		handleError(err, templateName, languageName)
 	}
 }
 
@@ -67,16 +74,21 @@ func main() {
 	cmdLineArgs := os.Args[1:]
 	cmd := cmdLineArgs[0]
 
-	err := pathutils.SetupConfigDir()
+	pathUtilsErr := pathutils.SetupConfigDir()
 
-	if err != nil {
-		fmt.Println("Failed to setup config directory: ", err)
+	if pathUtilsErr != nil {
+		fmt.Println("Failed to setup config directory: ", pathUtilsErr)
 	}
 
 	if len(cmdLineArgs) == 0 {
 		fmt.Println("No arguments provided. Use -h or --help for more information.")
 	} else {
-		languages, userTemplatesErr, embeddedTemplatesErr := templates.New()
+		var userTemplatesErr error
+		var embeddedTemplatesErr error
+
+		touchyScripts = scripts.New()
+		touchyScripts.RegisterAPI()
+		languageTemplates, userTemplatesErr, embeddedTemplatesErr = templates.New()
 
 		if userTemplatesErr != nil || embeddedTemplatesErr != nil {
 			handleError(userTemplatesErr, "", "")
@@ -88,20 +100,13 @@ func main() {
 
 			switch {
 			case cmds.Create != nil:
-				handleCreateCommand(languages, cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
+				handleCreateCommand(cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
 			case cmds.List != nil:
-				handleListCommand(languages, cmds.List.Type, cmds.List.Language)
+				handleListCommand(cmds.List.Type, cmds.List.Language)
 			case cmds.Show != nil:
-				err := languages.ShowTemplate(cmds.Show.Language, cmds.Show.TemplateName)
-
-				if err != nil {
-					handleError(err, cmds.Show.TemplateName, cmds.Show.Language)
-				}
+				handleShowCommand(cmds.Show.Language, cmds.Show.TemplateName)
 			case cmds.Run != nil:
-				scriptToRun := scripts.New()
-
-				scriptToRun.RegisterAPI()
-				err := scriptToRun.Run(cmds.Run.ScriptName)
+				err := touchyScripts.Run(cmds.Run.ScriptName)
 
 				if err != nil {
 					fmt.Println(err)
@@ -111,7 +116,7 @@ func main() {
 			var createCmd CreateCommand
 
 			arg.MustParse(&createCmd)
-			err := languages.CreateFileFromTemplate(createCmd.Language, createCmd.TemplateName, createCmd.FileName)
+			err := languageTemplates.CreateFileFromTemplate(createCmd.Language, createCmd.TemplateName, createCmd.FileName)
 
 			if err != nil {
 				handleError(err, createCmd.TemplateName, createCmd.Language)
