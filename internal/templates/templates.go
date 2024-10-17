@@ -69,7 +69,7 @@ func (g *Templates) findUserTemplates() error {
 	dirs, err := os.ReadDir(pathutils.GetTemplatesDir())
 
 	if err != nil {
-		return fmt.Errorf("%w: %v", ErrNoUserTemplatesDir, err)
+		return fmt.Errorf("%w: %w", ErrNoUserTemplatesDir, err)
 	}
 
 	return g.findTemplates(dirs, false)
