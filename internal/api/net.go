@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"github.com/schollz/progressbar/v3"
 	"io"
@@ -46,7 +47,8 @@ func DownloadFile(destinationPath string, url string) (bool, string) {
 // The error string is returned in the second parameter.
 func DownloadFileWithProgress(destinationPath string, url string) (bool, string) {
 	tempDestinationPath := destinationPath + ".tmp"
-	req, err := http.NewRequest("GET", url, nil)
+	ctx := context.Background()
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 
 	if err != nil {
 		return false, err.Error()
