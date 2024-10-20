@@ -13,7 +13,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.3
 	github.com/schollz/progressbar/v3 v3.16.1
 	github.com/vadv/gopher-lua-libs v0.5.0
-	golang.org/x/exp v0.0.0-20241004190924-225e2abe05e6
+	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c
 )
 
 require (
@@ -32,7 +32,7 @@ require (
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
-	github.com/klauspost/compress v1.17.10 // indirect
+	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -43,7 +43,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
-	github.com/prometheus/client_golang v1.20.4 // indirect
+	github.com/prometheus/client_golang v1.20.5 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.60.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
