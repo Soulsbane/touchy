@@ -253,7 +253,7 @@ func (g *Templates) CreateFileFromTemplate(languageName string, templateName str
 			} else {
 				fullFileName := path.Join(currentDir, pathutils.CleanPath(fileName))
 
-				if err := os.WriteFile(fullFileName, []byte(template), 0644); err != nil {
+				if err := os.WriteFile(fullFileName, []byte(template), 0600); err != nil {
 					return fmt.Errorf("%w %s", ErrFailedToCreateFile, fullFileName)
 				}
 			}
