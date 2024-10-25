@@ -13,7 +13,8 @@ import (
 // Returns a true indicating if the download was successful and false if not. The is returned in the second
 // parameter.
 func DownloadFile(destinationPath string, url string) (bool, string) {
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	ctx := context.Background()
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 
 	if err != nil {
 		return false, err.Error()
