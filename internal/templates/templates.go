@@ -20,6 +20,9 @@ var ErrLanguageNotFound = errors.New("language not found")
 var ErrFileNameEmpty = errors.New("output filename not specified")
 var ErrFailedToCreateFile = errors.New("failed to create file")
 var ErrNoUserTemplatesDir = errors.New("no user templates found")
+var ErrFailedToReadFile = errors.New("failed to read file")
+var ErrFailedToReadEmbeddedFile = errors.New("failed to read embedded file")
+var ErrHighlightFailed = errors.New("failed to highlight code")
 
 type Language struct {
 	// dirName         string                  // name of the directory under the template's directory.
@@ -42,13 +45,13 @@ func (lang *Language) GetTemplatesInfoFiles() []infofile.InfoFile {
 func getFileData(path string, embedded bool) ([]byte, error) {
 	if embedded {
 		if data, err := embedsDir.ReadFile(path); err != nil {
-			return data, err
+			return data, fmt.Errorf("%w: %w", ErrFailedToReadEmbeddedFile, err)
 		} else {
 			return data, nil
 		}
 	} else {
 		if data, err := os.ReadFile(path); err != nil {
-			return data, err
+			return data, fmt.Errorf("%w: %w", ErrFailedToReadFile, err)
 		} else {
 			return data, nil
 		}
@@ -220,7 +223,7 @@ func (g *Templates) ShowTemplate(languageName string, templateName string) error
 			err = quick.Highlight(os.Stdout, sourceCode, language.templateConfigs[idx].GetDefaultOutputFileName(), "terminal256", "monokai")
 
 			if err != nil {
-				return err
+				return ErrHighlightFailed
 			}
 
 		} else {
