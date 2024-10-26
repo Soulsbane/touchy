@@ -1,12 +1,17 @@
 package api
 
 import (
+	"errors"
+	"fmt"
 	"github.com/Soulsbane/touchy/internal/pathutils"
 	"os"
 	"path"
 )
 
 const defaultDirPermission = 0755
+
+var ErrFailedToCreateOutputDir = errors.New("failed to create directory in output directory")
+var ErrFailedToCreateDirPath = errors.New("failed to create directory path")
 
 type IO struct {
 }
@@ -16,9 +21,22 @@ func NewIO() *IO {
 }
 
 func (io *IO) CreateDirInOutputDir(name string) error {
-	return os.MkdirAll(path.Join(pathutils.GetOutputDir(), name), defaultDirPermission)
+	outputPath := path.Join(pathutils.GetOutputDir(), name)
+	err := os.MkdirAll(outputPath, defaultDirPermission)
+
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrFailedToCreateOutputDir, err)
+	}
+
+	return nil
 }
 
 func (io *IO) CreateDirAll(dir string) error {
-	return os.MkdirAll(dir, os.FileMode(defaultDirPermission))
+	err := os.MkdirAll(dir, defaultDirPermission)
+
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrFailedToCreateDirPath, err)
+	}
+
+	return nil
 }

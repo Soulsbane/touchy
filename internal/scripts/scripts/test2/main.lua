@@ -8,10 +8,18 @@ print(info.Description)
 print(info.DefaultOutputFileName)
 print(info.Embedded)
 
-local err = IO:CreateDirAll("test/path")
+local createPathErr = IO:CreateDirAll("testpath/secondtestpath")
 
-if err then
-	print(err:Error())
+if createPathErr then
+	print(createPathErr:Error())
 else
-	print("No error")
+	print("Directory path creation succeeded")
+end
+
+outputDirErr = IO:CreateDirInOutputDir("outputdir")
+
+if outputDirErr then
+	print(outputDirErr:Error())
+else
+	print("Output directory creation succeeded")
 end
