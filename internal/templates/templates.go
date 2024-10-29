@@ -24,6 +24,16 @@ var ErrFailedToReadFile = errors.New("failed to read file")
 var ErrFailedToReadEmbeddedFile = errors.New("failed to read embedded file")
 var ErrHighlightFailed = errors.New("failed to highlight code")
 
+type Templates2 interface {
+	CreateFileFromTemplate(languageName string, templateName string, customFileName string) error
+	GetListOfAllLanguages() []string
+	GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile)
+	GetListOfLanguageTemplatesFor(languageName string) []infofile.InfoFile
+	HasTemplate(languageName string, templateName string) bool
+	HasLanguage(languageName string) bool
+	ShowTemplate(languageName string, templateName string) error
+}
+
 type Language struct {
 	// dirName         string                  // name of the directory under the template's directory.
 	infoConfig      infofile.InfoFile   // Each language has a config file in its root directory call config.toml
