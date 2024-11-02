@@ -73,6 +73,21 @@ func (g *EmbeddedTemplates) findTemplates(embedded bool) error {
 	return nil // TODO: Handle errors
 }
 
+func (g *EmbeddedTemplates) loadTemplateFile(language string, template string) (string, error) {
+	var data []byte
+	var templateName string
+	var err error
+
+	templateName = path.Join("templates", language, template, template+".template")
+	data, err = embedsDir.ReadFile(templateName)
+
+	if err != nil { // We couldn't read from the embedded file or the file in user's config directory so return an error
+		return "", ErrTemplateNotFound
+	}
+
+	return string(data), nil
+}
+
 func (g *EmbeddedTemplates) GetListOfAllLanguages() map[string]Language {
 	return g.languages
 }
