@@ -5,6 +5,7 @@ import (
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"os"
 	"path"
+	"slices"
 )
 
 type EmbeddedTemplates struct {
@@ -95,4 +96,14 @@ func (g *EmbeddedTemplates) GetListOfAllLanguages() map[string]Language {
 func (g *EmbeddedTemplates) HasLanguage(languageName string) bool {
 	_, found := g.languages[languageName]
 	return found
+}
+
+func (g *EmbeddedTemplates) HasTemplate(languageName string, templateName string) bool {
+	if language, foundLanguage := g.languages[languageName]; foundLanguage {
+		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
+
+		return idx >= 0
+	}
+
+	return false
 }

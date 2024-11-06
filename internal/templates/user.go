@@ -6,6 +6,7 @@ import (
 	"github.com/Soulsbane/touchy/internal/pathutils"
 	"os"
 	"path"
+	"slices"
 )
 
 type UserTemplates struct {
@@ -81,4 +82,14 @@ func (g *UserTemplates) GetListOfAllLanguages() map[string]Language {
 func (g *UserTemplates) HasLanguage(languageName string) bool {
 	_, found := g.languages[languageName]
 	return found
+}
+
+func (g *UserTemplates) HasTemplate(languageName string, templateName string) bool {
+	if language, foundLanguage := g.languages[languageName]; foundLanguage {
+		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
+
+		return idx >= 0
+	}
+
+	return false
 }
