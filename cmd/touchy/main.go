@@ -33,6 +33,8 @@ func setupScriptsAndTemplates() {
 		handleError(userTemplatesErr, "", "")
 		handleError(embeddedTemplatesErr, "", "")
 	}
+
+	gatherTemplates()
 }
 
 func handleError(err error, templateName string, languageName string) {
@@ -94,6 +96,14 @@ func handleRunCommand(scriptName string) {
 	if err != nil {
 		handleError(err, scriptName, "")
 	}
+}
+
+func gatherTemplates() {
+	embedded := templates.NewEmbeddedTemplates()
+	embedded.GetListOfAllLanguages()
+
+	user := templates.NewUserTemplates()
+	user.GetListOfAllLanguages()
 }
 
 func main() {
