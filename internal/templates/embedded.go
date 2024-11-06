@@ -91,3 +91,8 @@ func (g *EmbeddedTemplates) loadTemplateFile(language string, template string) (
 func (g *EmbeddedTemplates) GetListOfAllLanguages() map[string]Language {
 	return g.languages
 }
+
+func (g *EmbeddedTemplates) HasLanguage(languageName string) bool {
+	_, found := g.languages[languageName]
+	return found
+}

@@ -77,3 +77,8 @@ func (g *UserTemplates) findTemplates(embedded bool) error {
 func (g *UserTemplates) GetListOfAllLanguages() map[string]Language {
 	return g.languages
 }
+
+func (g *UserTemplates) HasLanguage(languageName string) bool {
+	_, found := g.languages[languageName]
+	return found
+}
