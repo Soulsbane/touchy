@@ -5,11 +5,9 @@ import (
 	"fmt"
 	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/Soulsbane/touchy/internal/scripts"
-	"os"
-
-	"github.com/alexflint/go-arg"
-
 	"github.com/Soulsbane/touchy/internal/templates"
+	"github.com/alexflint/go-arg"
+	"os"
 )
 
 var languageTemplates *templates.Templates
@@ -33,8 +31,6 @@ func setupScriptsAndTemplates() {
 		handleError(userTemplatesErr, "", "")
 		handleError(embeddedTemplatesErr, "", "")
 	}
-
-	gatherTemplates()
 }
 
 func handleError(err error, templateName string, languageName string) {
