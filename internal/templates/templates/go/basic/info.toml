@@ -1,0 +1,3 @@
+Name = "basic"
+DefaultOutputFileName = "main.go"
+Description = "A basic template"
