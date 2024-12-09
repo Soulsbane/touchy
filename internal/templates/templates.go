@@ -40,7 +40,7 @@ type Language struct {
 	templateConfigs []infofile.InfoFile // A list of all the templates in the language directory. The key is the template dir name.
 }
 
-type Templates struct {
+type TemplateManager struct {
 	languages map[string]Language // Map of all languages in the templates directory. Key is the language name.
 }
 
@@ -68,8 +68,8 @@ func getFileData(path string, embedded bool) ([]byte, error) {
 	}
 }
 
-func New() (*Templates, error, error) {
-	var templates Templates
+func New() (*TemplateManager, error, error) {
+	var templates TemplateManager
 
 	templates.languages = make(map[string]Language)
 	userTemplatesErr := templates.findUserTemplates()
@@ -78,7 +78,7 @@ func New() (*Templates, error, error) {
 	return &templates, userTemplatesErr, embeddedTemplatesErr
 }
 
-func (g *Templates) findUserTemplates() error {
+func (g *TemplateManager) findUserTemplates() error {
 	dirs, err := os.ReadDir(pathutils.GetTemplatesDir())
 
 	if err != nil {
@@ -88,7 +88,7 @@ func (g *Templates) findUserTemplates() error {
 	return g.findTemplates(dirs, false)
 }
 
-func (g *Templates) findEmbeddedTemplates() error {
+func (g *TemplateManager) findEmbeddedTemplates() error {
 	dirs, err := embedsDir.ReadDir("templates")
 
 	if err != nil {
@@ -98,7 +98,7 @@ func (g *Templates) findEmbeddedTemplates() error {
 	return g.findTemplates(dirs, true)
 }
 
-func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) error {
+func (g *TemplateManager) findTemplates(dirs []fs.DirEntry, embedded bool) error {
 	var templatePath string
 
 	if embedded {
@@ -152,12 +152,12 @@ func (g *Templates) findTemplates(dirs []fs.DirEntry, embedded bool) error {
 	return nil // TODO: Handle errors
 }
 
-func (g *Templates) HasLanguage(languageName string) bool {
+func (g *TemplateManager) HasLanguage(languageName string) bool {
 	_, found := g.languages[languageName]
 	return found
 }
 
-func (g *Templates) HasTemplate(languageName string, templateName string) bool {
+func (g *TemplateManager) HasTemplate(languageName string, templateName string) bool {
 	if language, foundLanguage := g.languages[languageName]; foundLanguage {
 		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
 
@@ -167,7 +167,7 @@ func (g *Templates) HasTemplate(languageName string, templateName string) bool {
 	return false
 }
 
-func (g *Templates) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
+func (g *TemplateManager) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
 	language, foundLanguage := g.languages[languageName]
 
 	if foundLanguage {
@@ -188,7 +188,7 @@ func (g *Templates) GetLanguageTemplateFor(languageName string, templateName str
 	return "", infofile.InfoFile{}
 }
 
-func (g *Templates) loadTemplateFile(language string, template string, info infofile.InfoFile) (string, error) {
+func (g *TemplateManager) loadTemplateFile(language string, template string, info infofile.InfoFile) (string, error) {
 	var data []byte
 	var templateName string
 	var err error
@@ -209,15 +209,15 @@ func (g *Templates) loadTemplateFile(language string, template string, info info
 	return string(data), nil
 }
 
-func (g *Templates) GetListOfLanguageTemplates(language Language) []infofile.InfoFile {
+func (g *TemplateManager) GetListOfLanguageTemplates(language Language) []infofile.InfoFile {
 	return language.templateConfigs
 }
 
-func (g *Templates) GetListOfAllLanguages() map[string]Language {
+func (g *TemplateManager) GetListOfAllLanguages() map[string]Language {
 	return g.languages
 }
 
-func (g *Templates) ShowTemplate(languageName string, templateName string) error {
+func (g *TemplateManager) ShowTemplate(languageName string, templateName string) error {
 	if language, languageFound := g.languages[languageName]; languageFound {
 		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
 
@@ -247,7 +247,7 @@ func (g *Templates) ShowTemplate(languageName string, templateName string) error
 }
 
 // CreateFileFromTemplate Creates a template
-func (g *Templates) CreateFileFromTemplate(languageName string, templateName string, customFileName string) error {
+func (g *TemplateManager) CreateFileFromTemplate(languageName string, templateName string, customFileName string) error {
 	if g.HasLanguage(languageName) {
 		if g.HasTemplate(languageName, templateName) {
 			var fileName string

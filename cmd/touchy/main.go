@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-var languageTemplates *templates.Templates
+var manager *templates.TemplateManager
 var touchyScripts *scripts.TouchyScripts
 
 func setupScriptsAndTemplates() {
@@ -25,7 +25,7 @@ func setupScriptsAndTemplates() {
 
 	touchyScripts = scripts.New()
 	touchyScripts.RegisterAPI()
-	languageTemplates, userTemplatesErr, embeddedTemplatesErr = templates.New()
+	manager, userTemplatesErr, embeddedTemplatesErr = templates.New()
 
 	if userTemplatesErr != nil || embeddedTemplatesErr != nil {
 		handleError(userTemplatesErr, "", "")
@@ -52,7 +52,7 @@ func handleError(err error, templateName string, languageName string) {
 }
 
 func handleCreateCommand(languageName string, templateName string, fileName string) {
-	err := languageTemplates.CreateFileFromTemplate(languageName, templateName, fileName)
+	err := manager.CreateFileFromTemplate(languageName, templateName, fileName)
 
 	if err != nil {
 		handleError(err, templateName, languageName)
@@ -65,21 +65,21 @@ func handleListCommand(listType string, languageName string) {
 		scriptsList := touchyScripts.GetListOfScripts()
 		ListScripts(scriptsList)
 		fmt.Println("")
-		ListTemplates(languageName, languageTemplates.GetListOfAllLanguages())
-	case "languageTemplates":
-		ListLanguages(languageTemplates.GetListOfAllLanguages())
+		ListTemplates(languageName, manager.GetListOfAllLanguages())
+	case "languages":
+		ListLanguages(manager.GetListOfAllLanguages())
 	case "scripts":
 		scriptsList := touchyScripts.GetListOfScripts()
 		ListScripts(scriptsList)
 	case "templates":
-		ListTemplates(languageName, languageTemplates.GetListOfAllLanguages())
+		ListTemplates(languageName, manager.GetListOfAllLanguages())
 	default:
 		fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
 	}
 }
 
 func handleShowCommand(languageName string, templateName string) {
-	err := languageTemplates.ShowTemplate(languageName, templateName)
+	err := manager.ShowTemplate(languageName, templateName)
 
 	if err != nil {
 		handleError(err, templateName, languageName)
@@ -129,7 +129,7 @@ func main() {
 			var createCmd CreateCommand
 
 			arg.MustParse(&createCmd)
-			err := languageTemplates.CreateFileFromTemplate(createCmd.Language, createCmd.TemplateName, createCmd.FileName)
+			err := manager.CreateFileFromTemplate(createCmd.Language, createCmd.TemplateName, createCmd.FileName)
 
 			if err != nil {
 				handleError(err, createCmd.TemplateName, createCmd.Language)
