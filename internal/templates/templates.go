@@ -24,7 +24,7 @@ var ErrFailedToReadFile = errors.New("failed to read file")
 var ErrFailedToReadEmbeddedFile = errors.New("failed to read embedded file")
 var ErrHighlightFailed = errors.New("failed to highlight code")
 
-type Templates2 interface {
+type Templates interface {
 	CreateFileFromTemplate(languageName string, templateName string, customFileName string) error
 	GetListOfAllLanguages() []string
 	GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile)
