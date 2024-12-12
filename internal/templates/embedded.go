@@ -74,7 +74,7 @@ func (g *EmbeddedTemplates) findTemplates(embedded bool) error {
 	return nil // TODO: Handle errors
 }
 
-func (g *EmbeddedTemplates) loadTemplateFile(language string, template string) (string, error) {
+func (g *EmbeddedTemplates) LoadTemplateFile(language string, template string) (string, error) {
 	var data []byte
 	var templateName string
 	var err error
