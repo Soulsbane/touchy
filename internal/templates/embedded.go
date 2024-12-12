@@ -89,6 +89,10 @@ func (g *EmbeddedTemplates) loadTemplateFile(language string, template string) (
 	return string(data), nil
 }
 
+func (g *EmbeddedTemplates) GetListOfLanguageTemplatesFor(language Language) []infofile.InfoFile {
+	return language.templateConfigs
+}
+
 func (g *EmbeddedTemplates) GetListOfAllLanguages() map[string]Language {
 	return g.languages
 }
@@ -106,4 +110,24 @@ func (g *EmbeddedTemplates) HasTemplate(languageName string, templateName string
 	}
 
 	return false
+}
+
+func (g *EmbeddedTemplates) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
+	language, foundLanguage := g.languages[languageName]
+
+	if foundLanguage {
+		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
+
+		if idx >= 0 {
+			data, err := g.LoadTemplateFile(languageName, templateName)
+
+			if err != nil {
+				return "", language.templateConfigs[idx]
+			} else {
+				return data, language.templateConfigs[idx]
+			}
+		}
+	}
+
+	return "", infofile.InfoFile{}
 }
