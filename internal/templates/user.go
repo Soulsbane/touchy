@@ -75,6 +75,25 @@ func (g *UserTemplates) findTemplates(embedded bool) error {
 	return nil // TODO: Handle errors
 }
 
+func (g *UserTemplates) LoadTemplateFile(language string, template string) (string, error) {
+	var data []byte
+	var templateName string
+	var err error
+
+	templateName = path.Join("templates", language, template, template+".template")
+	data, err = os.ReadFile(templateName)
+
+	if err != nil { // We couldn't read from the embedded file or the file in user's config directory so return an error
+		return "", ErrTemplateNotFound
+	}
+
+	return string(data), nil
+}
+
+func (g *UserTemplates) GetListOfLanguageTemplatesFor(language Language) []infofile.InfoFile {
+	return language.templateConfigs
+}
+
 func (g *UserTemplates) GetListOfAllLanguages() map[string]Language {
 	return g.languages
 }
@@ -92,4 +111,24 @@ func (g *UserTemplates) HasTemplate(languageName string, templateName string) bo
 	}
 
 	return false
+}
+
+func (g *UserTemplates) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
+	language, foundLanguage := g.languages[languageName]
+
+	if foundLanguage {
+		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
+
+		if idx >= 0 {
+			data, err := g.LoadTemplateFile(languageName, templateName)
+
+			if err != nil {
+				return "", language.templateConfigs[idx]
+			} else {
+				return data, language.templateConfigs[idx]
+			}
+		}
+	}
+
+	return "", infofile.InfoFile{}
 }
