@@ -89,8 +89,8 @@ func (g *EmbeddedTemplates) LoadTemplateFile(language string, template string) (
 	return string(data), nil
 }
 
-func (g *EmbeddedTemplates) GetListOfLanguageTemplatesFor(language Language) []infofile.InfoFile {
-	return language.templateConfigs
+func (g *EmbeddedTemplates) GetListOfLanguageTemplatesFor(language string) []infofile.InfoFile {
+	return g.languages[language].templateConfigs // FIXME: This is a hack
 }
 
 func (g *EmbeddedTemplates) GetListOfAllLanguages() map[string]Language {

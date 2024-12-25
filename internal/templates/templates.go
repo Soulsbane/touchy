@@ -8,7 +8,6 @@ import (
 	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/alecthomas/chroma/quick"
 	"golang.org/x/exp/slices"
-	"io/fs"
 	"os"
 	"path"
 )
@@ -25,13 +24,12 @@ var ErrFailedToReadEmbeddedFile = errors.New("failed to read embedded file")
 var ErrHighlightFailed = errors.New("failed to highlight code")
 
 type Templates interface {
-	CreateFileFromTemplate(languageName string, templateName string, customFileName string) error
-	GetListOfAllLanguages() []string
+	// CreateFileFromTemplate(languageName string, templateName string, customFileName string) error
+	GetListOfAllLanguages() map[string]Language
 	GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile)
 	GetListOfLanguageTemplatesFor(languageName string) []infofile.InfoFile
 	HasTemplate(languageName string, templateName string) bool
 	HasLanguage(languageName string) bool
-	ShowTemplate(languageName string, templateName string) error
 }
 
 type Language struct {
@@ -41,7 +39,8 @@ type Language struct {
 }
 
 type TemplateManager struct {
-	languages map[string]Language // Map of all languages in the templates directory. Key is the language name.
+	languages    map[string]Language // Map of all languages in the templates directory. Key is the language name.
+	templateList []Templates
 }
 
 func (lang *Language) GetInfoFile() infofile.InfoFile {
@@ -69,87 +68,23 @@ func getFileData(path string, embedded bool) ([]byte, error) {
 }
 
 func New() (*TemplateManager, error, error) {
-	var templates TemplateManager
+	var manager TemplateManager
 
-	templates.languages = make(map[string]Language)
-	userTemplatesErr := templates.findUserTemplates()
-	embeddedTemplatesErr := templates.findEmbeddedTemplates()
+	manager.languages = make(map[string]Language)
+	manager.GatherTemplates()
 
-	return &templates, userTemplatesErr, embeddedTemplatesErr
+	return &manager, nil, nil
 }
 
-func (g *TemplateManager) findUserTemplates() error {
-	dirs, err := os.ReadDir(pathutils.GetTemplatesDir())
+func (g *TemplateManager) GatherTemplates() map[string]Language {
+	embedded := NewEmbeddedTemplates()
+	languages := embedded.GetListOfAllLanguages()
+	//user := NewUserTemplates()
+	g.templateList = append(g.templateList, embedded)
 
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrNoUserTemplatesDir, err)
-	}
+	//maps.Copy(languages, user.GetListOfAllLanguages())
 
-	return g.findTemplates(dirs, false)
-}
-
-func (g *TemplateManager) findEmbeddedTemplates() error {
-	dirs, err := embedsDir.ReadDir("templates")
-
-	if err != nil {
-		panic(err)
-	}
-
-	return g.findTemplates(dirs, true)
-}
-
-func (g *TemplateManager) findTemplates(dirs []fs.DirEntry, embedded bool) error {
-	var templatePath string
-
-	if embedded {
-		templatePath = "templates"
-	} else {
-		templatePath = pathutils.GetTemplatesDir()
-	}
-
-	for _, languageDir := range dirs {
-		if languageDir.IsDir() {
-			var language Language
-			var templates []os.DirEntry
-
-			infoPath := path.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
-			data, err := getFileData(infoPath, embedded)
-			language.infoConfig = infofile.Load(languageDir.Name(), infoPath, embedded, data)
-
-			if err != nil {
-				fmt.Println(err)
-			}
-
-			if embedded {
-				templates, err = embedsDir.ReadDir(path.Join(templatePath, languageDir.Name()))
-			} else {
-				templates, err = os.ReadDir(path.Join(templatePath, languageDir.Name()))
-			}
-
-			if err != nil {
-				fmt.Println("Could not read directory: ", err) // TODO: Handle this better?
-			}
-
-			for _, template := range templates {
-				if template.IsDir() {
-					configPath := path.Join(templatePath, languageDir.Name(), template.Name(), infofile.DefaultFileName)
-					templateData, fileReadErr := getFileData(configPath, embedded)
-
-					if fileReadErr != nil {
-						fmt.Println(fileReadErr)
-					}
-
-					config := infofile.Load(template.Name(), configPath, embedded, templateData)
-					config.SetEmbedded(embedded)
-					language.templateConfigs = append(language.templateConfigs, config)
-				}
-			}
-
-			g.languages[languageDir.Name()] = language
-		}
-	}
-
-	return nil // TODO: Handle errors
+	return languages
 }
 
 func (g *TemplateManager) HasLanguage(languageName string) bool {
@@ -218,29 +153,21 @@ func (g *TemplateManager) GetListOfAllLanguages() map[string]Language {
 }
 
 func (g *TemplateManager) ShowTemplate(languageName string, templateName string) error {
-	if language, languageFound := g.languages[languageName]; languageFound {
-		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
+	for _, temp := range g.templateList {
+		foundLanguage := temp.HasLanguage(languageName)
 
-		if idx >= 0 {
-			sourceCode, err := g.loadTemplateFile(languageName, templateName, language.templateConfigs[idx])
-
-			if err != nil {
-				return ErrTemplateNotFound
-			}
-
-			// Formatters: terminal, terminal8, terminal16, terminal256, terminal16m
+		if foundLanguage {
 			// Styles: https://github.com/alecthomas/chroma/tree/master/styles
-			err = quick.Highlight(os.Stdout, sourceCode, language.templateConfigs[idx].GetDefaultOutputFileName(), "terminal256", "monokai")
+			sourceCode, info := temp.GetLanguageTemplateFor(languageName, templateName)
+
+			err := quick.Highlight(os.Stdout, sourceCode, info.GetDefaultOutputFileName(), "terminal256", "monokai")
 
 			if err != nil {
 				return ErrHighlightFailed
 			}
-
 		} else {
-			return ErrTemplateNotFound
+			return ErrLanguageNotFound
 		}
-	} else {
-		return ErrLanguageNotFound
 	}
 
 	return nil

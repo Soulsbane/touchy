@@ -7,6 +7,7 @@ import (
 	"github.com/Soulsbane/touchy/internal/scripts"
 	"github.com/Soulsbane/touchy/internal/templates"
 	"github.com/alexflint/go-arg"
+	//"maps"
 	"os"
 )
 
@@ -51,55 +52,66 @@ func handleError(err error, templateName string, languageName string) {
 	}
 }
 
-func handleCreateCommand(languageName string, templateName string, fileName string) {
-	err := manager.CreateFileFromTemplate(languageName, templateName, fileName)
+//func handleCreateCommand(languageName string, templateName string, fileName string) {
+//	err := manager.CreateFileFromTemplate(languageName, templateName, fileName)
+//
+//	if err != nil {
+//		handleError(err, templateName, languageName)
+//	}
+//}
+//
+//func handleListCommand(listType string, languageName string) {
+//	switch listType {
+//	case "all":
+//		scriptsList := touchyScripts.GetListOfScripts()
+//		ListScripts(scriptsList)
+//		fmt.Println("")
+//		ListTemplates(languageName, manager.GetListOfAllLanguages())
+//	case "languages":
+//		ListLanguages(manager.GetListOfAllLanguages())
+//	case "scripts":
+//		scriptsList := touchyScripts.GetListOfScripts()
+//		ListScripts(scriptsList)
+//	case "templates":
+//		ListTemplates(languageName, manager.GetListOfAllLanguages())
+//	default:
+//		fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
+//	}
+//}
 
-	if err != nil {
-		handleError(err, templateName, languageName)
-	}
-}
+//func handleShowCommand(languageName string, templateName string) {
+//	err := manager.ShowTemplate(languageName, templateName)
+//
+//	if err != nil {
+//		handleError(err, templateName, languageName)
+//	}
+//}
+//
+//func handleRunCommand(scriptName string) {
+//	err := touchyScripts.Run(scriptName)
+//
+//	if err != nil {
+//		handleError(err, scriptName, "")
+//	}
+//}
 
-func handleListCommand(listType string, languageName string) {
-	switch listType {
-	case "all":
-		scriptsList := touchyScripts.GetListOfScripts()
-		ListScripts(scriptsList)
-		fmt.Println("")
-		ListTemplates(languageName, manager.GetListOfAllLanguages())
-	case "languages":
-		ListLanguages(manager.GetListOfAllLanguages())
-	case "scripts":
-		scriptsList := touchyScripts.GetListOfScripts()
-		ListScripts(scriptsList)
-	case "templates":
-		ListTemplates(languageName, manager.GetListOfAllLanguages())
-	default:
-		fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
-	}
-}
-
-func handleShowCommand(languageName string, templateName string) {
-	err := manager.ShowTemplate(languageName, templateName)
-
-	if err != nil {
-		handleError(err, templateName, languageName)
-	}
-}
-
-func handleRunCommand(scriptName string) {
-	err := touchyScripts.Run(scriptName)
-
-	if err != nil {
-		handleError(err, scriptName, "")
-	}
-}
-
-func gatherTemplates() {
+func oldgatherTemplates() {
 	embedded := templates.NewEmbeddedTemplates()
 	embedded.GetListOfAllLanguages()
 
 	user := templates.NewUserTemplates()
 	user.GetListOfAllLanguages()
+}
+
+func gatherTemplates() (map[string]templates.Language, []templates.Templates) {
+	embedded := templates.NewEmbeddedTemplates()
+	languages := embedded.GetListOfAllLanguages()
+	//user := templates.NewUserTemplates()
+	langTemps := []templates.Templates{embedded}
+
+	//maps.Copy(languages, user.GetListOfAllLanguages())
+
+	return languages, langTemps
 }
 
 func main() {
@@ -111,6 +123,7 @@ func main() {
 	} else {
 		cmd := cmdLineArgs[0]
 		setupScriptsAndTemplates()
+		languages, langTemps := gatherTemplates()
 
 		if isReservedCommand(cmds, cmd) || cmd == "-h" || cmd == "--help" {
 			arg.MustParse(&cmds)
@@ -119,9 +132,9 @@ func main() {
 			case cmds.Create != nil:
 				handleCreateCommand(cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
 			case cmds.List != nil:
-				handleListCommand(cmds.List.Type, cmds.List.Language)
+				handleListCommand(cmds.List.Type, cmds.List.Language, languages, langTemps)
 			case cmds.Show != nil:
-				handleShowCommand(cmds.Show.Language, cmds.Show.TemplateName)
+				handleShowCommand(cmds.Show.Language, cmds.Show.TemplateName, langTemps)
 			case cmds.Run != nil:
 				handleRunCommand(cmds.Run.ScriptName)
 			}

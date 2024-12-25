@@ -41,6 +41,7 @@ type commands struct {
 func (commands) Description() string {
 	return "Creates a file based upon a template"
 }
+
 func isReservedCommand(cmds commands, command string) bool {
 	// This checks if a command is reserved based on the command existing as a member of the command's struct.
 	dummyVal := reflect.ValueOf(cmds)
@@ -55,6 +56,50 @@ func isReservedCommand(cmds commands, command string) bool {
 	}
 
 	return false
+}
+
+func handleCreateCommand(languageName string, templateName string, fileName string) {
+	err := manager.CreateFileFromTemplate(languageName, templateName, fileName)
+
+	if err != nil {
+		handleError(err, templateName, languageName)
+	}
+}
+
+func handleListCommand(listType string, languageName string, languages map[string]templates.Language, temp []templates.Templates) {
+	switch listType {
+	case "all":
+		scriptsList := touchyScripts.GetListOfScripts()
+		ListScripts(scriptsList)
+		fmt.Println("")
+		ListTemplates(languageName, languages, temp)
+	case "languages":
+		ListLanguages(languages)
+	case "scripts":
+		scriptsList := touchyScripts.GetListOfScripts()
+		ListScripts(scriptsList)
+	case "templates":
+		ListTemplates(languageName, languages, temp)
+	default:
+		// TODO: Add support for pulling the default language  template
+		fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
+	}
+}
+
+func handleShowCommand(languageName string, templateName string, temp2 []templates.Templates) {
+	err := manager.ShowTemplate(languageName, templateName)
+
+	if err != nil {
+		handleError(err, templateName, languageName)
+	}
+}
+
+func handleRunCommand(scriptName string) {
+	err := touchyScripts.Run(scriptName)
+
+	if err != nil {
+		handleError(err, scriptName, "")
+	}
 }
 
 func ListLanguages(languages map[string]templates.Language) {
@@ -79,28 +124,31 @@ func ListScripts(scripts []infofile.InfoFile) {
 	outputTable.Render()
 }
 
-func ListTemplates(listArg string, languages map[string]templates.Language) {
-	if languageTemplates, found := languages[listArg]; found {
-		languageInfo := languageTemplates.GetInfoFile()
-		outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
+func ListTemplates(listArg string, languages map[string]templates.Language, temp2 []templates.Templates) {
+	fmt.Println("Listarg: ", listArg)
+	for _, temp := range temp2 {
+		if temp.HasLanguage(listArg) {
+			//languageInfo := temp.GetInfoFile()
+			//outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
+			//
+			//for _, info := range languageTemplates.GetTemplatesInfoFiles() {
+			//	outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
+			//}
+			//
+			//outputTable.Render()
+		} else if listArg == "all" {
+			for _, language := range languages {
+				languageInfo := language.GetInfoFile()
+				outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
 
-		for _, info := range languageTemplates.GetTemplatesInfoFiles() {
-			outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
-		}
+				for _, info := range language.GetTemplatesInfoFiles() {
+					outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
+				}
 
-		outputTable.Render()
-	} else if listArg == "all" {
-		for _, language := range languages {
-			languageInfo := language.GetInfoFile()
-			outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
-
-			for _, info := range language.GetTemplatesInfoFiles() {
-				outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
+				outputTable.Render()
 			}
-
-			outputTable.Render()
+		} else {
+			fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
 		}
-	} else {
-		fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
 	}
 }
