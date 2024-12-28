@@ -38,6 +38,11 @@ type Language struct {
 	templateConfigs []infofile.InfoFile // A list of all the templates in the language directory. The key is the template dir name.
 }
 
+type Languages struct {
+	languageName string
+	infoFile     infofile.InfoFile
+}
+
 type TemplateManager struct {
 	languages    map[string]Language // Map of all languages in the templates directory. Key is the language name.
 	templateList []Templates
