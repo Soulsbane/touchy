@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"reflect"
+	"strings"
+
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/templates"
 	"github.com/Soulsbane/touchy/internal/ui"
 	"github.com/jedib0t/go-pretty/v6/table"
-	"reflect"
-	"strings"
 )
 
 type ShowCommand struct {
@@ -66,20 +67,20 @@ func handleCreateCommand(languageName string, templateName string, fileName stri
 	}
 }
 
-func handleListCommand(listType string, languageName string, languages map[string]templates.Language, temp []templates.Templates) {
+func handleListCommand(listType string, languageName string, languages []templates.Languages, temp []templates.Templates) {
 	switch listType {
 	case "all":
 		scriptsList := touchyScripts.GetListOfScripts()
 		ListScripts(scriptsList)
 		fmt.Println("")
-		ListTemplates(languageName, languages, temp)
+		//ListTemplates(languageName, languages, temp)
 	case "languages":
-		ListLanguages(languages)
+		//ListLanguages(languages)
 	case "scripts":
 		scriptsList := touchyScripts.GetListOfScripts()
 		ListScripts(scriptsList)
 	case "templates":
-		ListTemplates(languageName, languages, temp)
+		//ListTemplates(languageName, languages, temp)
 	default:
 		// TODO: Add support for pulling the default language  template
 		fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
@@ -127,7 +128,8 @@ func ListScripts(scripts []infofile.InfoFile) {
 func ListTemplates(listArg string, languages map[string]templates.Language, temp2 []templates.Templates) {
 	fmt.Println("Listarg: ", listArg)
 	for _, temp := range temp2 {
-		if temp.HasLanguage(listArg) {
+		hasLang, _ := temp.HasLanguage(listArg)
+		if hasLang {
 			//languageInfo := temp.GetInfoFile()
 			//outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
 			//

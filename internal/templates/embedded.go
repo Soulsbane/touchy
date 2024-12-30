@@ -2,20 +2,21 @@ package templates
 
 import (
 	"fmt"
-	"github.com/Soulsbane/touchy/internal/infofile"
 	"os"
 	"path"
 	"slices"
+
+	"github.com/Soulsbane/touchy/internal/infofile"
 )
 
 type EmbeddedTemplates struct {
-	languages map[string]Language // Map of all languages in the templates directory. Key is the language name.
+	languages []Languages
 }
 
 func NewEmbeddedTemplates() *EmbeddedTemplates {
 	var templates EmbeddedTemplates
+	templates.languages = make([]Languages, 0)
 
-	templates.languages = make(map[string]Language)
 	err := templates.findTemplates(true)
 
 	if err != nil {
@@ -64,10 +65,9 @@ func (g *EmbeddedTemplates) findTemplates(embedded bool) error {
 					config := infofile.Load(template.Name(), configPath, embedded, templateData)
 					config.SetEmbedded(embedded)
 					language.templateConfigs = append(language.templateConfigs, config)
+					g.languages = append(g.languages, Languages{languageDir.Name(), config})
 				}
 			}
-
-			g.languages[languageDir.Name()] = language
 		}
 	}
 
@@ -90,44 +90,37 @@ func (g *EmbeddedTemplates) LoadTemplateFile(language string, template string) (
 }
 
 func (g *EmbeddedTemplates) GetListOfLanguageTemplatesFor(language string) []infofile.InfoFile {
-	return g.languages[language].templateConfigs // FIXME: This is a hack
+	return []infofile.InfoFile{} // TODO: Placeholder while I rework
 }
 
-func (g *EmbeddedTemplates) GetListOfAllLanguages() map[string]Language {
+func (g *EmbeddedTemplates) GetListOfAllLanguages() []Languages {
 	return g.languages
 }
 
-func (g *EmbeddedTemplates) HasLanguage(languageName string) bool {
-	_, found := g.languages[languageName]
-	return found
+func (g *EmbeddedTemplates) HasLanguage(languageName string) (bool, int) {
+	idx := slices.IndexFunc(g.languages, func(c Languages) bool { return c.languageName == languageName })
+	return idx >= 0, idx
 }
 
-func (g *EmbeddedTemplates) HasTemplate(languageName string, templateName string) bool {
-	if language, foundLanguage := g.languages[languageName]; foundLanguage {
-		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
-
-		return idx >= 0
-	}
-
-	return false
+func (g *EmbeddedTemplates) HasTemplate(languageName string, templateName string) (bool, int) {
+	idx := slices.IndexFunc(g.languages, func(c Languages) bool { return c.languageName == languageName && c.infoFile.GetName() == templateName })
+	return idx >= 0, idx
 }
 
 func (g *EmbeddedTemplates) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
-	language, foundLanguage := g.languages[languageName]
+	hasTemplate, idx := g.HasTemplate(languageName, templateName)
 
-	if foundLanguage {
-		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
-
+	if hasTemplate {
 		if idx >= 0 {
 			data, err := g.LoadTemplateFile(languageName, templateName)
 
 			if err != nil {
-				return "", language.templateConfigs[idx]
+				return "", g.languages[idx].infoFile
 			} else {
-				return data, language.templateConfigs[idx]
+				return data, g.languages[idx].infoFile
 			}
 		}
-	}
 
+	}
 	return "", infofile.InfoFile{}
 }

@@ -4,12 +4,13 @@ import (
 	"embed"
 	"errors"
 	"fmt"
+	"os"
+	"path"
+
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/alecthomas/chroma/quick"
 	"golang.org/x/exp/slices"
-	"os"
-	"path"
 )
 
 //go:embed templates
@@ -25,11 +26,11 @@ var ErrHighlightFailed = errors.New("failed to highlight code")
 
 type Templates interface {
 	// CreateFileFromTemplate(languageName string, templateName string, customFileName string) error
-	GetListOfAllLanguages() map[string]Language
+	GetListOfAllLanguages() []Languages
 	GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile)
 	GetListOfLanguageTemplatesFor(languageName string) []infofile.InfoFile
-	HasTemplate(languageName string, templateName string) bool
-	HasLanguage(languageName string) bool
+	HasTemplate(languageName string, templateName string) (bool, int)
+	HasLanguage(languageName string) (bool, int)
 }
 
 type Language struct {
@@ -81,7 +82,7 @@ func New() (*TemplateManager, error, error) {
 	return &manager, nil, nil
 }
 
-func (g *TemplateManager) GatherTemplates() map[string]Language {
+func (g *TemplateManager) GatherTemplates() []Languages {
 	embedded := NewEmbeddedTemplates()
 	languages := embedded.GetListOfAllLanguages()
 	//user := NewUserTemplates()
@@ -159,7 +160,7 @@ func (g *TemplateManager) GetListOfAllLanguages() map[string]Language {
 
 func (g *TemplateManager) ShowTemplate(languageName string, templateName string) error {
 	for _, temp := range g.templateList {
-		foundLanguage := temp.HasLanguage(languageName)
+		foundLanguage, _ := temp.HasLanguage(languageName)
 
 		if foundLanguage {
 			// Styles: https://github.com/alecthomas/chroma/tree/master/styles

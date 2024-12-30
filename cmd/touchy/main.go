@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+
 	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/Soulsbane/touchy/internal/scripts"
 	"github.com/Soulsbane/touchy/internal/templates"
@@ -103,7 +104,7 @@ func oldgatherTemplates() {
 	user.GetListOfAllLanguages()
 }
 
-func gatherTemplates() (map[string]templates.Language, []templates.Templates) {
+func gatherTemplates() ([]templates.Languages, []templates.Templates) {
 	embedded := templates.NewEmbeddedTemplates()
 	languages := embedded.GetListOfAllLanguages()
 	//user := templates.NewUserTemplates()
