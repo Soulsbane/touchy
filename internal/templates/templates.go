@@ -1,7 +1,6 @@
 package templates
 
 import (
-	"embed"
 	"errors"
 	"fmt"
 	"os"
@@ -13,8 +12,6 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-//go:embed templates
-var embedsDir embed.FS
 var ErrTemplateNotFound = errors.New("template not found")
 var ErrLanguageNotFound = errors.New("language not found")
 var ErrFileNameEmpty = errors.New("output filename not specified")

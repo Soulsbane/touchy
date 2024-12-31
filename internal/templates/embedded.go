@@ -1,6 +1,7 @@
 package templates
 
 import (
+	"embed"
 	"fmt"
 	"os"
 	"path"
@@ -8,6 +9,9 @@ import (
 
 	"github.com/Soulsbane/touchy/internal/infofile"
 )
+
+//go:embed templates
+var embedsDir embed.FS
 
 type EmbeddedTemplates struct {
 	languages []Languages
@@ -26,6 +30,14 @@ func NewEmbeddedTemplates() *EmbeddedTemplates {
 	return &templates
 }
 
+func getEmbeddedData(path string) ([]byte, error) {
+	if data, err := embedsDir.ReadFile(path); err != nil {
+		return data, fmt.Errorf("%w: %w", ErrFailedToReadEmbeddedFile, err)
+	} else {
+		return data, nil
+	}
+}
+
 func (g *EmbeddedTemplates) findTemplates(embedded bool) error {
 	templatePath := "templates"
 	dirs, err := embedsDir.ReadDir("templates")
@@ -40,7 +52,7 @@ func (g *EmbeddedTemplates) findTemplates(embedded bool) error {
 			var templates []os.DirEntry
 
 			infoPath := path.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
-			data, err := getFileData(infoPath, embedded)
+			data, err := getEmbeddedData(infoPath)
 			language.infoConfig = infofile.Load(languageDir.Name(), infoPath, embedded, data)
 
 			if err != nil {
@@ -56,7 +68,7 @@ func (g *EmbeddedTemplates) findTemplates(embedded bool) error {
 			for _, template := range templates {
 				if template.IsDir() {
 					configPath := path.Join(templatePath, languageDir.Name(), template.Name(), infofile.DefaultFileName)
-					templateData, fileReadErr := getFileData(configPath, embedded)
+					templateData, fileReadErr := getEmbeddedData(configPath)
 
 					if fileReadErr != nil {
 						fmt.Println(fileReadErr)
