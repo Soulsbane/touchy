@@ -28,6 +28,7 @@ func setupScriptsAndTemplates() {
 	touchyScripts = scripts.New()
 	touchyScripts.RegisterAPI()
 	manager, userTemplatesErr, embeddedTemplatesErr = templates.New()
+	manager.GatherTemplates()
 
 	if userTemplatesErr != nil || embeddedTemplatesErr != nil {
 		handleError(userTemplatesErr, "", "")
@@ -96,25 +97,6 @@ func handleError(err error, templateName string, languageName string) {
 //	}
 //}
 
-func oldgatherTemplates() {
-	embedded := templates.NewEmbeddedTemplates()
-	embedded.GetListOfAllLanguages()
-
-	user := templates.NewUserTemplates()
-	user.GetListOfAllLanguages()
-}
-
-func gatherTemplates() ([]templates.Languages, []templates.Templates) {
-	embedded := templates.NewEmbeddedTemplates()
-	languages := embedded.GetListOfAllLanguages()
-	//user := templates.NewUserTemplates()
-	langTemps := []templates.Templates{embedded}
-
-	//maps.Copy(languages, user.GetListOfAllLanguages())
-
-	return languages, langTemps
-}
-
 func main() {
 	var cmds commands
 	cmdLineArgs := os.Args[1:]
@@ -124,7 +106,6 @@ func main() {
 	} else {
 		cmd := cmdLineArgs[0]
 		setupScriptsAndTemplates()
-		languages, langTemps := gatherTemplates()
 
 		if isReservedCommand(cmds, cmd) || cmd == "-h" || cmd == "--help" {
 			arg.MustParse(&cmds)
@@ -133,9 +114,9 @@ func main() {
 			case cmds.Create != nil:
 				handleCreateCommand(cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
 			case cmds.List != nil:
-				handleListCommand(cmds.List.Type, cmds.List.Language, languages, langTemps)
+				//handleListCommand(cmds.List.Type, cmds.List.Language, languages, langTemps)
 			case cmds.Show != nil:
-				handleShowCommand(cmds.Show.Language, cmds.Show.TemplateName, langTemps)
+				handleShowCommand(cmds.Show.Language, cmds.Show.TemplateName)
 			case cmds.Run != nil:
 				handleRunCommand(cmds.Run.ScriptName)
 			}

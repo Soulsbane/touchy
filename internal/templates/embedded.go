@@ -8,6 +8,7 @@ import (
 	"slices"
 
 	"github.com/Soulsbane/touchy/internal/infofile"
+	"github.com/samber/lo"
 )
 
 //go:embed templates
@@ -105,8 +106,14 @@ func (g *EmbeddedTemplates) GetListOfLanguageTemplatesFor(language string) []inf
 	return []infofile.InfoFile{} // TODO: Placeholder while I rework
 }
 
-func (g *EmbeddedTemplates) GetListOfAllLanguages() []Languages {
-	return g.languages
+func (g *EmbeddedTemplates) GetListOfAllLanguages() []string {
+	infos := make([]string, 0)
+
+	for _, language := range g.languages {
+		infos = append(infos, language.languageName)
+	}
+
+	return lo.Uniq(infos)
 }
 
 func (g *EmbeddedTemplates) HasLanguage(languageName string) (bool, int) {

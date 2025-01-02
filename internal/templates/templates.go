@@ -23,7 +23,7 @@ var ErrHighlightFailed = errors.New("failed to highlight code")
 
 type Templates interface {
 	// CreateFileFromTemplate(languageName string, templateName string, customFileName string) error
-	GetListOfAllLanguages() []Languages
+	GetListOfAllLanguages() []string
 	GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile)
 	GetListOfLanguageTemplatesFor(languageName string) []infofile.InfoFile
 	HasTemplate(languageName string, templateName string) (bool, int)
@@ -74,20 +74,16 @@ func New() (*TemplateManager, error, error) {
 	var manager TemplateManager
 
 	manager.languages = make(map[string]Language)
-	manager.GatherTemplates()
 
 	return &manager, nil, nil
 }
 
-func (g *TemplateManager) GatherTemplates() []Languages {
+func (g *TemplateManager) GatherTemplates() {
 	embedded := NewEmbeddedTemplates()
-	languages := embedded.GetListOfAllLanguages()
 	//user := NewUserTemplates()
 	g.templateList = append(g.templateList, embedded)
 
 	//maps.Copy(languages, user.GetListOfAllLanguages())
-
-	return languages
 }
 
 func (g *TemplateManager) HasLanguage(languageName string) bool {

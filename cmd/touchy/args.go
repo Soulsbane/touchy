@@ -87,7 +87,7 @@ func handleListCommand(listType string, languageName string, languages []templat
 	}
 }
 
-func handleShowCommand(languageName string, templateName string, temp2 []templates.Templates) {
+func handleShowCommand(languageName string, templateName string) {
 	err := manager.ShowTemplate(languageName, templateName)
 
 	if err != nil {
