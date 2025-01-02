@@ -104,15 +104,15 @@ func handleRunCommand(scriptName string) {
 }
 
 func ListLanguages(languages map[string]templates.Language) {
-	outputTable := ui.CreateNewTableWriter("Languages", "Name", "Long Name", "Description")
-
-	for name, language := range languages {
-		languageInfo := language.GetInfoFile()
-
-		outputTable.AppendRow(table.Row{name, languageInfo.GetName(), languageInfo.GetDescription()})
-	}
-
-	outputTable.Render()
+	//	outputTable := ui.CreateNewTableWriter("Languages", "Name", "Long Name", "Description")
+	//
+	//	for name, language := range languages {
+	//		languageInfo := language.GetInfoFile()
+	//
+	//		outputTable.AppendRow(table.Row{name, languageInfo.GetName(), languageInfo.GetDescription()})
+	//	}
+	//
+	//	outputTable.Render()
 }
 
 func ListScripts(scripts []infofile.InfoFile) {
@@ -139,16 +139,16 @@ func ListTemplates(listArg string, languages map[string]templates.Language, temp
 			//
 			//outputTable.Render()
 		} else if listArg == "all" {
-			for _, language := range languages {
-				languageInfo := language.GetInfoFile()
-				outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
+			//for _, language := range languages {
+			//languageInfo := language.GetInfoFile()
+			//outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
 
-				for _, info := range language.GetTemplatesInfoFiles() {
-					outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
-				}
+			//for _, info := range language.GetTemplatesInfoFiles() {
+			//	outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
+			//}
 
-				outputTable.Render()
-			}
+			//outputTable.Render()
+			//}
 		} else {
 			fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
 		}

@@ -52,9 +52,9 @@ func (g *EmbeddedTemplates) findTemplates(embedded bool) error {
 			var language Language
 			var templates []os.DirEntry
 
-			infoPath := path.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
-			data, err := getEmbeddedData(infoPath)
-			language.infoConfig = infofile.Load(languageDir.Name(), infoPath, embedded, data)
+			//infoPath := path.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
+			//data, err := getEmbeddedData(infoPath)
+			//language.infoConfig = infofile.Load(languageDir.Name(), infoPath, embedded, data)
 
 			if err != nil {
 				fmt.Println(err)

@@ -30,9 +30,9 @@ type Templates interface {
 	HasLanguage(languageName string) (bool, int)
 }
 
+// NOTE: Will no longer be used. Using Languages as main data structure
 type Language struct {
 	// dirName         string                  // name of the directory under the template's directory.
-	infoConfig      infofile.InfoFile   // Each language has a config file in its root directory call config.toml
 	templateConfigs []infofile.InfoFile // A list of all the templates in the language directory. The key is the template dir name.
 }
 
@@ -46,9 +46,9 @@ type TemplateManager struct {
 	templateList []Templates
 }
 
-func (lang *Language) GetInfoFile() infofile.InfoFile {
-	return lang.infoConfig
-}
+//func (lang *Language) GetInfoFile() infofile.InfoFile {
+//	return lang.infoConfig
+//}
 
 func (lang *Language) GetTemplatesInfoFiles() []infofile.InfoFile {
 	return lang.templateConfigs

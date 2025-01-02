@@ -2,11 +2,12 @@ package templates
 
 import (
 	"fmt"
-	"github.com/Soulsbane/touchy/internal/infofile"
-	"github.com/Soulsbane/touchy/internal/pathutils"
 	"os"
 	"path"
 	"slices"
+
+	"github.com/Soulsbane/touchy/internal/infofile"
+	"github.com/Soulsbane/touchy/internal/pathutils"
 )
 
 type UserTemplates struct {
@@ -39,9 +40,9 @@ func (g *UserTemplates) findTemplates(embedded bool) error {
 			var language Language
 			var templates []os.DirEntry
 
-			infoPath := path.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
-			data, err := getFileData(infoPath, false)
-			language.infoConfig = infofile.Load(languageDir.Name(), infoPath, embedded, data)
+			//infoPath := path.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
+			//data, err := getFileData(infoPath, false)
+			//language.infoConfig = infofile.Load(languageDir.Name(), infoPath, embedded, data)
 
 			if err != nil {
 				fmt.Println(err)
