@@ -86,9 +86,22 @@ func (g *TemplateManager) GatherTemplates() {
 	//maps.Copy(languages, user.GetListOfAllLanguages())
 }
 
-func (g *TemplateManager) HasLanguage(languageName string) bool {
-	_, found := g.languages[languageName]
-	return found
+func (g *TemplateManager) HasLanguage(languageName string) (bool, []int) {
+	indexes := make([]int, 0)
+
+	for _, temp := range g.templateList {
+		found, idx := temp.HasLanguage(languageName)
+		if found {
+			indexes = append(indexes, idx)
+		}
+	}
+
+	if len(indexes) > 0 {
+		return true, indexes
+
+	}
+
+	return false, indexes
 }
 
 func (g *TemplateManager) HasTemplate(languageName string, templateName string) bool {
@@ -174,7 +187,9 @@ func (g *TemplateManager) ShowTemplate(languageName string, templateName string)
 
 // CreateFileFromTemplate Creates a template
 func (g *TemplateManager) CreateFileFromTemplate(languageName string, templateName string, customFileName string) error {
-	if g.HasLanguage(languageName) {
+	hasLang, _ := g.HasLanguage(languageName)
+
+	if hasLang {
 		if g.HasTemplate(languageName, templateName) {
 			var fileName string
 
