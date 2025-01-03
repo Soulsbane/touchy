@@ -104,14 +104,22 @@ func (g *TemplateManager) HasLanguage(languageName string) (bool, []int) {
 	return false, indexes
 }
 
-func (g *TemplateManager) HasTemplate(languageName string, templateName string) bool {
-	if language, foundLanguage := g.languages[languageName]; foundLanguage {
-		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
+func (g *TemplateManager) HasTemplate(languageName string, templateName string) (bool, []int) {
+	indexes := make([]int, 0)
 
-		return idx >= 0
+	for _, temp := range g.templateList {
+		found, idx := temp.HasTemplate(languageName, templateName)
+
+		if found {
+			indexes = append(indexes, idx)
+		}
 	}
 
-	return false
+	if len(indexes) > 0 {
+		return true, indexes
+	}
+
+	return false, indexes
 }
 
 func (g *TemplateManager) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
@@ -188,9 +196,10 @@ func (g *TemplateManager) ShowTemplate(languageName string, templateName string)
 // CreateFileFromTemplate Creates a template
 func (g *TemplateManager) CreateFileFromTemplate(languageName string, templateName string, customFileName string) error {
 	hasLang, _ := g.HasLanguage(languageName)
+	hasTemp, _ := g.HasTemplate(languageName, templateName)
 
 	if hasLang {
-		if g.HasTemplate(languageName, templateName) {
+		if hasTemp {
 			var fileName string
 
 			template, config := g.GetLanguageTemplateFor(languageName, templateName)
