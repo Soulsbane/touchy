@@ -91,6 +91,7 @@ func (g *TemplateManager) HasLanguage(languageName string) (bool, []int) {
 
 	for _, temp := range g.templateList {
 		found, idx := temp.HasLanguage(languageName)
+
 		if found {
 			indexes = append(indexes, idx)
 		}
@@ -98,7 +99,6 @@ func (g *TemplateManager) HasLanguage(languageName string) (bool, []int) {
 
 	if len(indexes) > 0 {
 		return true, indexes
-
 	}
 
 	return false, indexes
