@@ -8,7 +8,9 @@ import (
 
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/pathutils"
+	"github.com/Soulsbane/touchy/internal/ui"
 	"github.com/alecthomas/chroma/quick"
+	"github.com/jedib0t/go-pretty/v6/table"
 	"golang.org/x/exp/slices"
 )
 
@@ -170,6 +172,51 @@ func (g *TemplateManager) GetListOfLanguageTemplates(language Language) []infofi
 
 func (g *TemplateManager) GetListOfAllLanguages() map[string]Language {
 	return g.languages
+}
+
+func (g *TemplateManager) ListTemplates(listArg string) {
+	for _, temp := range g.templateList {
+		hasLang, _ := temp.HasLanguage(listArg)
+
+		if hasLang {
+			//languageInfo := temp.GetInfoFile()
+			//outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
+			//
+			//for _, info := range languageTemplates.GetTemplatesInfoFiles() {
+			//	outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
+			//}
+			//
+			//outputTable.Render()
+		} else if listArg == "all" {
+			//for _, language := range languages {
+			//languageInfo := language.GetInfoFile()
+			//outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
+
+			//for _, info := range language.GetTemplatesInfoFiles() {
+			//	outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
+			//}
+
+			//outputTable.Render()
+			//}
+		} else {
+			fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
+		}
+	}
+}
+
+func (g *TemplateManager) ListLanguages() {
+	// TODO: Download language info from the programming language DB and store locally
+	outputTable := ui.CreateNewTableWriter("Languages", "Language Name", "Description", "URL")
+
+	for _, temp := range g.templateList {
+		languages := temp.GetListOfAllLanguages()
+
+		for _, language := range languages {
+			outputTable.AppendRow(table.Row{language, "<no description>", "<no url>"})
+		}
+
+	}
+	outputTable.Render()
 }
 
 func (g *TemplateManager) ShowTemplate(languageName string, templateName string) error {

@@ -62,40 +62,6 @@ func handleError(err error, templateName string, languageName string) {
 //	}
 //}
 //
-//func handleListCommand(listType string, languageName string) {
-//	switch listType {
-//	case "all":
-//		scriptsList := touchyScripts.GetListOfScripts()
-//		ListScripts(scriptsList)
-//		fmt.Println("")
-//		ListTemplates(languageName, manager.GetListOfAllLanguages())
-//	case "languages":
-//		ListLanguages(manager.GetListOfAllLanguages())
-//	case "scripts":
-//		scriptsList := touchyScripts.GetListOfScripts()
-//		ListScripts(scriptsList)
-//	case "templates":
-//		ListTemplates(languageName, manager.GetListOfAllLanguages())
-//	default:
-//		fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
-//	}
-//}
-
-//func handleShowCommand(languageName string, templateName string) {
-//	err := manager.ShowTemplate(languageName, templateName)
-//
-//	if err != nil {
-//		handleError(err, templateName, languageName)
-//	}
-//}
-//
-//func handleRunCommand(scriptName string) {
-//	err := touchyScripts.Run(scriptName)
-//
-//	if err != nil {
-//		handleError(err, scriptName, "")
-//	}
-//}
 
 func main() {
 	var cmds commands
@@ -114,7 +80,7 @@ func main() {
 			case cmds.Create != nil:
 				handleCreateCommand(cmds.Create.Language, cmds.Create.TemplateName, cmds.Create.FileName)
 			case cmds.List != nil:
-				//handleListCommand(cmds.List.Type, cmds.List.Language, languages, langTemps)
+				handleListCommand(cmds.List.Type, cmds.List.Language)
 			case cmds.Show != nil:
 				handleShowCommand(cmds.Show.Language, cmds.Show.TemplateName)
 			case cmds.Run != nil:

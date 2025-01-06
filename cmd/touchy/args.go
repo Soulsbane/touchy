@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/Soulsbane/touchy/internal/infofile"
-	"github.com/Soulsbane/touchy/internal/templates"
 	"github.com/Soulsbane/touchy/internal/ui"
 	"github.com/jedib0t/go-pretty/v6/table"
 )
@@ -67,20 +66,20 @@ func handleCreateCommand(languageName string, templateName string, fileName stri
 	}
 }
 
-func handleListCommand(listType string, languageName string, languages []templates.Languages, temp []templates.Templates) {
+func handleListCommand(listType string, languageName string) {
 	switch listType {
 	case "all":
 		scriptsList := touchyScripts.GetListOfScripts()
 		ListScripts(scriptsList)
 		fmt.Println("")
-		//ListTemplates(languageName, languages, temp)
+		manager.ListTemplates(languageName)
 	case "languages":
-		//ListLanguages(languages)
+		manager.ListLanguages()
 	case "scripts":
 		scriptsList := touchyScripts.GetListOfScripts()
 		ListScripts(scriptsList)
 	case "templates":
-		//ListTemplates(languageName, languages, temp)
+		manager.ListTemplates(languageName)
 	default:
 		// TODO: Add support for pulling the default language  template
 		fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
@@ -103,18 +102,6 @@ func handleRunCommand(scriptName string) {
 	}
 }
 
-func ListLanguages(languages map[string]templates.Language) {
-	//	outputTable := ui.CreateNewTableWriter("Languages", "Name", "Long Name", "Description")
-	//
-	//	for name, language := range languages {
-	//		languageInfo := language.GetInfoFile()
-	//
-	//		outputTable.AppendRow(table.Row{name, languageInfo.GetName(), languageInfo.GetDescription()})
-	//	}
-	//
-	//	outputTable.Render()
-}
-
 func ListScripts(scripts []infofile.InfoFile) {
 	outputTable := ui.CreateNewTableWriter("Scripts", "Script name", "Description")
 
@@ -123,34 +110,4 @@ func ListScripts(scripts []infofile.InfoFile) {
 	}
 
 	outputTable.Render()
-}
-
-func ListTemplates(listArg string, languages map[string]templates.Language, temp2 []templates.Templates) {
-	fmt.Println("Listarg: ", listArg)
-	for _, temp := range temp2 {
-		hasLang, _ := temp.HasLanguage(listArg)
-		if hasLang {
-			//languageInfo := temp.GetInfoFile()
-			//outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
-			//
-			//for _, info := range languageTemplates.GetTemplatesInfoFiles() {
-			//	outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
-			//}
-			//
-			//outputTable.Render()
-		} else if listArg == "all" {
-			//for _, language := range languages {
-			//languageInfo := language.GetInfoFile()
-			//outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
-
-			//for _, info := range language.GetTemplatesInfoFiles() {
-			//	outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
-			//}
-
-			//outputTable.Render()
-			//}
-		} else {
-			fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
-		}
-	}
 }
