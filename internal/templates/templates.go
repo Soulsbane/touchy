@@ -11,7 +11,6 @@ import (
 	"github.com/Soulsbane/touchy/internal/ui"
 	"github.com/alecthomas/chroma/quick"
 	"github.com/jedib0t/go-pretty/v6/table"
-	"golang.org/x/exp/slices"
 )
 
 var ErrTemplateNotFound = errors.New("template not found")
@@ -32,19 +31,13 @@ type Templates interface {
 	HasLanguage(languageName string) (bool, int)
 }
 
-// NOTE: Will no longer be used. Using Languages as main data structure
-type Language struct {
-	// dirName         string                  // name of the directory under the template's directory.
-	templateConfigs []infofile.InfoFile // A list of all the templates in the language directory. The key is the template dir name.
-}
-
 type Languages struct {
 	languageName string
 	infoFile     infofile.InfoFile
 }
 
 type TemplateManager struct {
-	languages    map[string]Language // Map of all languages in the templates directory. Key is the language name.
+	//languages    map[string]Language // Map of all languages in the templates directory. Key is the language name.
 	templateList []Templates
 }
 
@@ -52,9 +45,9 @@ func (lang *Languages) GetInfoFile() infofile.InfoFile {
 	return lang.infoFile
 }
 
-func (lang *Language) GetTemplatesInfoFiles() []infofile.InfoFile {
-	return lang.templateConfigs
-}
+//func (lang *Language) GetTemplatesInfoFiles() []infofile.InfoFile {
+//	return lang.templateConfigs
+//}
 
 func getFileData(path string, embedded bool) ([]byte, error) {
 	if embedded {
@@ -75,7 +68,7 @@ func getFileData(path string, embedded bool) ([]byte, error) {
 func New() (*TemplateManager, error, error) {
 	var manager TemplateManager
 
-	manager.languages = make(map[string]Language)
+	//manager.languages = make(map[string]Language)
 
 	return &manager, nil, nil
 }
@@ -125,23 +118,23 @@ func (g *TemplateManager) HasTemplate(languageName string, templateName string) 
 }
 
 func (g *TemplateManager) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
-	language, foundLanguage := g.languages[languageName]
-
-	if foundLanguage {
-		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
-
-		if idx >= 0 {
-			info := language.templateConfigs[idx]
-			data, err := g.loadTemplateFile(languageName, templateName, info)
-
-			if err != nil {
-				return "", language.templateConfigs[idx]
-			} else {
-				return data, language.templateConfigs[idx]
-			}
-		}
-	}
-
+	//	language, foundLanguage := g.languages[languageName]
+	//
+	//	if foundLanguage {
+	//		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
+	//
+	//		if idx >= 0 {
+	//			info := language.templateConfigs[idx]
+	//			data, err := g.loadTemplateFile(languageName, templateName, info)
+	//
+	//			if err != nil {
+	//				return "", language.templateConfigs[idx]
+	//			} else {
+	//				return data, language.templateConfigs[idx]
+	//			}
+	//		}
+	//	}
+	//
 	return "", infofile.InfoFile{}
 }
 
@@ -166,13 +159,13 @@ func (g *TemplateManager) loadTemplateFile(language string, template string, inf
 	return string(data), nil
 }
 
-func (g *TemplateManager) GetListOfLanguageTemplates(language Language) []infofile.InfoFile {
-	return language.templateConfigs
-}
-
-func (g *TemplateManager) GetListOfAllLanguages() map[string]Language {
-	return g.languages
-}
+//func (g *TemplateManager) GetListOfLanguageTemplates(language Language) []infofile.InfoFile {
+//	return language.templateConfigs
+//}
+//
+//func (g *TemplateManager) GetListOfAllLanguages() map[string]Language {
+//	return g.languages
+//}
 
 func (g *TemplateManager) ListTemplates(listArg string) {
 	for _, temp := range g.templateList {
