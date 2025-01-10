@@ -27,7 +27,7 @@ type Templates interface {
 	// CreateFileFromTemplate(languageName string, templateName string, customFileName string) error
 	GetListOfAllLanguages() []string
 	GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile)
-	GetListOfLanguageTemplatesFor(languageName string) []infofile.InfoFile
+	GetListOfLanguageTemplatesFor(languageName string) []Languages
 	HasTemplate(languageName string, templateName string) (bool, int)
 	HasLanguage(languageName string) (bool, int)
 }
@@ -48,9 +48,9 @@ type TemplateManager struct {
 	templateList []Templates
 }
 
-//func (lang *Language) GetInfoFile() infofile.InfoFile {
-//	return lang.infoConfig
-//}
+func (lang *Languages) GetInfoFile() infofile.InfoFile {
+	return lang.infoFile
+}
 
 func (lang *Language) GetTemplatesInfoFiles() []infofile.InfoFile {
 	return lang.templateConfigs

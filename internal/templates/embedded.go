@@ -102,8 +102,16 @@ func (g *EmbeddedTemplates) LoadTemplateFile(language string, template string) (
 	return string(data), nil
 }
 
-func (g *EmbeddedTemplates) GetListOfLanguageTemplatesFor(language string) []infofile.InfoFile {
-	return []infofile.InfoFile{} // TODO: Placeholder while I rework
+func (g *EmbeddedTemplates) GetListOfLanguageTemplatesFor(language string) []Languages {
+	values := make([]Languages, 0)
+
+	for _, temp := range g.languages {
+		if temp.languageName == language {
+			values = append(values, temp)
+		}
+	}
+
+	return values
 }
 
 func (g *EmbeddedTemplates) GetListOfAllLanguages() []string {
