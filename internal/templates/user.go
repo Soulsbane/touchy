@@ -8,23 +8,32 @@ import (
 
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/pathutils"
+	"github.com/samber/lo"
 )
 
 type UserTemplates struct {
-	languages map[string]Language // Map of all languages in the templates directory. Key is the language name.
+	languages []Languages
 }
 
 func NewUserTemplates() *UserTemplates {
 	var templates UserTemplates
+	templates.languages = make([]Languages, 0)
 
-	templates.languages = make(map[string]Language)
-	err := templates.findTemplates(false)
+	err := templates.findTemplates(true)
 
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 
 	return &templates
+}
+
+func getUserData(path string) ([]byte, error) {
+	if data, err := os.ReadFile(path); err != nil {
+		return data, fmt.Errorf("%w: %w", ErrFailedToReadFile, err)
+	} else {
+		return data, nil
+	}
 }
 
 func (g *UserTemplates) findTemplates(embedded bool) error {
@@ -37,12 +46,7 @@ func (g *UserTemplates) findTemplates(embedded bool) error {
 
 	for _, languageDir := range dirs {
 		if languageDir.IsDir() {
-			var language Language
 			var templates []os.DirEntry
-
-			//infoPath := path.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
-			//data, err := getFileData(infoPath, false)
-			//language.infoConfig = infofile.Load(languageDir.Name(), infoPath, embedded, data)
 
 			if err != nil {
 				fmt.Println(err)
@@ -57,7 +61,7 @@ func (g *UserTemplates) findTemplates(embedded bool) error {
 			for _, template := range templates {
 				if template.IsDir() {
 					configPath := path.Join(templatePath, languageDir.Name(), template.Name(), infofile.DefaultFileName)
-					templateData, fileReadErr := getFileData(configPath, embedded)
+					templateData, fileReadErr := getUserData(configPath)
 
 					if fileReadErr != nil {
 						fmt.Println(fileReadErr)
@@ -65,11 +69,9 @@ func (g *UserTemplates) findTemplates(embedded bool) error {
 
 					config := infofile.Load(template.Name(), configPath, embedded, templateData)
 					config.SetEmbedded(embedded)
-					language.templateConfigs = append(language.templateConfigs, config)
+					g.languages = append(g.languages, Languages{languageDir.Name(), config})
 				}
 			}
-
-			g.languages[languageDir.Name()] = language
 		}
 	}
 
@@ -91,45 +93,52 @@ func (g *UserTemplates) LoadTemplateFile(language string, template string) (stri
 	return string(data), nil
 }
 
-func (g *UserTemplates) GetListOfLanguageTemplatesFor(language Language) []infofile.InfoFile {
-	return language.templateConfigs
-}
+func (g *UserTemplates) GetListOfLanguageTemplatesFor(language string) []Languages {
+	values := make([]Languages, 0)
 
-func (g *UserTemplates) GetListOfAllLanguages() map[string]Language {
-	return g.languages
-}
-
-func (g *UserTemplates) HasLanguage(languageName string) bool {
-	_, found := g.languages[languageName]
-	return found
-}
-
-func (g *UserTemplates) HasTemplate(languageName string, templateName string) bool {
-	if language, foundLanguage := g.languages[languageName]; foundLanguage {
-		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
-
-		return idx >= 0
+	for _, temp := range g.languages {
+		if temp.languageName == language {
+			values = append(values, temp)
+		}
 	}
 
-	return false
+	return values
+}
+
+func (g *UserTemplates) GetListOfAllLanguages() []string {
+	infos := make([]string, 0)
+
+	for _, language := range g.languages {
+		infos = append(infos, language.languageName)
+	}
+
+	return lo.Uniq(infos)
+}
+
+func (g *UserTemplates) HasLanguage(languageName string) (bool, int) {
+	idx := slices.IndexFunc(g.languages, func(c Languages) bool { return c.languageName == languageName })
+	return idx >= 0, idx
+}
+
+func (g *UserTemplates) HasTemplate(languageName string, templateName string) (bool, int) {
+	idx := slices.IndexFunc(g.languages, func(c Languages) bool { return c.languageName == languageName && c.infoFile.GetName() == templateName })
+	return idx >= 0, idx
 }
 
 func (g *UserTemplates) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
-	language, foundLanguage := g.languages[languageName]
+	hasTemplate, idx := g.HasTemplate(languageName, templateName)
 
-	if foundLanguage {
-		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
-
+	if hasTemplate {
 		if idx >= 0 {
 			data, err := g.LoadTemplateFile(languageName, templateName)
 
 			if err != nil {
-				return "", language.templateConfigs[idx]
+				return "", g.languages[idx].infoFile
 			} else {
-				return data, language.templateConfigs[idx]
+				return data, g.languages[idx].infoFile
 			}
 		}
-	}
 
+	}
 	return "", infofile.InfoFile{}
 }
