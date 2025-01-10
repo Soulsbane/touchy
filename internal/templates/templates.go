@@ -37,17 +37,12 @@ type Languages struct {
 }
 
 type TemplateManager struct {
-	//languages    map[string]Language // Map of all languages in the templates directory. Key is the language name.
 	templateList []Templates
 }
 
 func (lang *Languages) GetInfoFile() infofile.InfoFile {
 	return lang.infoFile
 }
-
-//func (lang *Language) GetTemplatesInfoFiles() []infofile.InfoFile {
-//	return lang.templateConfigs
-//}
 
 func getFileData(path string, embedded bool) ([]byte, error) {
 	if embedded {
@@ -67,9 +62,6 @@ func getFileData(path string, embedded bool) ([]byte, error) {
 
 func New() (*TemplateManager, error, error) {
 	var manager TemplateManager
-
-	//manager.languages = make(map[string]Language)
-
 	return &manager, nil, nil
 }
 
@@ -77,8 +69,6 @@ func (g *TemplateManager) GatherTemplates() {
 	embedded := NewEmbeddedTemplates()
 	//user := NewUserTemplates()
 	g.templateList = append(g.templateList, embedded)
-
-	//maps.Copy(languages, user.GetListOfAllLanguages())
 }
 
 func (g *TemplateManager) HasLanguage(languageName string) (bool, []int) {
@@ -118,23 +108,6 @@ func (g *TemplateManager) HasTemplate(languageName string, templateName string) 
 }
 
 func (g *TemplateManager) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
-	//	language, foundLanguage := g.languages[languageName]
-	//
-	//	if foundLanguage {
-	//		idx := slices.IndexFunc(language.templateConfigs, func(c infofile.InfoFile) bool { return c.GetName() == templateName })
-	//
-	//		if idx >= 0 {
-	//			info := language.templateConfigs[idx]
-	//			data, err := g.loadTemplateFile(languageName, templateName, info)
-	//
-	//			if err != nil {
-	//				return "", language.templateConfigs[idx]
-	//			} else {
-	//				return data, language.templateConfigs[idx]
-	//			}
-	//		}
-	//	}
-	//
 	return "", infofile.InfoFile{}
 }
 
@@ -158,14 +131,6 @@ func (g *TemplateManager) loadTemplateFile(language string, template string, inf
 
 	return string(data), nil
 }
-
-//func (g *TemplateManager) GetListOfLanguageTemplates(language Language) []infofile.InfoFile {
-//	return language.templateConfigs
-//}
-//
-//func (g *TemplateManager) GetListOfAllLanguages() map[string]Language {
-//	return g.languages
-//}
 
 func (g *TemplateManager) ListTemplates(listArg string) {
 	for _, temp := range g.templateList {
