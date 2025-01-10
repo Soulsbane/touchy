@@ -49,12 +49,7 @@ func (g *EmbeddedTemplates) findTemplates(embedded bool) error {
 
 	for _, languageDir := range dirs {
 		if languageDir.IsDir() {
-			//var language Language
 			var templates []os.DirEntry
-
-			//infoPath := path.Join(templatePath, languageDir.Name(), infofile.DefaultFileName)
-			//data, err := getEmbeddedData(infoPath)
-			//language.infoConfig = infofile.Load(languageDir.Name(), infoPath, embedded, data)
 
 			if err != nil {
 				fmt.Println(err)
@@ -77,7 +72,6 @@ func (g *EmbeddedTemplates) findTemplates(embedded bool) error {
 
 					config := infofile.Load(template.Name(), configPath, embedded, templateData)
 					config.SetEmbedded(embedded)
-					//language.templateConfigs = append(language.templateConfigs, config)
 					g.languages = append(g.languages, Languages{languageDir.Name(), config})
 				}
 			}
