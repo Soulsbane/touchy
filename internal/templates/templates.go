@@ -55,7 +55,7 @@ func (g *TemplateManager) GatherTemplates() {
 	g.templateList = append(g.templateList, embedded)
 }
 
-func (g *TemplateManager) HasLanguage(languageName string) bool {
+func (g *TemplateManager) hasLanguage(languageName string) bool {
 	for _, temp := range g.templateList {
 		if temp.HasLanguage(languageName) {
 			return true
@@ -176,7 +176,7 @@ func (g *TemplateManager) ShowTemplate(languageName string, templateName string)
 
 // CreateFileFromTemplate Creates a template
 func (g *TemplateManager) CreateFileFromTemplate(languageName string, templateName string, customFileName string) error {
-	hasLang := g.HasLanguage(languageName)
+	hasLang := g.hasLanguage(languageName)
 	hasTemp, _ := g.HasTemplate(languageName, templateName)
 
 	if hasLang {
