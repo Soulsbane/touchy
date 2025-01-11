@@ -44,22 +44,6 @@ func (lang *Languages) GetInfoFile() infofile.InfoFile {
 	return lang.infoFile
 }
 
-func getFileData(path string, embedded bool) ([]byte, error) {
-	if embedded {
-		if data, err := embedsDir.ReadFile(path); err != nil {
-			return data, fmt.Errorf("%w: %w", ErrFailedToReadEmbeddedFile, err)
-		} else {
-			return data, nil
-		}
-	} else {
-		if data, err := os.ReadFile(path); err != nil {
-			return data, fmt.Errorf("%w: %w", ErrFailedToReadFile, err)
-		} else {
-			return data, nil
-		}
-	}
-}
-
 func New() (*TemplateManager, error, error) {
 	var manager TemplateManager
 	return &manager, nil, nil
