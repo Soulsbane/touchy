@@ -28,7 +28,7 @@ type Templates interface {
 	GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile)
 	GetListOfLanguageTemplatesFor(languageName string) []Languages
 	HasTemplate(languageName string, templateName string) (bool, int)
-	HasLanguage(languageName string) (bool, int)
+	HasLanguage(languageName string) bool
 }
 
 type Languages struct {
@@ -55,22 +55,14 @@ func (g *TemplateManager) GatherTemplates() {
 	g.templateList = append(g.templateList, embedded)
 }
 
-func (g *TemplateManager) HasLanguage(languageName string) (bool, []int) {
-	indexes := make([]int, 0)
-
+func (g *TemplateManager) HasLanguage(languageName string) bool {
 	for _, temp := range g.templateList {
-		found, idx := temp.HasLanguage(languageName)
-
-		if found {
-			indexes = append(indexes, idx)
+		if temp.HasLanguage(languageName) {
+			return true
 		}
 	}
 
-	if len(indexes) > 0 {
-		return true, indexes
-	}
-
-	return false, indexes
+	return false
 }
 
 func (g *TemplateManager) HasTemplate(languageName string, templateName string) (bool, []int) {
@@ -118,7 +110,7 @@ func (g *TemplateManager) loadTemplateFile(language string, template string, inf
 
 func (g *TemplateManager) ListTemplates(listArg string) {
 	for _, temp := range g.templateList {
-		hasLang, _ := temp.HasLanguage(listArg)
+		hasLang := temp.HasLanguage(listArg)
 
 		if hasLang {
 			//languageInfo := temp.GetInfoFile()
@@ -163,7 +155,7 @@ func (g *TemplateManager) ListLanguages() {
 
 func (g *TemplateManager) ShowTemplate(languageName string, templateName string) error {
 	for _, temp := range g.templateList {
-		foundLanguage, _ := temp.HasLanguage(languageName)
+		foundLanguage := temp.HasLanguage(languageName)
 
 		if foundLanguage {
 			// Styles: https://github.com/alecthomas/chroma/tree/master/styles
@@ -184,7 +176,7 @@ func (g *TemplateManager) ShowTemplate(languageName string, templateName string)
 
 // CreateFileFromTemplate Creates a template
 func (g *TemplateManager) CreateFileFromTemplate(languageName string, templateName string, customFileName string) error {
-	hasLang, _ := g.HasLanguage(languageName)
+	hasLang := g.HasLanguage(languageName)
 	hasTemp, _ := g.HasTemplate(languageName, templateName)
 
 	if hasLang {

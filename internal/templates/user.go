@@ -115,9 +115,9 @@ func (g *UserTemplates) GetListOfAllLanguages() []string {
 	return lo.Uniq(infos)
 }
 
-func (g *UserTemplates) HasLanguage(languageName string) (bool, int) {
+func (g *UserTemplates) HasLanguage(languageName string) bool {
 	idx := slices.IndexFunc(g.languages, func(c Languages) bool { return c.languageName == languageName })
-	return idx >= 0, idx
+	return idx >= 0
 }
 
 func (g *UserTemplates) HasTemplate(languageName string, templateName string) (bool, int) {
