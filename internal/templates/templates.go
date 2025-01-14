@@ -108,9 +108,9 @@ func (g *TemplateManager) loadTemplateFile(language string, template string, inf
 	return string(data), nil
 }
 
-func (g *TemplateManager) ListTemplates(listArg string) {
+func (g *TemplateManager) ListTemplates(languageName string) {
 	for _, temp := range g.templateList {
-		hasLang := temp.HasLanguage(listArg)
+		hasLang := temp.HasLanguage(languageName)
 
 		if hasLang {
 			//languageInfo := temp.GetInfoFile()
@@ -121,7 +121,7 @@ func (g *TemplateManager) ListTemplates(listArg string) {
 			//}
 			//
 			//outputTable.Render()
-		} else if listArg == "all" {
+		} else if languageName == "all" {
 			//for _, language := range languages {
 			//languageInfo := language.GetInfoFile()
 			//outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
