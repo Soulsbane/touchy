@@ -25,6 +25,7 @@ var ErrHighlightFailed = errors.New("failed to highlight code")
 type Templates interface {
 	// CreateFileFromTemplate(languageName string, templateName string, customFileName string) error
 	GetListOfAllLanguages() []string
+	GetLanguages() []Languages
 	GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile)
 	GetListOfLanguageTemplatesFor(languageName string) []Languages
 	HasTemplate(languageName string, templateName string) (bool, int)
@@ -108,34 +109,38 @@ func (g *TemplateManager) loadTemplateFile(language string, template string, inf
 	return string(data), nil
 }
 
+func (g *TemplateManager) outputTable(languageName string, languages []Languages) {
+	if len(languages) > 0 {
+		outputTable := ui.CreateNewTableWriter(languageName+" Templates", "Language", "Name", "Description", "Default Output File name")
+
+		for _, info := range languages {
+			outputTable.AppendRow(table.Row{info.languageName, info.infoFile.GetName(), info.infoFile.GetDescription(), info.infoFile.GetDefaultOutputFileName()})
+		}
+
+		outputTable.Render()
+	}
+}
+
 func (g *TemplateManager) ListTemplates(languageName string) {
+	languages := make([]Languages, 0)
+
 	for _, temp := range g.templateList {
 		hasLang := temp.HasLanguage(languageName)
 
 		if hasLang {
-			//languageInfo := temp.GetInfoFile()
-			//outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
-			//
-			//for _, info := range languageTemplates.GetTemplatesInfoFiles() {
-			//	outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
-			//}
-			//
-			//outputTable.Render()
+			if languages != nil {
+				languages = append(languages, temp.GetListOfLanguageTemplatesFor(languageName)...)
+			}
 		} else if languageName == "all" {
-			//for _, language := range languages {
-			//languageInfo := language.GetInfoFile()
-			//outputTable := ui.CreateNewTableWriter(languageInfo.GetName()+" Templates", "name", "Description", "Default Output File name")
-
-			//for _, info := range language.GetTemplatesInfoFiles() {
-			//	outputTable.AppendRow(table.Row{info.GetName(), info.GetDescription(), info.GetDefaultOutputFileName()})
-			//}
-
-			//outputTable.Render()
-			//}
+			if languages != nil {
+				languages = append(languages, temp.GetLanguages()...)
+			}
 		} else {
 			fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
 		}
 	}
+
+	g.outputTable(languageName, languages)
 }
 
 func (g *TemplateManager) ListLanguages() {
