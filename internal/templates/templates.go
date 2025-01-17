@@ -11,6 +11,8 @@ import (
 	"github.com/Soulsbane/touchy/internal/ui"
 	"github.com/alecthomas/chroma/quick"
 	"github.com/jedib0t/go-pretty/v6/table"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 var ErrTemplateNotFound = errors.New("template not found")
@@ -109,12 +111,18 @@ func (g *TemplateManager) loadTemplateFile(language string, template string, inf
 	return string(data), nil
 }
 
-func (g *TemplateManager) outputTable(languageName string, languages []Languages) {
+func (g *TemplateManager) outputTemplateList(languageName string, languages []Languages) {
+	headerName := cases.Title(language.English).String(languageName) + " Templates"
+
 	if len(languages) > 0 {
-		outputTable := ui.CreateNewTableWriter(languageName+" Templates", "Language", "Name", "Description", "Default Output File name")
+		outputTable := ui.CreateNewTableWriter(headerName, "Language", "Name", "Description", "Output File name")
 
 		for _, info := range languages {
-			outputTable.AppendRow(table.Row{info.languageName, info.infoFile.GetName(), info.infoFile.GetDescription(), info.infoFile.GetDefaultOutputFileName()})
+			outputTable.AppendRow(table.Row{
+				info.languageName, info.infoFile.GetName(),
+				info.infoFile.GetDescription(),
+				info.infoFile.GetDefaultOutputFileName(),
+			})
 		}
 
 		outputTable.Render()
@@ -140,7 +148,7 @@ func (g *TemplateManager) ListTemplates(languageName string) {
 		}
 	}
 
-	g.outputTable(languageName, languages)
+	g.outputTemplateList(languageName, languages)
 }
 
 func (g *TemplateManager) ListLanguages() {
