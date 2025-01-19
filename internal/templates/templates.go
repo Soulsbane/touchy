@@ -87,28 +87,15 @@ func (g *TemplateManager) HasTemplate(languageName string, templateName string) 
 }
 
 func (g *TemplateManager) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
+	for _, temp := range g.templateList {
+		hasTemp, _ := temp.HasTemplate(languageName, templateName)
+
+		if hasTemp {
+			return temp.GetLanguageTemplateFor(languageName, templateName)
+		}
+	}
+
 	return "", infofile.InfoFile{}
-}
-
-func (g *TemplateManager) loadTemplateFile(language string, template string, info infofile.InfoFile) (string, error) {
-	var data []byte
-	var templateName string
-	var err error
-
-	if info.IsEmbedded() {
-		templateName = path.Join("templates", language, template, template+".template")
-		data, err = embedsDir.ReadFile(templateName)
-
-	} else {
-		templateName = path.Join(pathutils.GetTemplatesDir(), language, template, template+".template")
-		data, err = os.ReadFile(templateName)
-	}
-
-	if err != nil { // We couldn't read from the embedded file or the file in user's config directory so return an error
-		return "", ErrTemplateNotFound
-	}
-
-	return string(data), nil
 }
 
 func (g *TemplateManager) outputTemplateList(languageName string, languages []Languages) {
