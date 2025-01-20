@@ -146,8 +146,8 @@ func (g *TemplateManager) ListLanguages() {
 	for _, temp := range g.templateList {
 		languages := temp.GetListOfAllLanguages()
 
-		for _, language := range languages {
-			outputTable.AppendRow(table.Row{language, "<no description>", "<no url>"})
+		for _, lang := range languages {
+			outputTable.AppendRow(table.Row{lang, "<no description>", "<no url>"})
 		}
 
 	}
