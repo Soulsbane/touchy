@@ -155,21 +155,19 @@ func (g *TemplateManager) ListLanguages() {
 }
 
 func (g *TemplateManager) ShowTemplate(languageName string, templateName string) error {
-	for _, temp := range g.templateList {
-		foundLanguage := temp.HasLanguage(languageName)
+	foundLanguage := g.hasLanguage(languageName)
 
-		if foundLanguage {
-			// Styles: https://github.com/alecthomas/chroma/tree/master/styles
-			sourceCode, info := temp.GetLanguageTemplateFor(languageName, templateName)
+	if foundLanguage {
+		// Styles: https://github.com/alecthomas/chroma/tree/master/styles
+		sourceCode, info := g.GetLanguageTemplateFor(languageName, templateName)
 
-			err := quick.Highlight(os.Stdout, sourceCode, info.GetDefaultOutputFileName(), "terminal256", "monokai")
+		err := quick.Highlight(os.Stdout, sourceCode, info.GetDefaultOutputFileName(), "terminal256", "monokai")
 
-			if err != nil {
-				return ErrHighlightFailed
-			}
-		} else {
-			return ErrLanguageNotFound
+		if err != nil {
+			return ErrHighlightFailed
 		}
+	} else {
+		return ErrLanguageNotFound
 	}
 
 	return nil
