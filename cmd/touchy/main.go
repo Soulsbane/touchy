@@ -16,8 +16,8 @@ var manager *templates.TemplateManager
 var touchyScripts *scripts.TouchyScripts
 
 func setupScriptsAndTemplates() {
-	var userTemplatesErr error
-	var embeddedTemplatesErr error
+	//var userTemplatesErr error
+	//var embeddedTemplatesErr error
 
 	pathUtilsErr := pathutils.SetupConfigDir()
 
@@ -27,13 +27,13 @@ func setupScriptsAndTemplates() {
 
 	touchyScripts = scripts.New()
 	touchyScripts.RegisterAPI()
-	manager, userTemplatesErr, embeddedTemplatesErr = templates.New()
+	manager = templates.New()
 	manager.GatherTemplates()
 
-	if userTemplatesErr != nil || embeddedTemplatesErr != nil {
-		handleError(userTemplatesErr, "", "")
-		handleError(embeddedTemplatesErr, "", "")
-	}
+	//if userTemplatesErr != nil || embeddedTemplatesErr != nil {
+	//	handleError(userTemplatesErr, "", "")
+	//	handleError(embeddedTemplatesErr, "", "")
+	//}
 }
 
 func handleError(err error, templateName string, languageName string) {

@@ -47,9 +47,9 @@ func (lang *Languages) GetInfoFile() infofile.InfoFile {
 	return lang.infoFile
 }
 
-func New() (*TemplateManager, error, error) {
+func New() *TemplateManager {
 	var manager TemplateManager
-	return &manager, nil, nil
+	return &manager
 }
 
 func (g *TemplateManager) GatherTemplates() {

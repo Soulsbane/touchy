@@ -3,6 +3,10 @@ package scripts
 import (
 	"embed"
 	"fmt"
+	"io/fs"
+	"os"
+	"path"
+
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/api"
 	"github.com/Soulsbane/touchy/internal/infofile"
@@ -10,9 +14,6 @@ import (
 	"github.com/Soulsbane/touchy/internal/templates"
 	libs "github.com/vadv/gopher-lua-libs"
 	"golang.org/x/exp/slices"
-	"io/fs"
-	"os"
-	"path"
 )
 
 const defaultScriptFileName = "main.lua"
@@ -110,7 +111,7 @@ func (ts *TouchyScripts) RegisterAPI() {
 	ts.scriptSystem.SetGlobal("DownloadFile", api.DownloadFile)
 	ts.scriptSystem.SetGlobal("DownloadFileWithProgress", api.DownloadFileWithProgress)
 
-	templatesObject, _, _ := templates.New()
+	templatesObject := templates.New()
 	promptsObject := api.NewPrompts()
 	ioObject := api.NewIO()
 
