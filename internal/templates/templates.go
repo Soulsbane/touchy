@@ -104,11 +104,11 @@ func (g *TemplateManager) outputTemplateList(languageName string, languages []La
 	headerName := cases.Title(language.English).String(languageName) + " Templates"
 
 	if len(languages) > 0 {
-		outputTable := ui.CreateNewTableWriter(headerName, "Language", "Name", "Description", "Output File name")
+		outputTable := ui.CreateNewTableWriter(headerName, "Name", "Language", "Description", "Output File name")
 
 		for _, info := range languages {
 			outputTable.AppendRow(table.Row{
-				info.languageName, info.infoFile.GetName(),
+				info.infoFile.GetName(), info.languageName,
 				info.infoFile.GetDescription(),
 				info.infoFile.GetDefaultOutputFileName(),
 			})
