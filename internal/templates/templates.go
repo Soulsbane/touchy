@@ -11,6 +11,7 @@ import (
 	"github.com/Soulsbane/touchy/internal/ui"
 	"github.com/alecthomas/chroma/quick"
 	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/samber/lo"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
@@ -141,16 +142,17 @@ func (g *TemplateManager) ListTemplates(languageName string) {
 
 func (g *TemplateManager) ListLanguages() {
 	// TODO: Download language info from the programming language DB and store locally
+	var languages []string
 	outputTable := ui.CreateNewTableWriter("Languages", "Language Name", "Description", "URL")
 
 	for _, temp := range g.templateList {
-		languages := temp.GetListOfAllLanguages()
-
-		for _, lang := range languages {
-			outputTable.AppendRow(table.Row{lang, "<no description>", "<no url>"})
-		}
-
+		languages = append(languages, temp.GetListOfAllLanguages()...)
 	}
+
+	for _, lang := range lo.Uniq(languages) {
+		outputTable.AppendRow(table.Row{lang, "<no description>", "<no url>"})
+	}
+
 	outputTable.Render()
 }
 
