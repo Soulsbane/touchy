@@ -54,8 +54,9 @@ func New() *TemplateManager {
 
 func (g *TemplateManager) GatherTemplates() {
 	embedded := NewEmbeddedTemplates()
-	//user := NewUserTemplates()
+	user := NewUserTemplates()
 	g.templateList = append(g.templateList, embedded)
+	g.templateList = append(g.templateList, user)
 }
 
 func (g *TemplateManager) hasLanguage(languageName string) bool {
