@@ -83,7 +83,7 @@ func (g *UserTemplates) LoadTemplateFile(language string, template string) (stri
 	var templateName string
 	var err error
 
-	templateName = path.Join("templates", language, template, template+".template")
+	templateName = path.Join(pathutils.GetTemplatesDir(), language, template, template+".template")
 	data, err = os.ReadFile(templateName)
 
 	if err != nil { // We couldn't read from the embedded file or the file in user's config directory so return an error
