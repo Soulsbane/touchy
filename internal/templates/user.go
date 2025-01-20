@@ -115,6 +115,10 @@ func (g *UserTemplates) GetListOfAllLanguages() []string {
 	return lo.Uniq(infos)
 }
 
+func (g *UserTemplates) GetLanguages() []Languages {
+	return g.languages
+}
+
 func (g *UserTemplates) HasLanguage(languageName string) bool {
 	idx := slices.IndexFunc(g.languages, func(c Languages) bool { return c.languageName == languageName })
 	return idx >= 0
