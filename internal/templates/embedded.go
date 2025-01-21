@@ -89,8 +89,8 @@ func (g *EmbeddedTemplates) loadTemplateFile(language string, template string) (
 	templateName = path.Join("templates", language, template, template+".template")
 	data, err = embedsDir.ReadFile(templateName)
 
-	if err != nil { // We couldn't read from the embedded file or the file in user's config directory so return an error
-		return "", ErrTemplateNotFound
+	if err != nil { // We couldn't read from the embedded file's directory so return an error
+		return "", fmt.Errorf("%w: %w", ErrTemplateNotFound, err)
 	}
 
 	return string(data), nil
