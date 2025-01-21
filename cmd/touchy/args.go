@@ -81,8 +81,13 @@ func handleListCommand(listType string, languageName string) {
 	case "templates":
 		manager.ListTemplates(languageName)
 	default:
-		// TODO: Add support for pulling the default language  template
-		fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
+		// NOTE: listType in this case could be a language name
+		if manager.HasLanguage(listType) {
+			manager.ListTemplates(listType)
+		} else {
+			// TODO: Add support for pulling the default language  template
+			fmt.Println("That list type could not be found! Use 'list all' to see all available types.")
+		}
 	}
 }
 

@@ -60,7 +60,7 @@ func (g *TemplateManager) GatherTemplates() {
 	g.templateList = append(g.templateList, user)
 }
 
-func (g *TemplateManager) hasLanguage(languageName string) bool {
+func (g *TemplateManager) HasLanguage(languageName string) bool {
 	for _, temp := range g.templateList {
 		if temp.HasLanguage(languageName) {
 			return true
@@ -128,12 +128,12 @@ func (g *TemplateManager) ListTemplates(languageName string) {
 			if languages != nil {
 				languages = append(languages, temp.GetListOfLanguageTemplatesFor(languageName)...)
 			}
-		} else if languageName == "all" {
+		}
+
+		if languageName == "all" {
 			if languages != nil {
 				languages = append(languages, temp.GetLanguages()...)
 			}
-		} else {
-			fmt.Println("That language could not be found! Use 'list all' to see all available languages.")
 		}
 	}
 
@@ -157,7 +157,7 @@ func (g *TemplateManager) ListLanguages() {
 }
 
 func (g *TemplateManager) ShowTemplate(languageName string, templateName string) error {
-	foundLanguage := g.hasLanguage(languageName)
+	foundLanguage := g.HasLanguage(languageName)
 
 	if foundLanguage {
 		// Styles: https://github.com/alecthomas/chroma/tree/master/styles
@@ -177,7 +177,7 @@ func (g *TemplateManager) ShowTemplate(languageName string, templateName string)
 
 // CreateFileFromTemplate Creates a template
 func (g *TemplateManager) CreateFileFromTemplate(languageName string, templateName string, customFileName string) error {
-	hasLang := g.hasLanguage(languageName)
+	hasLang := g.HasLanguage(languageName)
 	hasTemp, _ := g.HasTemplate(languageName, templateName)
 
 	if hasLang {
