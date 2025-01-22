@@ -20,8 +20,6 @@ type EmbeddedTemplates struct {
 
 func NewEmbeddedTemplates() *EmbeddedTemplates {
 	var templates EmbeddedTemplates
-	templates.languages = make([]Languages, 0)
-
 	err := templates.findTemplates(true)
 
 	if err != nil {
@@ -97,7 +95,7 @@ func (g *EmbeddedTemplates) loadTemplateFile(language string, template string) (
 }
 
 func (g *EmbeddedTemplates) GetListOfLanguageTemplatesFor(language string) []Languages {
-	values := make([]Languages, 0)
+	var values []Languages
 
 	for _, temp := range g.languages {
 		if temp.languageName == language {
@@ -109,7 +107,7 @@ func (g *EmbeddedTemplates) GetListOfLanguageTemplatesFor(language string) []Lan
 }
 
 func (g *EmbeddedTemplates) GetListOfAllLanguages() []string {
-	infos := make([]string, 0)
+	var infos []string
 
 	for _, language := range g.languages {
 		infos = append(infos, language.languageName)

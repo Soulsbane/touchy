@@ -26,7 +26,6 @@ var ErrFailedToReadEmbeddedFile = errors.New("failed to read embedded file")
 var ErrHighlightFailed = errors.New("failed to highlight code")
 
 type Templates interface {
-	// CreateFileFromTemplate(languageName string, templateName string, customFileName string) error
 	GetListOfAllLanguages() []string
 	GetLanguages() []Languages
 	GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile)
@@ -71,7 +70,7 @@ func (g *TemplateManager) HasLanguage(languageName string) bool {
 }
 
 func (g *TemplateManager) HasTemplate(languageName string, templateName string) (bool, []int) {
-	indexes := make([]int, 0)
+	var indexes []int
 
 	for _, temp := range g.templateList {
 		found, idx := temp.HasTemplate(languageName, templateName)
@@ -119,21 +118,17 @@ func (g *TemplateManager) outputTemplateList(languageName string, languages []La
 }
 
 func (g *TemplateManager) ListTemplates(languageName string) {
-	languages := make([]Languages, 0)
+	var languages []Languages
 
 	for _, temp := range g.templateList {
 		hasLang := temp.HasLanguage(languageName)
 
 		if hasLang {
-			if languages != nil {
-				languages = append(languages, temp.GetListOfLanguageTemplatesFor(languageName)...)
-			}
+			languages = append(languages, temp.GetListOfLanguageTemplatesFor(languageName)...)
 		}
 
 		if languageName == "all" {
-			if languages != nil {
-				languages = append(languages, temp.GetLanguages()...)
-			}
+			languages = append(languages, temp.GetLanguages()...)
 		}
 	}
 

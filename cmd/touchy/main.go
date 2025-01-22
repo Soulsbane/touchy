@@ -24,6 +24,7 @@ func setupScriptsAndTemplates() {
 
 	touchyScripts = scripts.New()
 	touchyScripts.RegisterAPI()
+
 	manager = templates.New()
 	manager.GatherTemplates()
 }

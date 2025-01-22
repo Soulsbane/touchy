@@ -17,8 +17,6 @@ type UserTemplates struct {
 
 func NewUserTemplates() *UserTemplates {
 	var templates UserTemplates
-	templates.languages = make([]Languages, 0)
-
 	err := templates.findTemplates(true)
 
 	if err != nil {
@@ -94,7 +92,7 @@ func (g *UserTemplates) loadTemplateFile(language string, template string) (stri
 }
 
 func (g *UserTemplates) GetListOfLanguageTemplatesFor(language string) []Languages {
-	values := make([]Languages, 0)
+	var values []Languages
 
 	for _, temp := range g.languages {
 		if temp.languageName == language {
@@ -106,7 +104,7 @@ func (g *UserTemplates) GetListOfLanguageTemplatesFor(language string) []Languag
 }
 
 func (g *UserTemplates) GetListOfAllLanguages() []string {
-	infos := make([]string, 0)
+	var infos []string
 
 	for _, language := range g.languages {
 		infos = append(infos, language.languageName)
