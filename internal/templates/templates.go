@@ -30,8 +30,9 @@ type Templates interface {
 	GetLanguages() []Languages
 	GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile)
 	GetListOfLanguageTemplatesFor(languageName string) []Languages
-	HasTemplate(languageName string, templateName string) (bool, int)
+	HasTemplate(languageName string, templateName string) bool
 	HasLanguage(languageName string) bool
+	GetTemplateIndexFor(languageName string, templateName string) (bool, int)
 }
 
 type Languages struct {
@@ -69,27 +70,21 @@ func (g *TemplateManager) HasLanguage(languageName string) bool {
 	return false
 }
 
-func (g *TemplateManager) HasTemplate(languageName string, templateName string) (bool, []int) {
-	var indexes []int
-
+func (g *TemplateManager) HasTemplate(languageName string, templateName string) bool {
 	for _, temp := range g.templateList {
-		found, idx := temp.HasTemplate(languageName, templateName)
+		found := temp.HasTemplate(languageName, templateName)
 
 		if found {
-			indexes = append(indexes, idx)
+			return true
 		}
 	}
 
-	if len(indexes) > 0 {
-		return true, indexes
-	}
-
-	return false, indexes
+	return false
 }
 
 func (g *TemplateManager) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
 	for _, temp := range g.templateList {
-		hasTemp, _ := temp.HasTemplate(languageName, templateName)
+		hasTemp := temp.HasTemplate(languageName, templateName)
 
 		if hasTemp {
 			return temp.GetLanguageTemplateFor(languageName, templateName)
@@ -173,7 +168,7 @@ func (g *TemplateManager) ShowTemplate(languageName string, templateName string)
 // CreateFileFromTemplate Creates a template
 func (g *TemplateManager) CreateFileFromTemplate(languageName string, templateName string, customFileName string) error {
 	hasLang := g.HasLanguage(languageName)
-	hasTemp, _ := g.HasTemplate(languageName, templateName)
+	hasTemp := g.HasTemplate(languageName, templateName)
 
 	if hasLang {
 		if hasTemp {

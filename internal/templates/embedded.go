@@ -125,13 +125,18 @@ func (g *EmbeddedTemplates) HasLanguage(languageName string) bool {
 	return idx >= 0
 }
 
-func (g *EmbeddedTemplates) HasTemplate(languageName string, templateName string) (bool, int) {
+func (g *EmbeddedTemplates) HasTemplate(languageName string, templateName string) bool {
+	idx := slices.IndexFunc(g.languages, func(c Languages) bool { return c.languageName == languageName && c.infoFile.GetName() == templateName })
+	return idx >= 0
+}
+
+func (g *EmbeddedTemplates) GetTemplateIndexFor(languageName string, templateName string) (bool, int) {
 	idx := slices.IndexFunc(g.languages, func(c Languages) bool { return c.languageName == languageName && c.infoFile.GetName() == templateName })
 	return idx >= 0, idx
 }
 
 func (g *EmbeddedTemplates) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
-	hasTemplate, idx := g.HasTemplate(languageName, templateName)
+	hasTemplate, idx := g.GetTemplateIndexFor(languageName, templateName)
 
 	if hasTemplate {
 		if idx >= 0 {
