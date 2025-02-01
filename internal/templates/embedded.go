@@ -121,13 +121,11 @@ func (g *EmbeddedTemplates) GetLanguages() []Languages {
 }
 
 func (g *EmbeddedTemplates) HasLanguage(languageName string) bool {
-	idx := slices.IndexFunc(g.languages, func(c Languages) bool { return c.languageName == languageName })
-	return idx >= 0
+	return slices.ContainsFunc(g.languages, func(c Languages) bool { return c.languageName == languageName })
 }
 
 func (g *EmbeddedTemplates) HasTemplate(languageName string, templateName string) bool {
-	idx := slices.IndexFunc(g.languages, func(c Languages) bool { return c.languageName == languageName && c.infoFile.GetName() == templateName })
-	return idx >= 0
+	return slices.ContainsFunc(g.languages, func(c Languages) bool { return c.languageName == languageName && c.infoFile.GetName() == templateName })
 }
 
 func (g *EmbeddedTemplates) GetTemplateIndexFor(languageName string, templateName string) (bool, int) {
