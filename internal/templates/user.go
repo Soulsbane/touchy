@@ -131,19 +131,17 @@ func (g *UserTemplates) GetTemplateIndexFor(languageName string, templateName st
 }
 
 func (g *UserTemplates) GetLanguageTemplateFor(languageName string, templateName string) (string, infofile.InfoFile) {
-	hasTemplate, idx := g.GetTemplateIndexFor(languageName, templateName)
-
-	if hasTemplate {
+	if hasTemplate, idx := g.GetTemplateIndexFor(languageName, templateName); hasTemplate {
 		if idx >= 0 {
 			data, err := g.loadTemplateFile(languageName, templateName)
 
 			if err != nil {
 				return "", g.languages[idx].infoFile
-			} else {
-				return data, g.languages[idx].infoFile
 			}
-		}
 
+			return data, g.languages[idx].infoFile
+		}
 	}
+
 	return "", infofile.InfoFile{}
 }
