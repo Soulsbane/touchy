@@ -98,14 +98,24 @@ func (g *TemplateManager) outputTemplateList(languageName string, languages []La
 	headerName := cases.Title(language.English).String(languageName) + " Templates"
 
 	if len(languages) > 0 {
-		outputTable := ui.CreateNewTableWriter(headerName, "Name", "Language", "Description", "Output File name")
+		var outputTable table.Writer
+
+		if languageName == "all" {
+			outputTable = ui.CreateNewTableWriter(headerName, "Name", "Language", "Description", "Output File name")
+		} else {
+			outputTable = ui.CreateNewTableWriter(headerName, "Name", "Description", "Output File name")
+		}
 
 		for _, info := range languages {
-			outputTable.AppendRow(table.Row{
-				info.infoFile.GetName(), info.languageName,
-				info.infoFile.GetDescription(),
-				info.infoFile.GetDefaultOutputFileName(),
-			})
+			var outputRow table.Row
+
+			if languageName == "all" {
+				outputRow = table.Row{info.infoFile.GetName(), info.languageName, info.infoFile.GetDescription(), info.infoFile.GetDefaultOutputFileName()}
+			} else {
+				outputRow = table.Row{info.infoFile.GetName(), info.infoFile.GetDescription(), info.infoFile.GetDefaultOutputFileName()}
+			}
+
+			outputTable.AppendRow(outputRow)
 		}
 
 		outputTable.Render()
