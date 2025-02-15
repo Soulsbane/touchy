@@ -137,7 +137,11 @@ func (g *TemplateManager) ListTemplates(languageName string) {
 		}
 	}
 
-	g.outputTemplateList(languageName, languages)
+	if len(languages) > 0 {
+		g.outputTemplateList(languageName, languages)
+	} else {
+		fmt.Println("No templates found. Use 'list templates' to see available templates.")
+	}
 }
 
 func (g *TemplateManager) ListLanguages() {
