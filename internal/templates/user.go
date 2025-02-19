@@ -15,15 +15,15 @@ type UserTemplates struct {
 	languages []Languages
 }
 
-func NewUserTemplates() *UserTemplates {
+func NewUserTemplates() (*UserTemplates, error) {
 	var templates UserTemplates
 	err := templates.findTemplates(true)
 
 	if err != nil {
-		panic(err)
+		return &templates, err
 	}
 
-	return &templates
+	return &templates, nil
 }
 
 func getUserData(path string) ([]byte, error) {
@@ -46,14 +46,10 @@ func (g *UserTemplates) findTemplates(embedded bool) error {
 		if languageDir.IsDir() {
 			var templates []os.DirEntry
 
-			if err != nil {
-				fmt.Println(err)
-			}
-
 			templates, err = os.ReadDir(path.Join(templatePath, languageDir.Name()))
 
 			if err != nil {
-				fmt.Println("Could not read directory: ", err) // TODO: Handle this better?
+				return fmt.Errorf("%w: %w", ErrNoUserTemplatesDir, err)
 			}
 
 			for _, template := range templates {

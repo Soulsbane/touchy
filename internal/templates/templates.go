@@ -54,10 +54,23 @@ func New() *TemplateManager {
 }
 
 func (g *TemplateManager) GatherTemplates() {
-	embedded := NewEmbeddedTemplates()
-	user := NewUserTemplates()
+	embedded, embedErr := NewEmbeddedTemplates()
+	user, userErr := NewUserTemplates()
+
 	g.templateList = append(g.templateList, embedded)
 	g.templateList = append(g.templateList, user)
+
+	g.handleTemplateError(embedErr, userErr)
+}
+
+func (g *TemplateManager) handleTemplateError(embedErr error, userErr error) {
+	if embedErr != nil {
+		fmt.Println(embedErr)
+	}
+
+	if userErr != nil {
+		fmt.Println(userErr)
+	}
 }
 
 func (g *TemplateManager) HasLanguage(languageName string) bool {

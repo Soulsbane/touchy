@@ -18,15 +18,15 @@ type EmbeddedTemplates struct {
 	languages []Languages
 }
 
-func NewEmbeddedTemplates() *EmbeddedTemplates {
+func NewEmbeddedTemplates() (*EmbeddedTemplates, error) {
 	var templates EmbeddedTemplates
 	err := templates.findTemplates(true)
 
 	if err != nil {
-		panic(err)
+		return &templates, err
 	}
 
-	return &templates
+	return &templates, nil
 }
 
 func getEmbeddedData(path string) ([]byte, error) {
