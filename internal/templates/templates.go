@@ -123,9 +123,16 @@ func (g *TemplateManager) outputTemplateList(languageName string, languages []La
 			var outputRow table.Row
 
 			if languageName == "all" {
-				outputRow = table.Row{info.infoFile.GetName(), info.languageName, info.infoFile.GetDescription(), info.infoFile.GetDefaultOutputFileName()}
+				outputRow = table.Row{
+					info.infoFile.GetName(),
+					info.languageName, info.infoFile.GetDescription(),
+					info.infoFile.GetDefaultOutputFileName(),
+				}
 			} else {
-				outputRow = table.Row{info.infoFile.GetName(), info.infoFile.GetDescription(), info.infoFile.GetDefaultOutputFileName()}
+				outputRow = table.Row{info.infoFile.GetName(),
+					info.infoFile.GetDescription(),
+					info.infoFile.GetDefaultOutputFileName(),
+				}
 			}
 
 			outputTable.AppendRow(outputRow)
