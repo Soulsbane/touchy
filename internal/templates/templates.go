@@ -85,9 +85,7 @@ func (g *TemplateManager) HasLanguage(languageName string) bool {
 
 func (g *TemplateManager) HasTemplate(languageName string, templateName string) bool {
 	for _, temp := range g.templateList {
-		found := temp.HasTemplate(languageName, templateName)
-
-		if found {
+		if temp.HasTemplate(languageName, templateName) {
 			return true
 		}
 	}
