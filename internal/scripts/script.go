@@ -9,3 +9,10 @@ type TouchyScript struct {
 	Description  string
 	Embedded     bool
 }
+
+func NewTouchyScript() *TouchyScript {
+	var touchyScript TouchyScript
+
+	touchyScript.scriptSystem = goscriptsystem.New(goscriptsystem.NewStdOutScriptErrors())
+	return &touchyScript
+}
