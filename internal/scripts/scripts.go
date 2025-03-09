@@ -22,7 +22,7 @@ const defaultScriptFileName = "main.lua"
 var embedsDir embed.FS
 
 type Scripts interface {
-	GetScriptInfoFor(scriptName string) TouchyScript
+	GetScriptInfoFor(scriptName string) *infofile.InfoFile
 	GetListOfScripts() []TouchyScript
 }
 

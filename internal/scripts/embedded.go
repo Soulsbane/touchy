@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/infofile"
+	"golang.org/x/exp/slices"
 	"path"
 )
 
@@ -54,4 +55,14 @@ func (es *EmbeddedScripts) findScripts() error {
 
 func (es *EmbeddedScripts) GetListOfScripts() []TouchyScript {
 	return es.scripts
+}
+
+func (es *EmbeddedScripts) GetScriptInfoFor(scriptName string) infofile.InfoFile {
+	idx := slices.IndexFunc(es.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
+
+	if idx >= 0 {
+		return es.scripts[idx].info
+	}
+
+	return infofile.InfoFile{}
 }
