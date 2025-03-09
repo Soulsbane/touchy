@@ -51,3 +51,7 @@ func (es *EmbeddedScripts) findScripts() error {
 
 	return nil
 }
+
+func (es *EmbeddedScripts) GetListOfScripts() []TouchyScript {
+	return es.scripts
+}
