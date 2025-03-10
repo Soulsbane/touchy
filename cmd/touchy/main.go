@@ -13,7 +13,7 @@ import (
 )
 
 var manager *templates.TemplateManager
-var touchyScripts *scripts.TouchyScripts
+var touchyScripts *scripts.TouchyScriptsManager
 
 func setupScriptsAndTemplates() {
 	pathUtilsErr := pathutils.SetupConfigDir()

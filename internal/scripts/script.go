@@ -6,7 +6,7 @@ import (
 )
 
 type Scripts interface {
-	GetScriptInfoFor(scriptName string) *infofile.InfoFile
+	GetScriptInfoFor(scriptName string) infofile.InfoFile
 	GetListOfScripts() []TouchyScript
 }
 
