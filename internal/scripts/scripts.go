@@ -21,11 +21,6 @@ const defaultScriptFileName = "main.lua"
 //go:embed scripts
 var embedsDir embed.FS
 
-type Scripts interface {
-	GetScriptInfoFor(scriptName string) *infofile.InfoFile
-	GetListOfScripts() []TouchyScript
-}
-
 type TouchyScripts struct {
 	scriptSystem *goscriptsystem.ScriptSystem
 	scripts      []infofile.InfoFile
