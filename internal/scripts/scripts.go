@@ -26,10 +26,6 @@ type Scripts interface {
 	GetListOfScripts() []TouchyScript
 }
 
-type TouchyScriptsManager struct {
-	scripts []TouchyScript
-}
-
 type TouchyScripts struct {
 	scriptSystem *goscriptsystem.ScriptSystem
 	scripts      []infofile.InfoFile
