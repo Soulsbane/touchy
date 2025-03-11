@@ -8,6 +8,7 @@ import (
 type Scripts interface {
 	GetScriptInfoFor(scriptName string) infofile.InfoFile
 	GetListOfScripts() []TouchyScript
+	GetListOfScriptInfo() []infofile.InfoFile
 }
 
 type TouchyScript struct {

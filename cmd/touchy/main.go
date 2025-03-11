@@ -13,7 +13,7 @@ import (
 )
 
 var manager *templates.TemplateManager
-var touchyScripts *scripts.TouchyScriptsManager
+var scriptsManager *scripts.TouchyScriptsManager
 
 func setupScriptsAndTemplates() {
 	pathUtilsErr := pathutils.SetupConfigDir()
@@ -22,11 +22,12 @@ func setupScriptsAndTemplates() {
 		fmt.Println("Failed to setup config directory: ", pathUtilsErr)
 	}
 
-	touchyScripts = scripts.New()
-	touchyScripts.RegisterAPI()
+	//touchyScripts.RegisterAPI()
 
 	manager = templates.New()
+	scriptsManager = scripts.New()
 	manager.GatherTemplates()
+	scriptsManager.GatherScripts()
 }
 
 func handleError(err error, templateName string, languageName string) {

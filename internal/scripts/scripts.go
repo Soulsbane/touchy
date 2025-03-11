@@ -26,16 +26,6 @@ type TouchyScripts struct {
 	scripts      []infofile.InfoFile
 }
 
-//func New() *TouchyScripts {
-//	var touchyScripts TouchyScripts
-//
-//	touchyScripts.scriptSystem = goscriptsystem.New(goscriptsystem.NewStdOutScriptErrors())
-//	touchyScripts.findEmbeddedScripts()
-//	touchyScripts.findConfigDirScripts()
-//
-//	return &touchyScripts
-//}
-
 func (ts *TouchyScripts) findConfigDirScripts() {
 	configScriptsDir := pathutils.GetScriptsDir()
 	configDirs, err := os.ReadDir(configScriptsDir)

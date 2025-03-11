@@ -57,6 +57,16 @@ func (es *EmbeddedScripts) GetListOfScripts() []TouchyScript {
 	return es.scripts
 }
 
+func (es *EmbeddedScripts) GetListOfScriptInfo() []infofile.InfoFile {
+	var infoList []infofile.InfoFile
+
+	for _, script := range es.scripts {
+		infoList = append(infoList, script.info)
+	}
+
+	return infoList
+}
+
 func (es *EmbeddedScripts) GetScriptInfoFor(scriptName string) infofile.InfoFile {
 	idx := slices.IndexFunc(es.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
 

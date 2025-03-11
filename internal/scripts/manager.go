@@ -1,5 +1,7 @@
 package scripts
 
+import "github.com/Soulsbane/touchy/internal/infofile"
+
 type TouchyScriptsManager struct {
 	scripts []Scripts
 }
@@ -27,4 +29,17 @@ func (manager *TouchyScriptsManager) GetListOfScripts() []TouchyScript {
 	}
 
 	return scriptList
+}
+
+func (manager *TouchyScriptsManager) GetListOfScriptInfo() []infofile.InfoFile {
+	var scriptList []infofile.InfoFile
+
+	for _, script := range manager.scripts {
+		scriptList = append(scriptList, script.GetListOfScriptInfo()...)
+	}
+
+	return scriptList
+}
+func (ts *TouchyScriptsManager) Run(scriptName string) error {
+	return nil
 }

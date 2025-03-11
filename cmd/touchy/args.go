@@ -69,14 +69,14 @@ func handleCreateCommand(languageName string, templateName string, fileName stri
 func handleListCommand(listType string, languageName string) {
 	switch listType {
 	case "all":
-		scriptsList := touchyScripts.GetListOfScripts()
+		scriptsList := scriptsManager.GetListOfScriptInfo()
 		ListScripts(scriptsList)
 		fmt.Println("")
 		manager.ListTemplates(languageName)
 	case "languages":
 		manager.ListLanguages()
 	case "scripts":
-		scriptsList := touchyScripts.GetListOfScripts()
+		scriptsList := scriptsManager.GetListOfScriptInfo()
 		ListScripts(scriptsList)
 	case "templates":
 		manager.ListTemplates(languageName)
@@ -100,7 +100,7 @@ func handleShowCommand(languageName string, templateName string) {
 }
 
 func handleRunCommand(scriptName string) {
-	err := touchyScripts.Run(scriptName)
+	err := scriptsManager.Run(scriptName)
 
 	if err != nil {
 		handleError(err, scriptName, "")
