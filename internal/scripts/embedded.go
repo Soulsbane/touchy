@@ -34,7 +34,6 @@ func (es *EmbeddedScripts) findScripts() error {
 		if dir.IsDir() {
 			var touchyScript TouchyScript
 
-			touchyScript.scriptSystem = goscriptsystem.New(goscriptsystem.NewStdOutScriptErrors())
 			infoFilePath := path.Join("scripts", dir.Name(), infofile.DefaultFileName)
 			data, readFileErr := embedsDir.ReadFile(infoFilePath)
 
@@ -75,4 +74,24 @@ func (es *EmbeddedScripts) GetScriptInfoFor(scriptName string) infofile.InfoFile
 	}
 
 	return infofile.InfoFile{}
+}
+
+func (es *EmbeddedScripts) Run(scriptName string, system goscriptsystem.ScriptSystem) error {
+	idx := slices.IndexFunc(es.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
+
+	if idx >= 0 {
+		script := es.scripts[idx]
+		script.scriptSystem = &system
+		scriptPath := path.Join("scripts", scriptName, defaultScriptFileName)
+		data, err := embedsDir.ReadFile(scriptPath)
+
+		if err != nil {
+			return fmt.Errorf("failed to read script file: %w", err)
+		} else {
+			script.scriptSystem.DoString(string(data))
+			return nil
+		}
+	} else {
+		return fmt.Errorf("script %s not found", scriptName)
+	}
 }
