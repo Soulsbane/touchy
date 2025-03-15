@@ -30,6 +30,7 @@ func (manager *TouchyScriptsManager) createScriptSystem() *goscriptsystem.Script
 	scriptSystem.SetGlobal("DownloadFileWithProgress", api.DownloadFileWithProgress)
 
 	templatesObject := templates.New()
+	templatesObject.GatherTemplates()
 	promptsObject := api.NewPrompts()
 	ioObject := api.NewIO()
 
