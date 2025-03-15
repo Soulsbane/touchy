@@ -1,12 +1,16 @@
 package scripts
 
 import (
+	"embed"
 	"fmt"
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"golang.org/x/exp/slices"
 	"path"
 )
+
+//go:embed scripts
+var embedsDir embed.FS
 
 type EmbeddedScripts struct {
 	scripts []TouchyScript
