@@ -8,11 +8,8 @@ import (
 	"path"
 
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
-	"github.com/Soulsbane/touchy/internal/api"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/pathutils"
-	"github.com/Soulsbane/touchy/internal/templates"
-	libs "github.com/vadv/gopher-lua-libs"
 	"golang.org/x/exp/slices"
 )
 
@@ -90,25 +87,6 @@ func (ts *TouchyScripts) GetScriptInfoFor(scriptName string) *infofile.InfoFile 
 func (ts *TouchyScripts) GetListOfScripts() []infofile.InfoFile {
 	scripts := ts.scripts
 	return scripts
-}
-
-func (ts *TouchyScripts) RegisterAPI() {
-	ts.scriptSystem.SetGlobal("GetOutputDir", pathutils.GetOutputDir)
-	ts.scriptSystem.SetGlobal("GetAppConfigDir", pathutils.GetAppConfigDir)
-	ts.scriptSystem.SetGlobal("GetScriptsDir", pathutils.GetScriptsDir)
-	ts.scriptSystem.SetGlobal("GetTemplatesDir", pathutils.GetTemplatesDir)
-	ts.scriptSystem.SetGlobal("CleanPath", pathutils.CleanPath)
-	ts.scriptSystem.SetGlobal("DownloadFile", api.DownloadFile)
-	ts.scriptSystem.SetGlobal("DownloadFileWithProgress", api.DownloadFileWithProgress)
-
-	templatesObject := templates.New()
-	promptsObject := api.NewPrompts()
-	ioObject := api.NewIO()
-
-	ts.scriptSystem.SetGlobal("Templates", templatesObject)
-	ts.scriptSystem.SetGlobal("Prompts", promptsObject)
-	ts.scriptSystem.SetGlobal("IO", ioObject)
-	libs.Preload(ts.scriptSystem.GetState())
 }
 
 func (ts *TouchyScripts) Run(scriptName string) error {
