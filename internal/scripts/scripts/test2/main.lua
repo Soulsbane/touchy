@@ -3,10 +3,10 @@
 data, info = Templates:GetLanguageTemplateFor("go", "default")
 print("Language Template for go/default: \n")
 print(data)
-print(info.Name)
-print(info.Description)
-print(info.DefaultOutputFileName)
-print(info.Embedded)
+print("Name: ", info.Name)
+print("Description: ", info.Description)
+print("DefaultOutputFileName: ", info.DefaultOutputFileName)
+print("Embedded: ", info.Embedded)
 
 local createPathErr = IO:CreateDirAll("testpath/secondtestpath")
 
