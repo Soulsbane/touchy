@@ -27,14 +27,6 @@ func NewUserTemplates() (*UserTemplates, error) {
 	return &templates, nil
 }
 
-func getUserData(path string) ([]byte, error) {
-	if data, err := os.ReadFile(path); err != nil {
-		return data, fmt.Errorf("%w: %w", common.ErrFailedToReadFile, err)
-	} else {
-		return data, nil
-	}
-}
-
 func (g *UserTemplates) findTemplates(embedded bool) error {
 	templatePath := pathutils.GetTemplatesDir()
 	dirs, err := os.ReadDir(templatePath)
@@ -56,7 +48,7 @@ func (g *UserTemplates) findTemplates(embedded bool) error {
 			for _, template := range templates {
 				if template.IsDir() {
 					configPath := path.Join(templatePath, languageDir.Name(), template.Name(), infofile.DefaultFileName)
-					templateData, fileReadErr := getUserData(configPath)
+					templateData, fileReadErr := common.GetFileData(configPath)
 
 					if fileReadErr != nil {
 						fmt.Println(fileReadErr)
