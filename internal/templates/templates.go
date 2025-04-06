@@ -1,8 +1,8 @@
 package templates
 
 import (
-	"errors"
 	"fmt"
+	"github.com/Soulsbane/touchy/internal/common"
 	"os"
 	"path"
 
@@ -15,15 +15,6 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
-
-var ErrTemplateNotFound = errors.New("template not found")
-var ErrLanguageNotFound = errors.New("language not found")
-var ErrFileNameEmpty = errors.New("output filename not specified")
-var ErrFailedToCreateFile = errors.New("failed to create file")
-var ErrNoUserTemplatesDir = errors.New("no user templates found")
-var ErrFailedToReadFile = errors.New("failed to read file")
-var ErrFailedToReadEmbeddedFile = errors.New("failed to read embedded file")
-var ErrHighlightFailed = errors.New("failed to highlight code")
 
 type Templates interface {
 	GetListOfAllLanguages() []string
@@ -188,10 +179,10 @@ func (g *TemplateManager) ShowTemplate(languageName string, templateName string)
 		err := quick.Highlight(os.Stdout, sourceCode, info.GetDefaultOutputFileName(), "terminal256", "monokai")
 
 		if err != nil {
-			return ErrHighlightFailed
+			return common.ErrHighlightFailed
 		}
 	} else {
-		return ErrLanguageNotFound
+		return common.ErrLanguageNotFound
 	}
 
 	return nil
@@ -216,21 +207,21 @@ func (g *TemplateManager) CreateFileFromTemplate(languageName string, templateNa
 			}
 
 			if fileName == "" {
-				return ErrFileNameEmpty
+				return common.ErrFileNameEmpty
 			} else {
 				fullFileName := path.Join(currentDir, pathutils.CleanPath(fileName))
 
 				if err := os.WriteFile(fullFileName, []byte(template), 0600); err != nil {
-					return fmt.Errorf("%w %s", ErrFailedToCreateFile, fullFileName)
+					return fmt.Errorf("%w %s", common.ErrFailedToCreateFile, fullFileName)
 				}
 			}
 
 			return nil
 		} else {
-			return ErrTemplateNotFound
+			return common.ErrTemplateNotFound
 		}
 	} else {
-		return ErrLanguageNotFound
+		return common.ErrLanguageNotFound
 	}
 
 }

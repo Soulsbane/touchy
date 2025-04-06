@@ -3,6 +3,7 @@ package templates
 import (
 	"embed"
 	"fmt"
+	"github.com/Soulsbane/touchy/internal/common"
 	"os"
 	"path"
 	"slices"
@@ -31,7 +32,7 @@ func NewEmbeddedTemplates() (*EmbeddedTemplates, error) {
 
 func getEmbeddedData(path string) ([]byte, error) {
 	if data, err := embedsDir.ReadFile(path); err != nil {
-		return data, fmt.Errorf("%w: %w", ErrFailedToReadEmbeddedFile, err)
+		return data, fmt.Errorf("%w: %w", common.ErrFailedToReadEmbeddedFile, err)
 	} else {
 		return data, nil
 	}
@@ -88,7 +89,7 @@ func (g *EmbeddedTemplates) loadTemplateFile(language string, template string) (
 	data, err = embedsDir.ReadFile(templateName)
 
 	if err != nil { // We couldn't read from the embedded file's directory so return an error
-		return "", fmt.Errorf("%w: %w", ErrTemplateNotFound, err)
+		return "", fmt.Errorf("%w: %w", common.ErrTemplateNotFound, err)
 	}
 
 	return string(data), nil

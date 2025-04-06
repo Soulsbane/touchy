@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/Soulsbane/touchy/internal/common"
 
 	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/Soulsbane/touchy/internal/scripts"
@@ -33,13 +34,13 @@ func setupScriptsAndTemplates() {
 func handleError(err error, templateName string, languageName string) {
 	if err != nil {
 		switch {
-		case errors.Is(err, templates.ErrLanguageNotFound):
+		case errors.Is(err, common.ErrLanguageNotFound):
 			fmt.Println("Language not found:", languageName)
-		case errors.Is(err, templates.ErrTemplateNotFound):
+		case errors.Is(err, common.ErrTemplateNotFound):
 			fmt.Println("Template not found:", templateName)
-		case errors.Is(err, templates.ErrFileNameEmpty):
+		case errors.Is(err, common.ErrFileNameEmpty):
 			fmt.Println("Error: output filename not specified")
-		case errors.Is(err, templates.ErrNoUserTemplatesDir):
+		case errors.Is(err, common.ErrNoUserTemplatesDir):
 			// TODO: Maybe notify user where the user templates is or if it should be created?
 			fmt.Println("Warning: no user templates found!")
 		default:

@@ -2,6 +2,7 @@ package templates
 
 import (
 	"fmt"
+	"github.com/Soulsbane/touchy/internal/common"
 	"os"
 	"path"
 	"slices"
@@ -28,7 +29,7 @@ func NewUserTemplates() (*UserTemplates, error) {
 
 func getUserData(path string) ([]byte, error) {
 	if data, err := os.ReadFile(path); err != nil {
-		return data, fmt.Errorf("%w: %w", ErrFailedToReadFile, err)
+		return data, fmt.Errorf("%w: %w", common.ErrFailedToReadFile, err)
 	} else {
 		return data, nil
 	}
@@ -39,7 +40,7 @@ func (g *UserTemplates) findTemplates(embedded bool) error {
 	dirs, err := os.ReadDir(templatePath)
 
 	if err != nil {
-		return fmt.Errorf("%w: %w", ErrNoUserTemplatesDir, err)
+		return fmt.Errorf("%w: %w", common.ErrNoUserTemplatesDir, err)
 	}
 
 	for _, languageDir := range dirs {
@@ -49,7 +50,7 @@ func (g *UserTemplates) findTemplates(embedded bool) error {
 			templates, err = os.ReadDir(path.Join(templatePath, languageDir.Name()))
 
 			if err != nil {
-				return fmt.Errorf("%w: %w", ErrNoUserTemplatesDir, err)
+				return fmt.Errorf("%w: %w", common.ErrNoUserTemplatesDir, err)
 			}
 
 			for _, template := range templates {
@@ -81,7 +82,7 @@ func (g *UserTemplates) loadTemplateFile(language string, template string) (stri
 	data, err = os.ReadFile(templateName)
 
 	if err != nil { // We couldn't read from the file in user's config directory so return an error
-		return "", fmt.Errorf("%w: %w", ErrTemplateNotFound, err)
+		return "", fmt.Errorf("%w: %w", common.ErrTemplateNotFound, err)
 	}
 
 	return string(data), nil
