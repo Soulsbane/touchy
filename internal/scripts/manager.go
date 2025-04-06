@@ -44,12 +44,18 @@ func (manager *TouchyScriptsManager) createScriptSystem() *goscriptsystem.Script
 
 func (manager *TouchyScriptsManager) GatherScripts() {
 	embedded, embeddedErr := NewEmbeddedScripts()
+	user, userErr := NewUserScripts()
 
 	if embeddedErr != nil {
 		panic(embeddedErr)
 	}
 
+	if userErr != nil {
+		panic(userErr)
+	}
+
 	manager.scripts = append(manager.scripts, embedded)
+	manager.scripts = append(manager.scripts, user)
 }
 
 func (manager *TouchyScriptsManager) GetListOfScripts() []TouchyScript {
