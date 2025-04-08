@@ -9,7 +9,6 @@ import (
 	"github.com/Soulsbane/touchy/internal/scripts"
 	"github.com/Soulsbane/touchy/internal/templates"
 	"github.com/alexflint/go-arg"
-	//"maps"
 	"os"
 )
 
@@ -22,8 +21,6 @@ func setupScriptsAndTemplates() {
 	if pathUtilsErr != nil {
 		fmt.Println("Failed to setup config directory: ", pathUtilsErr)
 	}
-
-	//touchyScripts.RegisterAPI()
 
 	manager = templates.New()
 	scriptsManager = scripts.New()
