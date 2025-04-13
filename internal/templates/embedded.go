@@ -43,7 +43,7 @@ func (g *EmbeddedTemplates) findTemplates(embedded bool) error {
 	dirs, err := embedsDir.ReadDir("templates")
 
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("failed to read script embeds directory: %w", err)
 	}
 
 	for _, languageDir := range dirs {
