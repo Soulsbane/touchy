@@ -2,10 +2,14 @@ package infofile
 
 import (
 	"fmt"
+
 	"github.com/pelletier/go-toml/v2"
 )
 
 const DefaultFileName = "info.toml"
+const defaultDescription = "No description available"
+const defaultOutputFileName = "output.txt"
+const defaultName = "No name provided"
 
 type InfoFile struct {
 	Name                  string
@@ -49,4 +53,13 @@ func Load(name string, infoFilePath string, embedded bool, data []byte) InfoFile
 	}
 
 	return config
+}
+
+func GetDefaultInfoFile() InfoFile {
+	return InfoFile{
+		Name:                  defaultName,
+		DefaultOutputFileName: defaultOutputFileName,
+		Description:           defaultDescription,
+		Embedded:              false,
+	}
 }

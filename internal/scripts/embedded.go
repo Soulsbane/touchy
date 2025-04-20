@@ -3,10 +3,11 @@ package scripts
 import (
 	"embed"
 	"fmt"
+	"path"
+
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"golang.org/x/exp/slices"
-	"path"
 )
 
 //go:embed scripts
@@ -37,19 +38,19 @@ func (es *EmbeddedScripts) findScripts() error {
 	for _, dir := range dirs {
 		if dir.IsDir() {
 			var touchyScript TouchyScript
+			var config infofile.InfoFile
 
 			infoFilePath := path.Join("scripts", dir.Name(), infofile.DefaultFileName)
 			data, readFileErr := embedsDir.ReadFile(infoFilePath)
 
 			if readFileErr != nil {
-				// TODO: Maybe set a default config if config file is not found?
-				fmt.Println("Failed to load config file: " + infoFilePath)
+				config = infofile.GetDefaultInfoFile()
+			} else {
+				config = infofile.Load(dir.Name(), infoFilePath, true, data)
+				config.SetEmbedded(true)
+				touchyScript.info = config
+				es.scripts = append(es.scripts, touchyScript)
 			}
-
-			config := infofile.Load(dir.Name(), infoFilePath, true, data)
-			config.SetEmbedded(true)
-			touchyScript.info = config
-			es.scripts = append(es.scripts, touchyScript)
 		}
 	}
 
