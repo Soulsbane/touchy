@@ -42,7 +42,7 @@ func Load(name string, infoFilePath string, embedded bool, data []byte) InfoFile
 	var err error
 	config := InfoFile{
 		Name:        name,
-		Description: "<Unknown>",
+		Description: defaultDescription,
 		Embedded:    embedded,
 	}
 
