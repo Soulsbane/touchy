@@ -1,8 +1,6 @@
 package infofile
 
 import (
-	"fmt"
-
 	"github.com/pelletier/go-toml/v2"
 )
 
@@ -49,7 +47,8 @@ func Load(name string, infoFilePath string, embedded bool, data []byte) InfoFile
 	err = toml.Unmarshal(data, &config)
 
 	if err != nil {
-		fmt.Println("Failed to read config data: "+infoFilePath, " using default config.")
+		// INFO: Really we don't need to worry about the error here since default values are fine
+		return GetDefaultInfoFile()
 	}
 
 	return config
