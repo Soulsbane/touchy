@@ -26,7 +26,7 @@ func NewUserScripts() (*UserScripts, error) {
 	return &userScripts, nil
 }
 
-func (es *UserScripts) findScripts() error {
+func (us *UserScripts) findScripts() error {
 	scriptsPath := pathutils.GetScriptsDir()
 	dirs, err := os.ReadDir(scriptsPath)
 
@@ -49,43 +49,43 @@ func (es *UserScripts) findScripts() error {
 			config = infofile.Load(dir.Name(), infoFilePath, true, data)
 			config.SetEmbedded(true)
 			touchyScript.info = config
-			es.scripts = append(es.scripts, touchyScript)
+			us.scripts = append(us.scripts, touchyScript)
 		}
 	}
 
 	return nil
 }
 
-func (es *UserScripts) GetListOfScripts() []TouchyScript {
-	return es.scripts
+func (us *UserScripts) GetListOfScripts() []TouchyScript {
+	return us.scripts
 }
 
-func (es *UserScripts) GetListOfScriptInfo() []infofile.InfoFile {
+func (us *UserScripts) GetListOfScriptInfo() []infofile.InfoFile {
 	var infoList []infofile.InfoFile
 
-	for _, script := range es.scripts {
+	for _, script := range us.scripts {
 		infoList = append(infoList, script.info)
 	}
 
 	return infoList
 }
 
-func (es *UserScripts) GetScriptInfoFor(scriptName string) infofile.InfoFile {
-	idx := slices.IndexFunc(es.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
+func (us *UserScripts) GetScriptInfoFor(scriptName string) infofile.InfoFile {
+	idx := slices.IndexFunc(us.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
 
 	if idx >= 0 {
-		return es.scripts[idx].info
+		return us.scripts[idx].info
 	}
 
 	return infofile.InfoFile{}
 }
 
-func (es *UserScripts) Run(scriptName string, system goscriptsystem.ScriptSystem) error {
-	idx := slices.IndexFunc(es.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
+func (us *UserScripts) Run(scriptName string, system goscriptsystem.ScriptSystem) error {
+	idx := slices.IndexFunc(us.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
 	scriptsPath := pathutils.GetScriptsDir()
 
 	if idx >= 0 {
-		script := es.scripts[idx]
+		script := us.scripts[idx]
 		script.scriptSystem = &system
 		scriptPath := path.Join(scriptsPath, scriptName, defaultScriptFileName)
 		data, err := os.ReadFile(scriptPath)
