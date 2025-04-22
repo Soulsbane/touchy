@@ -5,7 +5,7 @@ import (
 )
 
 const DefaultFileName = "info.toml"
-const defaultDescription = "No description available"
+const DefaultDescription = "No description available"
 const defaultOutputFileName = "output.txt"
 const defaultName = "No name provided"
 
@@ -40,7 +40,7 @@ func Load(name string, infoFilePath string, embedded bool, data []byte) InfoFile
 	var err error
 	config := InfoFile{
 		Name:        name,
-		Description: defaultDescription,
+		Description: DefaultDescription,
 		Embedded:    embedded,
 	}
 
@@ -58,7 +58,7 @@ func GetDefaultInfoFile() InfoFile {
 	return InfoFile{
 		Name:                  defaultName,
 		DefaultOutputFileName: defaultOutputFileName,
-		Description:           defaultDescription,
+		Description:           DefaultDescription,
 		Embedded:              false,
 	}
 }
