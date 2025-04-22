@@ -2,12 +2,13 @@ package scripts
 
 import (
 	"fmt"
+	"os"
+	"path"
+
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/pathutils"
 	"golang.org/x/exp/slices"
-	"os"
-	"path"
 )
 
 type UserScripts struct {
@@ -36,16 +37,16 @@ func (es *UserScripts) findScripts() error {
 	for _, dir := range dirs {
 		if dir.IsDir() {
 			var touchyScript TouchyScript
+			var config infofile.InfoFile
 
 			infoFilePath := path.Join(scriptsPath, dir.Name(), infofile.DefaultFileName)
 			data, readFileErr := os.ReadFile(infoFilePath)
 
 			if readFileErr != nil {
-				// TODO: Maybe set a default config if config file is not found?
-				fmt.Println("Failed to load config file: " + infoFilePath)
+				config = infofile.GetDefaultInfoFile()
 			}
 
-			config := infofile.Load(dir.Name(), infoFilePath, true, data)
+			config = infofile.Load(dir.Name(), infoFilePath, true, data)
 			config.SetEmbedded(true)
 			touchyScript.info = config
 			es.scripts = append(es.scripts, touchyScript)
