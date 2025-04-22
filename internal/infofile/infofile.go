@@ -6,7 +6,7 @@ import (
 
 const DefaultFileName = "info.toml"
 const DefaultDescription = "No description available"
-const defaultOutputFileName = "output.txt"
+const DefaultOutputFileName = "output.txt"
 const defaultName = "No name provided"
 
 type InfoFile struct {
@@ -57,7 +57,7 @@ func Load(name string, infoFilePath string, embedded bool, data []byte) InfoFile
 func GetDefaultInfoFile() InfoFile {
 	return InfoFile{
 		Name:                  defaultName,
-		DefaultOutputFileName: defaultOutputFileName,
+		DefaultOutputFileName: DefaultOutputFileName,
 		Description:           DefaultDescription,
 		Embedded:              false,
 	}
