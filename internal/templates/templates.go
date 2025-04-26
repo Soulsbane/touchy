@@ -2,9 +2,10 @@ package templates
 
 import (
 	"fmt"
-	"github.com/Soulsbane/touchy/internal/common"
 	"os"
 	"path"
+
+	"github.com/Soulsbane/touchy/internal/common"
 
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/Soulsbane/touchy/internal/pathutils"
@@ -220,8 +221,8 @@ func (g *TemplateManager) CreateFileFromTemplate(languageName string, templateNa
 		} else {
 			return common.ErrTemplateNotFound
 		}
-	} else {
-		return common.ErrLanguageNotFound
 	}
+
+	return common.ErrLanguageNotFound
 
 }
