@@ -96,7 +96,7 @@ func (es *EmbeddedScripts) Run(scriptName string, system goscriptsystem.ScriptSy
 			script.scriptSystem.DoString(string(data))
 			return nil
 		}
-	} else {
-		return fmt.Errorf("script %s not found", scriptName)
 	}
+
+	return fmt.Errorf("script %s not found", scriptName)
 }

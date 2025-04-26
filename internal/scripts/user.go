@@ -96,7 +96,7 @@ func (us *UserScripts) Run(scriptName string, system goscriptsystem.ScriptSystem
 			script.scriptSystem.DoString(string(data))
 			return nil
 		}
-	} else {
-		return fmt.Errorf("script %s not found", scriptName)
 	}
+
+	return fmt.Errorf("script %s not found", scriptName)
 }
