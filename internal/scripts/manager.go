@@ -77,6 +77,19 @@ func (manager *TouchyScriptsManager) GetListOfScriptInfo() []infofile.InfoFile {
 
 	return scriptList
 }
+
+func (manager *TouchyScriptsManager) GetNumberOfScripts(name string) int {
+	count := 0
+
+	for _, script := range manager.scripts {
+		if script.HasScript(name) {
+			count++
+		}
+	}
+
+	return count
+}
+
 func (manager *TouchyScriptsManager) Run(scriptName string) error {
 	scriptSystem := manager.createScriptSystem()
 

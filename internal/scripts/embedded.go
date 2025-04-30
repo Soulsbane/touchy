@@ -81,6 +81,11 @@ func (es *EmbeddedScripts) GetScriptInfoFor(scriptName string) infofile.InfoFile
 	return infofile.InfoFile{}
 }
 
+func (es *EmbeddedScripts) HasScript(scriptName string) bool {
+	idx := slices.IndexFunc(es.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
+	return idx >= 0
+}
+
 func (es *EmbeddedScripts) Run(scriptName string, system goscriptsystem.ScriptSystem) error {
 	idx := slices.IndexFunc(es.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
 

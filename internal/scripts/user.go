@@ -80,6 +80,11 @@ func (us *UserScripts) GetScriptInfoFor(scriptName string) infofile.InfoFile {
 	return infofile.InfoFile{}
 }
 
+func (us *UserScripts) HasScript(scriptName string) bool {
+	idx := slices.IndexFunc(us.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
+	return idx >= 0
+}
+
 func (us *UserScripts) Run(scriptName string, system goscriptsystem.ScriptSystem) error {
 	idx := slices.IndexFunc(us.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
 	scriptsPath := pathutils.GetScriptsDir()
