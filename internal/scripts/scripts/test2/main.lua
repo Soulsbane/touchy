@@ -23,3 +23,6 @@ if outputDirErr then
 else
 	print("Output directory creation succeeded")
 end
+
+local lsOutput, err = Command:RunWithOutput("ls")
+print(lsOutput)

@@ -19,3 +19,25 @@ func (c *Command) Run(command string, args ...string) error {
 
 	return nil
 }
+
+func (c *Command) RunWithOutput(command string, args ...string) (string, error) {
+	cmd := exec.Command(command, args...)
+	output, err := cmd.Output()
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(output), nil
+}
+
+func (c *Command) RunWithOutputAsBytes(command string, args ...string) ([]byte, error) {
+	cmd := exec.Command(command, args...)
+	output, err := cmd.Output()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return output, nil
+}
