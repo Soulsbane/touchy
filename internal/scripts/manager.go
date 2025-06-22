@@ -33,10 +33,12 @@ func (manager *TouchyScriptsManager) createScriptSystem() *goscriptsystem.Script
 	templatesObject.GatherTemplates()
 	promptsObject := api.NewPrompts()
 	ioObject := api.NewIO()
+	commandObject := api.NewCommand()
 
 	scriptSystem.SetGlobal("Templates", templatesObject)
 	scriptSystem.SetGlobal("Prompts", promptsObject)
 	scriptSystem.SetGlobal("IO", ioObject)
+	scriptSystem.SetGlobal("Command", commandObject)
 	libs.Preload(scriptSystem.GetState())
 
 	return scriptSystem
