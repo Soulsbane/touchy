@@ -11,13 +11,13 @@ print("GetAppConfigDir: ", appConfigDir)
 print("GetScriptsDir: ", GetScriptsDir())
 print("GetTemplatesDir: ", GetTemplatesDir())
 
---success , errString = DownloadFileWithProgress("20MB-TESTFILE.ORG.pdf", "https://files.testfile.org/PDF/20MB-TESTFILE.ORG.pdf")
---success, errString = DownloadFileWithProgress("20MB-TESTFILE.ORG.pdf", "https://files.testfile.org/PDF/20MB-TESTFILE.ORG.pdferr")
+--success , errString = Downloader:GetFileWithProgress("20MB-TESTFILE.ORG.pdf", "https://files.testfile.org/PDF/20MB-TESTFILE.ORG.pdf")
+--success, errString = Downloader:GetFileWithProgress("20MB-TESTFILE.ORG.pdf", "https://files.testfile.org/PDF/20MB-TESTFILE.ORG.pdferr")
 
 -- Download a file from the internet that will WON"T work
---success, errString = DownloadFile("20MB-TESTFILE.ORG.pdf", "https://files.testfile.org/PDF/20MB-TESTFILE.ORG.pdff")
+--success, errString = Downloader:GetFile("20MB-TESTFILE.ORG.pdf", "https://files.testfile.org/PDF/20MB-TESTFILE.ORG.pdff")
 -- Download a file from the internet that will work
-success, errString = DownloadFile("20MB-TESTFILE.ORG.pdf", "https://files.testfile.org/PDF/20MB-TESTFILE.ORG.pdf")
+success, errString = Downloader:GetFile("20MB-TESTFILE.ORG.pdf", "https://files.testfile.org/PDF/20MB-TESTFILE.ORG.pdf")
 
 if not success then
 	print("DownloadFile Error: ", errString)

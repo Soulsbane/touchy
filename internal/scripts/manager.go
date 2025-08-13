@@ -26,19 +26,19 @@ func (manager *TouchyScriptsManager) createScriptSystem() *goscriptsystem.Script
 	scriptSystem.SetGlobal("GetScriptsDir", pathutils.GetScriptsDir)
 	scriptSystem.SetGlobal("GetTemplatesDir", pathutils.GetTemplatesDir)
 	scriptSystem.SetGlobal("CleanPath", pathutils.CleanPath)
-	scriptSystem.SetGlobal("DownloadFile", api.DownloadFile)
-	scriptSystem.SetGlobal("DownloadFileWithProgress", api.DownloadFileWithProgress)
 
 	templatesObject := templates.New()
 	templatesObject.GatherTemplates()
 	promptsObject := api.NewPrompts()
 	ioObject := api.NewIO()
 	commandObject := api.NewCommand()
+	downloaderObject := api.NewDownloader()
 
 	scriptSystem.SetGlobal("Templates", templatesObject)
 	scriptSystem.SetGlobal("Prompts", promptsObject)
 	scriptSystem.SetGlobal("IO", ioObject)
 	scriptSystem.SetGlobal("Command", commandObject)
+	scriptSystem.SetGlobal("Downloader", downloaderObject)
 	libs.Preload(scriptSystem.GetState())
 
 	return scriptSystem

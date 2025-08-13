@@ -3,16 +3,24 @@ package api
 import (
 	"context"
 	"fmt"
-	"github.com/schollz/progressbar/v3"
 	"io"
 	"net/http"
 	"os"
+
+	"github.com/schollz/progressbar/v3"
 )
+
+type Downloader struct {
+}
+
+func NewDownloader() *Downloader {
+	return &Downloader{}
+}
 
 // DownloadFile downloads a file from a given URL and saves it to the specified file path.
 // Returns a true indicating if the download was successful and false if not. The is returned in the second
 // parameter.
-func DownloadFile(destinationPath string, url string) (bool, string) {
+func (*Downloader) GetFile(destinationPath string, url string) (bool, string) {
 	ctx := context.Background()
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 
@@ -52,7 +60,7 @@ func DownloadFile(destinationPath string, url string) (bool, string) {
 // DownloadFileWithProgress downloads a file from a given URL along with a progress bar displayed in the terminal
 // and saves it to the specified file path. Returns a true indicating if the download was successful and false if not.
 // The error string is returned in the second parameter.
-func DownloadFileWithProgress(destinationPath string, url string) (bool, string) {
+func (*Downloader) GetFileWithProgress(destinationPath string, url string) (bool, string) {
 	tempDestinationPath := destinationPath + ".tmp"
 	ctx := context.Background()
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
