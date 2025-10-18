@@ -1,6 +1,8 @@
 package scripts
 
 import (
+	"fmt"
+
 	"github.com/Soulsbane/goscriptsystem/goscriptsystem"
 	"github.com/Soulsbane/touchy/internal/api"
 	"github.com/Soulsbane/touchy/internal/infofile"
@@ -96,12 +98,17 @@ func (manager *TouchyScriptsManager) Run(scriptName string) error {
 	scriptSystem := manager.createScriptSystem()
 
 	for _, script := range manager.scripts {
-		err := script.Run(scriptName, *scriptSystem)
+		if script.HasScript(scriptName) {
 
-		if err != nil {
-			return err
+			err := script.Run(scriptName, *scriptSystem)
+
+			if err != nil {
+				return err
+			}
+
+			return nil
 		}
 	}
 
-	return nil
+	return fmt.Errorf("script %s not found", scriptName)
 }
