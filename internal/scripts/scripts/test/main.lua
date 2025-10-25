@@ -20,7 +20,7 @@ print("GetTemplatesDir: ", GetTemplatesDir())
 success, errString = Downloader:GetFile("20MB-TESTFILE.ORG.pdf", "https://files.testfile.org/PDF/20MB-TESTFILE.ORG.pdf")
 
 if not success then
-	print("DownloadFile Error: ", errString)
+    print("DownloadFile Error: ", errString)
 end
 
 local filepath = require("filepath")
@@ -30,18 +30,21 @@ print(result)
 local shouldExit = Prompts:ConfirmationPrompt("Exit this script?")
 
 if shouldExit then
-	print("Exiting script")
+    print("Exiting script")
 else
-	print("Not exiting script")
+    print("Not exiting script")
 end
 
 local inputtedValue = Prompts:InputPrompt("Input Test Value: ", "Default Value")
 print("Inputted Value: ", inputtedValue)
 
-local choice = Prompts:ChoicePrompt("Choose a value", {"Option 1", "Option 2", "Option 3"}, "Option 2")
+local multilineInput = Prompts:MultiLineInputPrompt("Enter Multiline Value: ", "Default Value")
+print("Multiline Input: ", multilineInput)
+
+local choice = Prompts:ChoicePrompt("Choose a value", { "Option 1", "Option 2", "Option 3" }, "Option 2")
 print("Choice: ", choice)
 
-local choices = Prompts:MultiSelectPrompt("Favorite Animals?", {"Cat", "Dog", "Bird", "Whale"}, {"Cat", "Whale"})
+local choices = Prompts:MultiSelectPrompt("Favorite Animals?", { "Cat", "Dog", "Bird", "Whale" }, { "Cat", "Whale" })
 for _, v in choices() do
-	print (v)
+    print(v)
 end
