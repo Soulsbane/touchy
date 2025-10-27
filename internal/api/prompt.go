@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/Iilun/survey/v2"
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/huh"
 )
 
@@ -41,22 +42,23 @@ func (p *Prompts) InputPrompt(message string, defaultValue string) string {
 }
 
 func (p *Prompts) MultiLineInputPrompt(message string, defaultValue string) string {
-	value := defaultValue
-	text := huh.NewText().
-		Title(message).
-		Value(&value)
+	value := ""
+	text := huh.NewText().Title(message).Value(&value)
 
-	// FIXME: ctrl+enter does not submit the input
-	// huh.NewForm(
-	// 	huh.NewGroup(text),
-	// ).WithKeyMap(&huh.KeyMap{
-	// 	Text: huh.TextKeyMap{
-	// 		NewLine: key.NewBinding(key.WithKeys("enter", "ctrl+j"), key.WithHelp("enter / ctrl+j", "new line")),
-	// 		Editor:  key.NewBinding(key.WithKeys("ctrl+e"), key.WithHelp("ctrl+e", "open editor")),
-	// 		Submit:  key.NewBinding(key.WithKeys("ctrl+enter"), key.WithHelp("ctrl+enter", "submit")),
-	// 	},
-	// }).Run()
-	huh.NewForm(huh.NewGroup(text)).Run()
+	err := huh.NewForm(
+		huh.NewGroup(text),
+	).WithKeyMap(&huh.KeyMap{
+		Quit: key.NewBinding(key.WithKeys("ctrl+c"), key.WithHelp("ctrl+c", "quit")),
+		Text: huh.TextKeyMap{
+			NewLine: key.NewBinding(key.WithKeys("enter", "ctrl+j"), key.WithHelp("enter / ctrl+j", "new line")),
+			// Editor:  key.NewBinding(key.WithKeys("ctrl+e"), key.WithHelp("ctrl+e", "open editor")),
+			Submit: key.NewBinding(key.WithKeys("alt+enter"), key.WithHelp("alt+enter", "submit")),
+		},
+	}).Run()
+
+	if err != nil {
+		return defaultValue
+	}
 
 	return value
 }
