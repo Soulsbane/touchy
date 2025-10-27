@@ -30,19 +30,14 @@ func (p *Prompts) ConfirmationPrompt(message string) bool {
 
 func (p *Prompts) InputPrompt(message string, defaultValue string) string {
 	value := ""
-	input := &survey.Input{
-		Message: message,
-		Default: defaultValue,
-	}
-
-	err := survey.AskOne(input, &value)
+	input := huh.NewInput().Title(message).Value(&value)
+	err := huh.NewForm(huh.NewGroup(input)).Run()
 
 	if err != nil {
 		return defaultValue
 	}
 
 	return value
-
 }
 
 func (p *Prompts) MultiLineInputPrompt(message string, defaultValue string) string {
@@ -68,13 +63,10 @@ func (p *Prompts) MultiLineInputPrompt(message string, defaultValue string) stri
 
 func (p *Prompts) ChoicePrompt(message string, choices []string, defaultValue string) string {
 	choice := ""
-	input := &survey.Select{
-		Message: message,
-		Options: choices,
-		Default: defaultValue,
-	}
-
-	err := survey.AskOne(input, &choice)
+	err := huh.NewSelect[string]().
+		Options(huh.NewOptions(choices...)...).
+		Value(&choice).
+		Title(message).Run()
 
 	if err != nil {
 		return defaultValue
