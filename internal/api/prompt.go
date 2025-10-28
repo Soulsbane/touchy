@@ -31,8 +31,7 @@ func (p *Prompts) ConfirmationPrompt(message string) bool {
 
 func (p *Prompts) InputPrompt(message string, defaultValue string) string {
 	value := ""
-	input := huh.NewInput().Title(message).Value(&value)
-	err := huh.NewForm(huh.NewGroup(input)).Run()
+	err := huh.NewInput().Title(message).Value(&value).Run()
 
 	if err != nil {
 		return defaultValue
@@ -51,8 +50,7 @@ func (p *Prompts) MultiLineInputPrompt(message string, defaultValue string) stri
 		Quit: key.NewBinding(key.WithKeys("ctrl+c"), key.WithHelp("ctrl+c", "quit")),
 		Text: huh.TextKeyMap{
 			NewLine: key.NewBinding(key.WithKeys("enter", "ctrl+j"), key.WithHelp("enter / ctrl+j", "new line")),
-			// Editor:  key.NewBinding(key.WithKeys("ctrl+e"), key.WithHelp("ctrl+e", "open editor")),
-			Submit: key.NewBinding(key.WithKeys("alt+enter"), key.WithHelp("alt+enter", "submit")),
+			Submit:  key.NewBinding(key.WithKeys("alt+enter"), key.WithHelp("alt+enter", "submit")),
 		},
 	}).Run()
 
