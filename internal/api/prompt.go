@@ -77,13 +77,10 @@ func (p *Prompts) ChoicePrompt(message string, choices []string, defaultValue st
 
 func (p *Prompts) MultiSelectPrompt(message string, promptChoices []string, defaultChoices []string) []string {
 	choices := []string{}
-	input := &survey.MultiSelect{
-		Message: message,
-		Options: promptChoices,
-		Default: defaultChoices,
-	}
-
-	err := survey.AskOne(input, &choices)
+	err := huh.NewMultiSelect[string]().
+		Options(huh.NewOptions(promptChoices...)...).
+		Value(&choices).
+		Title(message).Run()
 
 	if err != nil {
 		return defaultChoices
