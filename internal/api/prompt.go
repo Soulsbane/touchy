@@ -12,7 +12,7 @@ func NewPrompts() *Prompts {
 	return &Prompts{}
 }
 
-func (p *Prompts) ConfirmationPrompt(message string) bool {
+func (p *Prompts) Confirmation(message string) bool {
 	value := false
 	err := huh.NewConfirm().Title(message).Affirmative("Yes").Negative("No").Value(&value).Run()
 
@@ -22,7 +22,7 @@ func (p *Prompts) ConfirmationPrompt(message string) bool {
 
 	return value
 }
-func (p *Prompts) InputPrompt(message string, defaultValue string) string {
+func (p *Prompts) Input(message string, defaultValue string) string {
 	value := ""
 	err := huh.NewInput().Title(message).Value(&value).Run()
 
@@ -33,7 +33,7 @@ func (p *Prompts) InputPrompt(message string, defaultValue string) string {
 	return value
 }
 
-func (p *Prompts) MultiLineInputPrompt(message string, defaultValue string) string {
+func (p *Prompts) MultiLineInput(message string, defaultValue string) string {
 	value := ""
 	text := huh.NewText().Title(message).Value(&value)
 
@@ -54,7 +54,7 @@ func (p *Prompts) MultiLineInputPrompt(message string, defaultValue string) stri
 	return value
 }
 
-func (p *Prompts) ChoicePrompt(message string, choices []string, defaultValue string) string {
+func (p *Prompts) Choice(message string, choices []string, defaultValue string) string {
 	choice := ""
 	err := huh.NewSelect[string]().
 		Options(huh.NewOptions(choices...)...).
@@ -68,7 +68,7 @@ func (p *Prompts) ChoicePrompt(message string, choices []string, defaultValue st
 	return choice
 }
 
-func (p *Prompts) MultiSelectPrompt(message string, promptChoices []string, defaultChoices []string) []string {
+func (p *Prompts) MultiSelect(message string, promptChoices []string, defaultChoices []string) []string {
 	choices := []string{}
 	err := huh.NewMultiSelect[string]().
 		Options(huh.NewOptions(promptChoices...)...).

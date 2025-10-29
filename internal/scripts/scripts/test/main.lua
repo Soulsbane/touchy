@@ -27,7 +27,7 @@ local filepath = require("filepath")
 local result = filepath.dir("/var/tmp/file.name")
 print(result)
 
-local shouldExit = Prompts:ConfirmationPrompt("Exit this script?")
+local shouldExit = Prompts:Confirmation("Exit this script?")
 
 if shouldExit then
     print("Exiting script")
@@ -35,16 +35,16 @@ else
     print("Not exiting script")
 end
 
-local inputtedValue = Prompts:InputPrompt("Input Test Value: ", "Default Value")
+local inputtedValue = Prompts:Input("Input Test Value: ", "Default Value")
 print("Inputted Value: ", inputtedValue)
 
-local multilineInput = Prompts:MultiLineInputPrompt("Enter Multiline Value: ", "Default Value")
+local multilineInput = Prompts:MultiLineInput("Enter Multiline Value: ", "Default Value")
 print("Multiline Input: ", multilineInput)
 
-local choice = Prompts:ChoicePrompt("Choose a value", { "Option 1", "Option 2", "Option 3" }, "Option 2")
+local choice = Prompts:Choice("Choose a value", { "Option 1", "Option 2", "Option 3" }, "Option 2")
 print("Choice: ", choice)
 
-local choices = Prompts:MultiSelectPrompt("Favorite Animals?", { "Cat", "Dog", "Bird", "Whale" }, { "Cat", "Whale" })
+local choices = Prompts:MultiSelect("Favorite Animals?", { "Cat", "Dog", "Bird", "Whale" }, { "Cat", "Whale" })
 for _, v in choices() do
     print(v)
 end
