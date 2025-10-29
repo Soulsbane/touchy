@@ -54,7 +54,7 @@ func (p *Prompts) MultiLineInput(message string, defaultValue string) string {
 	return value
 }
 
-func (p *Prompts) Choice(message string, choices []string, defaultValue string) string {
+func (p *Prompts) Select(message string, choices []string, defaultValue string) string {
 	choice := ""
 	err := huh.NewSelect[string]().
 		Options(huh.NewOptions(choices...)...).

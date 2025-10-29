@@ -41,7 +41,7 @@ print("Inputted Value: ", inputtedValue)
 local multilineInput = Prompts:MultiLineInput("Enter Multiline Value: ", "Default Value")
 print("Multiline Input: ", multilineInput)
 
-local choice = Prompts:Choice("Choose a value", { "Option 1", "Option 2", "Option 3" }, "Option 2")
+local choice = Prompts:Select("Choose a value", { "Option 1", "Option 2", "Option 3" }, "Option 2")
 print("Choice: ", choice)
 
 local choices = Prompts:MultiSelect("Favorite Animals?", { "Cat", "Dog", "Bird", "Whale" }, { "Cat", "Whale" })
