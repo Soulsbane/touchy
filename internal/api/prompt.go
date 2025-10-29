@@ -1,7 +1,6 @@
 package api
 
 import (
-	"github.com/Iilun/survey/v2"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/huh"
 )
@@ -14,21 +13,15 @@ func NewPrompts() *Prompts {
 }
 
 func (p *Prompts) ConfirmationPrompt(message string) bool {
-	name := false
-	input := &survey.Confirm{
-		Message: message,
-		Default: false,
-	}
-
-	err := survey.AskOne(input, &name)
+	value := false
+	err := huh.NewConfirm().Title(message).Affirmative("Yes").Negative("No").Value(&value).Run()
 
 	if err != nil {
 		return false
 	}
 
-	return name
+	return value
 }
-
 func (p *Prompts) InputPrompt(message string, defaultValue string) string {
 	value := ""
 	err := huh.NewInput().Title(message).Value(&value).Run()
