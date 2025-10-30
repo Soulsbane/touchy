@@ -26,7 +26,7 @@ func (p *Prompts) Input(message string, defaultValue string) string {
 	value := ""
 	err := huh.NewInput().Title(message).Value(&value).Run()
 
-	if err != nil {
+	if err != nil || value == "" {
 		return defaultValue
 	}
 
@@ -47,7 +47,7 @@ func (p *Prompts) MultiLineInput(message string, defaultValue string) string {
 		},
 	}).Run()
 
-	if err != nil {
+	if err != nil || value == "" {
 		return defaultValue
 	}
 
@@ -61,7 +61,7 @@ func (p *Prompts) Select(message string, choices []string, defaultValue string) 
 		Value(&choice).
 		Title(message).Run()
 
-	if err != nil {
+	if err != nil || choice == "" {
 		return defaultValue
 	}
 
@@ -75,7 +75,7 @@ func (p *Prompts) MultiSelect(message string, promptChoices []string, defaultCho
 		Value(&choices).
 		Title(message).Run()
 
-	if err != nil {
+	if err != nil || len(choices) == 0 {
 		return defaultChoices
 	}
 
