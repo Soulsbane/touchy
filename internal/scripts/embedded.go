@@ -86,7 +86,7 @@ func (es *EmbeddedScripts) HasScript(scriptName string) bool {
 	return idx >= 0
 }
 
-func (es *EmbeddedScripts) Run(scriptName string, system goscriptsystem.ScriptSystem) error {
+func (es *EmbeddedScripts) Run(scriptName string, system goscriptsystem.ScriptSystem, args []string) error {
 	idx := slices.IndexFunc(es.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
 
 	if idx >= 0 {
@@ -98,7 +98,12 @@ func (es *EmbeddedScripts) Run(scriptName string, system goscriptsystem.ScriptSy
 		if err != nil {
 			return fmt.Errorf("failed to read script file: %w", err)
 		} else {
-			script.scriptSystem.DoString(string(data))
+			err := script.scriptSystem.LoadStringWithArgs(string(data), args)
+
+			if err != nil {
+				fmt.Println("failed to load script: ", err)
+			}
+
 			return nil
 		}
 	}

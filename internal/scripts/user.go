@@ -85,7 +85,7 @@ func (us *UserScripts) HasScript(scriptName string) bool {
 	return idx >= 0
 }
 
-func (us *UserScripts) Run(scriptName string, system goscriptsystem.ScriptSystem) error {
+func (us *UserScripts) Run(scriptName string, system goscriptsystem.ScriptSystem, args []string) error {
 	idx := slices.IndexFunc(us.scripts, func(c TouchyScript) bool { return c.info.GetName() == scriptName })
 	scriptsPath := pathutils.GetScriptsDir()
 
@@ -98,7 +98,12 @@ func (us *UserScripts) Run(scriptName string, system goscriptsystem.ScriptSystem
 		if err != nil {
 			return fmt.Errorf("failed to read script file: %w", err)
 		} else {
-			script.scriptSystem.DoString(string(data))
+			err := script.scriptSystem.LoadStringWithArgs(string(data), args)
+
+			if err != nil {
+				fmt.Println("failed to load script: ", err)
+			}
+
 			return nil
 		}
 	}

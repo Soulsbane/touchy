@@ -27,7 +27,8 @@ type CreateCommand struct {
 }
 
 type RunCommand struct {
-	ScriptName string `arg:"positional,required" help:"name of the script to run"`
+	ScriptName string   `arg:"positional,required" help:"name of the script to run"`
+	ScriptArgs []string `arg:"positional" help:"arguments to pass to the script"`
 }
 
 type commands struct {
@@ -99,8 +100,8 @@ func handleShowCommand(languageName string, templateName string) {
 	}
 }
 
-func handleRunCommand(scriptName string) {
-	err := scriptsManager.Run(scriptName)
+func handleRunCommand(scriptName string, args []string) {
+	err := scriptsManager.Run(scriptName, args)
 
 	if err != nil {
 		handleError(err, scriptName, "")

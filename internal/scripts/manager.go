@@ -94,13 +94,13 @@ func (manager *TouchyScriptsManager) GetNumberOfScripts(name string) int {
 	return count
 }
 
-func (manager *TouchyScriptsManager) Run(scriptName string) error {
+func (manager *TouchyScriptsManager) Run(scriptName string, args []string) error {
 	scriptSystem := manager.createScriptSystem()
 
 	for _, script := range manager.scripts {
 		if script.HasScript(scriptName) {
 
-			err := script.Run(scriptName, *scriptSystem)
+			err := script.Run(scriptName, *scriptSystem, args)
 
 			if err != nil {
 				return err

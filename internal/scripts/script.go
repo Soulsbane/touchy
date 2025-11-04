@@ -12,7 +12,7 @@ type Scripts interface {
 	GetListOfScripts() []TouchyScript
 	GetListOfScriptInfo() []infofile.InfoFile
 	HasScript(scriptName string) bool
-	Run(scriptName string, system goscriptsystem.ScriptSystem) error
+	Run(scriptName string, system goscriptsystem.ScriptSystem, argsl []string) error
 }
 
 type TouchyScript struct {

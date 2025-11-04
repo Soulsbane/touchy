@@ -1,4 +1,16 @@
+local args = { ... }
+
 print("Hello from main.lua")
+
+if #args == 0 then
+	print("No arguments provided")
+else
+	print("Arguments provided:", #args)
+	for i, v in ipairs(args) do
+		print(i, v)
+	end
+end
+
 print("Output Directory:", GetOutputDir())
 Templates:ShowTemplate("go", "default")
 print("Has language Go: ", Templates:HasLanguage("go"))

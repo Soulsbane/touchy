@@ -3,13 +3,15 @@ package main
 import (
 	"errors"
 	"fmt"
+
 	"github.com/Soulsbane/touchy/internal/common"
+
+	"os"
 
 	"github.com/Soulsbane/touchy/internal/pathutils"
 	"github.com/Soulsbane/touchy/internal/scripts"
 	"github.com/Soulsbane/touchy/internal/templates"
 	"github.com/alexflint/go-arg"
-	"os"
 )
 
 var manager *templates.TemplateManager
@@ -67,7 +69,8 @@ func main() {
 			case cmds.Show != nil:
 				handleShowCommand(cmds.Show.Language, cmds.Show.TemplateName)
 			case cmds.Run != nil:
-				handleRunCommand(cmds.Run.ScriptName)
+				// handleRunCommand(cmds.Run.ScriptName, cmdLineArgs[2:])
+				handleRunCommand(cmds.Run.ScriptName, cmds.Run.ScriptArgs)
 			}
 		} else {
 			var createCmd CreateCommand
