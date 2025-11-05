@@ -93,19 +93,13 @@ func (us *UserScripts) Run(scriptName string, system goscriptsystem.ScriptSystem
 		script := us.scripts[idx]
 		script.scriptSystem = &system
 		scriptPath := path.Join(scriptsPath, scriptName, defaultScriptFileName)
-		data, err := os.ReadFile(scriptPath)
+		err := script.scriptSystem.LoadFileWithArgs(scriptPath, args)
 
 		if err != nil {
-			return fmt.Errorf("failed to read script file: %w", err)
-		} else {
-			err := script.scriptSystem.LoadStringWithArgs(string(data), args)
-
-			if err != nil {
-				fmt.Println("failed to load script: ", err)
-			}
-
-			return nil
+			fmt.Println("failed to load script: ", err)
 		}
+
+		return nil
 	}
 
 	return fmt.Errorf("script %s not found", scriptName)
