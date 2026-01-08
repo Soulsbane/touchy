@@ -7,16 +7,16 @@ toolchain go1.24.6
 require (
 	github.com/Soulsbane/goscriptsystem v0.4.0
 	github.com/alecthomas/chroma v0.10.0
-	github.com/alexflint/go-arg v1.6.0
+	github.com/alexflint/go-arg v1.6.1
 	github.com/charmbracelet/bubbles v0.21.1-0.20250623103423-23b8fd6302d7
 	github.com/charmbracelet/huh v0.8.0
-	github.com/jedib0t/go-pretty/v6 v6.6.9
+	github.com/jedib0t/go-pretty/v6 v6.7.8
 	github.com/pelletier/go-toml/v2 v2.2.4
 	github.com/samber/lo v1.52.0
-	github.com/schollz/progressbar/v3 v3.18.0
-	github.com/vadv/gopher-lua-libs v0.7.0
-	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546
-	golang.org/x/text v0.30.0
+	github.com/schollz/progressbar/v3 v3.19.0
+	github.com/vadv/gopher-lua-libs v0.8.0
+	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93
+	golang.org/x/text v0.32.0
 )
 
 require (
@@ -32,14 +32,14 @@ require (
 	github.com/cbroglie/mustache v1.4.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/charmbracelet/bubbletea v1.3.10 // indirect
-	github.com/charmbracelet/colorprofile v0.3.3 // indirect
+	github.com/charmbracelet/colorprofile v0.4.1 // indirect
 	github.com/charmbracelet/lipgloss v1.1.0 // indirect
-	github.com/charmbracelet/x/ansi v0.10.3 // indirect
-	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20251105022227-dc9e59457e21 // indirect
+	github.com/charmbracelet/x/ansi v0.11.3 // indirect
+	github.com/charmbracelet/x/cellbuf v0.0.14 // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20251215102626-e0db08df7383 // indirect
 	github.com/charmbracelet/x/term v0.2.2 // indirect
 	github.com/cheggaaa/pb/v3 v3.1.7 // indirect
-	github.com/clipperhouse/displaywidth v0.4.1 // indirect
+	github.com/clipperhouse/displaywidth v0.6.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
@@ -54,7 +54,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-localereader v0.0.1 // indirect
 	github.com/mattn/go-runewidth v0.0.19 // indirect
-	github.com/mattn/go-sqlite3 v1.14.32 // indirect
+	github.com/mattn/go-sqlite3 v1.14.33 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
@@ -65,7 +65,7 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/prometheus/client_golang v1.23.2 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
-	github.com/prometheus/common v0.67.2 // indirect
+	github.com/prometheus/common v0.67.5 // indirect
 	github.com/prometheus/procfs v0.19.2 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
@@ -73,10 +73,10 @@ require (
 	github.com/yuin/gluamapper v0.0.0-20150323120927-d836955830e7 // indirect
 	github.com/yuin/gopher-lua v1.1.1 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
-	golang.org/x/net v0.46.0 // indirect
-	golang.org/x/sys v0.37.0 // indirect
-	golang.org/x/term v0.36.0 // indirect
-	google.golang.org/protobuf v1.36.10 // indirect
+	golang.org/x/net v0.48.0 // indirect
+	golang.org/x/sys v0.39.0 // indirect
+	golang.org/x/term v0.38.0 // indirect
+	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/xmlpath.v2 v2.0.0-20150820204837-860cbeca3ebc // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	layeh.com/gopher-luar v1.0.11 // indirect
