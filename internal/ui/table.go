@@ -7,7 +7,7 @@ import (
 	"github.com/jedib0t/go-pretty/v6/text"
 )
 
-func CreateNewTableWriter(title string, args ...interface{}) table.Writer {
+func CreateNewTableWriter(title string, args ...any) table.Writer {
 	writer := table.NewWriter()
 
 	writer.SetOutputMirror(os.Stdout)
