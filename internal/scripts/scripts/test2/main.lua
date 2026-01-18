@@ -26,3 +26,7 @@ end
 
 local lsOutput, err = Command:RunWithOutput("ls")
 print(lsOutput)
+print("Command output with args: ")
+
+local lsOutputWithArgs, err = Command:RunWithOutput("ls", "-al")
+print(lsOutputWithArgs)
