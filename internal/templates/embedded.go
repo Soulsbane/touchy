@@ -3,11 +3,11 @@ package templates
 import (
 	"embed"
 	"fmt"
-	"github.com/Soulsbane/touchy/internal/common"
 	"os"
 	"path"
 	"slices"
 
+	"github.com/Soulsbane/touchy/internal/common"
 	"github.com/Soulsbane/touchy/internal/infofile"
 	"github.com/samber/lo"
 )
