@@ -51,3 +51,7 @@ func (io *IO) DirExists(dir string) bool {
 
 	return info.IsDir()
 }
+
+func (io *IO) ChangeDir(dir string) error {
+	return os.Chdir(dir)
+}
