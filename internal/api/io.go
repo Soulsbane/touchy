@@ -3,9 +3,10 @@ package api
 import (
 	"errors"
 	"fmt"
-	"github.com/Soulsbane/touchy/internal/pathutils"
 	"os"
 	"path"
+
+	"github.com/Soulsbane/touchy/internal/pathutils"
 )
 
 const defaultDirPermission = 0755
@@ -39,4 +40,14 @@ func (io *IO) CreateDirAll(dir string) error {
 	}
 
 	return nil
+}
+
+func (io *IO) DirExists(dir string) bool {
+	info, err := os.Stat(dir)
+
+	if os.IsNotExist(err) {
+		return false
+	}
+
+	return info.IsDir()
 }
