@@ -45,6 +45,41 @@ func New() *TemplateManager {
 	return &manager
 }
 
+func outputTemplateList(languageName string, languages []Languages) {
+	headerName := cases.Title(language.English).String(languageName) + " Templates"
+
+	if len(languages) > 0 {
+		var outputTable table.Writer
+
+		if languageName == "all" {
+			outputTable = ui.CreateNewTableWriter(headerName, "Name", "Language", "Description", "Output File name")
+		} else {
+			outputTable = ui.CreateNewTableWriter(headerName, "Name", "Description", "Output File name")
+		}
+
+		for _, info := range languages {
+			var outputRow table.Row
+
+			if languageName == "all" {
+				outputRow = table.Row{
+					info.infoFile.GetName(),
+					info.languageName, info.infoFile.GetDescription(),
+					info.infoFile.GetDefaultOutputFileName(),
+				}
+			} else {
+				outputRow = table.Row{info.infoFile.GetName(),
+					info.infoFile.GetDescription(),
+					info.infoFile.GetDefaultOutputFileName(),
+				}
+			}
+
+			outputTable.AppendRow(outputRow)
+		}
+
+		outputTable.Render()
+	}
+}
+
 func (g *TemplateManager) GatherTemplates() {
 	embedded, embedErr := NewEmbeddedTemplates()
 	user, userErr := NewUserTemplates()
@@ -97,41 +132,6 @@ func (g *TemplateManager) GetLanguageTemplateFor(languageName string, templateNa
 	return "", infofile.InfoFile{}
 }
 
-func (g *TemplateManager) outputTemplateList(languageName string, languages []Languages) {
-	headerName := cases.Title(language.English).String(languageName) + " Templates"
-
-	if len(languages) > 0 {
-		var outputTable table.Writer
-
-		if languageName == "all" {
-			outputTable = ui.CreateNewTableWriter(headerName, "Name", "Language", "Description", "Output File name")
-		} else {
-			outputTable = ui.CreateNewTableWriter(headerName, "Name", "Description", "Output File name")
-		}
-
-		for _, info := range languages {
-			var outputRow table.Row
-
-			if languageName == "all" {
-				outputRow = table.Row{
-					info.infoFile.GetName(),
-					info.languageName, info.infoFile.GetDescription(),
-					info.infoFile.GetDefaultOutputFileName(),
-				}
-			} else {
-				outputRow = table.Row{info.infoFile.GetName(),
-					info.infoFile.GetDescription(),
-					info.infoFile.GetDefaultOutputFileName(),
-				}
-			}
-
-			outputTable.AppendRow(outputRow)
-		}
-
-		outputTable.Render()
-	}
-}
-
 func (g *TemplateManager) ListTemplates(languageName string) {
 	var languages []Languages
 
@@ -148,7 +148,7 @@ func (g *TemplateManager) ListTemplates(languageName string) {
 	}
 
 	if len(languages) > 0 {
-		g.outputTemplateList(languageName, languages)
+		outputTemplateList(languageName, languages)
 	} else {
 		fmt.Println("No templates found. Use 'list templates' to see available templates.")
 	}
