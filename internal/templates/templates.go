@@ -87,10 +87,10 @@ func (g *TemplateManager) GatherTemplates() {
 	g.templateList = append(g.templateList, embedded)
 	g.templateList = append(g.templateList, user)
 
-	g.handleTemplateError(embedErr, userErr)
+	handleTemplateError(embedErr, userErr)
 }
 
-func (g *TemplateManager) handleTemplateError(embedErr error, userErr error) {
+func handleTemplateError(embedErr error, userErr error) {
 	if embedErr != nil {
 		fmt.Println(embedErr)
 	}
