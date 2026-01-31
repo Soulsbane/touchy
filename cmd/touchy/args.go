@@ -48,9 +48,9 @@ func isReservedCommand(cmds commands, command string) bool {
 	dummyVal := reflect.ValueOf(cmds)
 	numFields := dummyVal.NumField()
 
-	for i := 0; i < numFields; i++ {
+	for i := range numFields {
 		field := dummyVal.Type().Field(i).Name
-
+		fmt.Println(field)
 		if strings.ToLower(field) == command {
 			return true
 		}
