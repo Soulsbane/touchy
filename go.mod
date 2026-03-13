@@ -7,14 +7,14 @@ require (
 	github.com/alecthomas/chroma v0.10.0
 	github.com/alexflint/go-arg v1.6.1
 	github.com/charmbracelet/bubbles v1.0.0
-	github.com/charmbracelet/huh v0.8.0
+	github.com/charmbracelet/huh v1.0.0
 	github.com/jedib0t/go-pretty/v6 v6.7.8
 	github.com/pelletier/go-toml/v2 v2.2.4
 	github.com/samber/lo v1.53.0
 	github.com/schollz/progressbar/v3 v3.19.0
 	github.com/vadv/gopher-lua-libs v0.8.0
-	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa
-	golang.org/x/text v0.34.0
+	golang.org/x/exp v0.0.0-20260312153236-7ab1446f8b90
+	golang.org/x/text v0.35.0
 )
 
 require (
@@ -30,7 +30,7 @@ require (
 	github.com/cbroglie/mustache v1.4.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/charmbracelet/bubbletea v1.3.10 // indirect
-	github.com/charmbracelet/colorprofile v0.4.2 // indirect
+	github.com/charmbracelet/colorprofile v0.4.3 // indirect
 	github.com/charmbracelet/lipgloss v1.1.0 // indirect
 	github.com/charmbracelet/x/ansi v0.11.6 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.15 // indirect
@@ -55,7 +55,7 @@ require (
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/montanaflynn/stats v0.7.1 // indirect
+	github.com/montanaflynn/stats v0.8.2 // indirect
 	github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
@@ -70,9 +70,9 @@ require (
 	github.com/yuin/gluamapper v0.0.0-20150323120927-d836955830e7 // indirect
 	github.com/yuin/gopher-lua v1.1.1 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
-	golang.org/x/net v0.51.0 // indirect
+	golang.org/x/net v0.52.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/term v0.40.0 // indirect
+	golang.org/x/term v0.41.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/xmlpath.v2 v2.0.0-20150820204837-860cbeca3ebc // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
